@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import Syndic from "./pages/Syndic";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
+import PublicAlert from "./pages/PublicAlert";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/alert/:id" element={<ProtectedRoute><AlertDetail /></ProtectedRoute>} />
             <Route path="/syndic" element={<ProtectedRoute><Syndic /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/p/alert/:id" element={<PublicAlert />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

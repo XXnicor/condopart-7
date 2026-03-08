@@ -16,6 +16,7 @@ import {
   Loader2,
   MapPin,
   PawPrint,
+  Share2,
   XCircle,
 } from 'lucide-react';
 import { SkeletonCard } from '@/components/ui/skeleton-card';
@@ -28,6 +29,7 @@ import AlertMap from '@/components/AlertMap';
 import SightingForm from '@/components/SightingForm';
 import AlertFeed from '@/components/AlertFeed';
 import ResolveAlertModal from '@/components/ResolveAlertModal';
+import ShareAlertSheet from '@/components/ShareAlertSheet';
 
 const statusConfig = {
   active: { label: '🔍 Procurando', className: 'bg-success text-success-foreground' },
@@ -45,6 +47,7 @@ const AlertDetail = () => {
 
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showShareSheet, setShowShareSheet] = useState(false);
 
   // Broadcast listener for alert-resolved events
   useEffect(() => {
@@ -122,8 +125,13 @@ const AlertDetail = () => {
           <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-5 w-5" />
           </button>
-          <h1 className="font-display text-lg font-bold">{alert.title}</h1>
-          <div className="ml-auto">{statusBadge(alert.status)}</div>
+          <h1 className="font-display text-lg font-bold truncate">{alert.title}</h1>
+          <div className="ml-auto flex items-center gap-2">
+            <button onClick={() => setShowShareSheet(true)} className="rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+              <Share2 className="h-5 w-5" />
+            </button>
+            {statusBadge(alert.status)}
+          </div>
         </div>
       </header>
 
@@ -281,6 +289,14 @@ const AlertDetail = () => {
         isOpen={showResolveModal}
         onClose={() => setShowResolveModal(false)}
         onSuccess={handleResolveSuccess}
+      />
+
+      <ShareAlertSheet
+        isOpen={showShareSheet}
+        onClose={() => setShowShareSheet(false)}
+        alertId={id!}
+        alertTitle={alert.title}
+        alertDescription={alert.description}
       />
 
       <BottomNav />
