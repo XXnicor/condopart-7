@@ -125,8 +125,13 @@ const AlertDetail = () => {
           <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-5 w-5" />
           </button>
-          <h1 className="font-display text-lg font-bold">{alert.title}</h1>
-          <div className="ml-auto">{statusBadge(alert.status)}</div>
+          <h1 className="font-display text-lg font-bold truncate">{alert.title}</h1>
+          <div className="ml-auto flex items-center gap-2">
+            <button onClick={() => setShowShareSheet(true)} className="rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+              <Share2 className="h-5 w-5" />
+            </button>
+            {statusBadge(alert.status)}
+          </div>
         </div>
       </header>
 
