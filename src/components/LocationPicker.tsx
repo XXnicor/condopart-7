@@ -36,6 +36,16 @@ const LocationPicker = ({ value, onChange, error }: LocationPickerProps) => {
     map.setView([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], GOLDEN_PARK_CONDO.zoom);
     setPendingCoords({ lat: GOLDEN_PARK_CONDO.lat, lng: GOLDEN_PARK_CONDO.lng });
 
+    const refIcon = L.divIcon({
+      className: '',
+      html: `<div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;color:white;font-size:13px;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.3);">🏢</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+    });
+    L.marker([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], { icon: refIcon, interactive: true })
+      .addTo(map)
+      .bindPopup(GOLDEN_PARK_CONDO.name);
+
 
     setMapStatus('ready');
 
