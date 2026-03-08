@@ -47,6 +47,7 @@ const AlertDetail = () => {
 
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showShareSheet, setShowShareSheet] = useState(false);
 
   // Broadcast listener for alert-resolved events
   useEffect(() => {
