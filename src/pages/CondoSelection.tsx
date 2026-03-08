@@ -34,7 +34,7 @@ const CondoSelection = () => {
   }, [assignCondo]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-background px-4">
       <div className="flex flex-col items-center gap-4 text-center">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10">
           <Building2 className="h-6 w-6 text-amber-500" style={{ width: 48, height: 48 }} />

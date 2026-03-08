@@ -145,8 +145,8 @@ const Auth = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
-      <div className="w-full max-w-[480px] mx-auto">
+    <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-background px-4">
+      <div className="w-full">
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-lg">
             <PawPrint className="h-9 w-9 text-primary-foreground" />
@@ -195,7 +195,10 @@ const Auth = () => {
                           placeholder="seu@email.com"
                           value={forgotEmail}
                           onChange={(e) => { setForgotEmail(e.target.value); setForgotErrors({}); }}
-                          className={forgotErrors.email ? 'border-destructive' : ''}
+                          className={`text-base min-h-[44px] ${forgotErrors.email ? 'border-destructive' : ''}`}
+                          autoComplete="email"
+                          autoCorrect="off"
+                          autoCapitalize="off"
                         />
                         {forgotErrors.email && <p className="text-xs text-destructive">{forgotErrors.email}</p>}
                       </div>
@@ -219,7 +222,10 @@ const Auth = () => {
                         placeholder="seu@email.com"
                         value={loginEmail}
                         onChange={(e) => { setLoginEmail(e.target.value); setLoginErrors(prev => ({ ...prev, email: undefined })); }}
-                        className={loginErrors.email ? 'border-destructive' : ''}
+                        className={`text-base min-h-[44px] ${loginErrors.email ? 'border-destructive' : ''}`}
+                        autoComplete="email"
+                        autoCorrect="off"
+                        autoCapitalize="off"
                       />
                       {loginErrors.email && <p className="text-xs text-destructive">{loginErrors.email}</p>}
                     </div>
@@ -240,7 +246,8 @@ const Auth = () => {
                         placeholder="••••••••"
                         value={loginPassword}
                         onChange={(e) => { setLoginPassword(e.target.value); setLoginErrors(prev => ({ ...prev, password: undefined })); }}
-                        className={loginErrors.password ? 'border-destructive' : ''}
+                        className={`text-base min-h-[44px] ${loginErrors.password ? 'border-destructive' : ''}`}
+                        autoComplete="current-password"
                       />
                       {loginErrors.password && <p className="text-xs text-destructive">{loginErrors.password}</p>}
                     </div>
@@ -294,7 +301,9 @@ const Auth = () => {
                         placeholder="Seu nome"
                         value={signupName}
                         onChange={(e) => { setSignupName(e.target.value); setSignupErrors(prev => ({ ...prev, name: undefined })); }}
-                        className={signupErrors.name ? 'border-destructive' : ''}
+                        className={`text-base min-h-[44px] ${signupErrors.name ? 'border-destructive' : ''}`}
+                        autoComplete="name"
+                        autoCorrect="off"
                       />
                       {signupErrors.name && <p className="text-xs text-destructive">{signupErrors.name}</p>}
                     </div>
@@ -306,7 +315,10 @@ const Auth = () => {
                         placeholder="seu@email.com"
                         value={signupEmail}
                         onChange={(e) => { setSignupEmail(e.target.value); setSignupErrors(prev => ({ ...prev, email: undefined })); }}
-                        className={signupErrors.email ? 'border-destructive' : ''}
+                        className={`text-base min-h-[44px] ${signupErrors.email ? 'border-destructive' : ''}`}
+                        autoComplete="email"
+                        autoCorrect="off"
+                        autoCapitalize="off"
                       />
                       {signupErrors.email && <p className="text-xs text-destructive">{signupErrors.email}</p>}
                     </div>
@@ -318,7 +330,8 @@ const Auth = () => {
                         placeholder="Mínimo 8 caracteres"
                         value={signupPassword}
                         onChange={(e) => { setSignupPassword(e.target.value); setSignupErrors(prev => ({ ...prev, password: undefined })); }}
-                        className={signupErrors.password ? 'border-destructive' : ''}
+                        className={`text-base min-h-[44px] ${signupErrors.password ? 'border-destructive' : ''}`}
+                        autoComplete="new-password"
                       />
                       {signupErrors.password && <p className="text-xs text-destructive">{signupErrors.password}</p>}
                     </div>
@@ -330,7 +343,8 @@ const Auth = () => {
                         placeholder="Repita sua senha"
                         value={signupConfirmPassword}
                         onChange={(e) => { setSignupConfirmPassword(e.target.value); setSignupErrors(prev => ({ ...prev, confirmPassword: undefined })); }}
-                        className={signupErrors.confirmPassword ? 'border-destructive' : ''}
+                        className={`text-base min-h-[44px] ${signupErrors.confirmPassword ? 'border-destructive' : ''}`}
+                        autoComplete="new-password"
                       />
                       {signupErrors.confirmPassword && <p className="text-xs text-destructive">{signupErrors.confirmPassword}</p>}
                     </div>

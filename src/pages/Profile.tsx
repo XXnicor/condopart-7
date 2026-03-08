@@ -214,7 +214,7 @@ const Profile = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-background pb-20">
+      <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
         <ProfileSkeleton />
         <BottomNav />
       </div>
@@ -227,7 +227,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
       {/* Header with gradient background */}
       <motion.div
         className="bg-gradient-to-r from-amber-400 via-amber-500 to-orange-400 rounded-b-3xl overflow-hidden"
@@ -235,7 +235,7 @@ const Profile = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4 }}
       >
-        <div className="mx-auto max-w-[480px] px-4 py-8 flex flex-col items-center gap-3">
+        <div className="px-4 py-8 flex flex-col items-center gap-3">
           <input
             ref={avatarInputRef}
             type="file"
@@ -302,7 +302,7 @@ const Profile = () => {
       </motion.div>
 
       <motion.div
-        className="mx-auto max-w-[480px] px-4 space-y-4"
+        className="px-4 space-y-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.1 }}
@@ -456,7 +456,9 @@ const Profile = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 maxLength={100}
-                className={`rounded-xl ${nameError ? 'border-destructive' : ''}`}
+                className={`rounded-xl text-base min-h-[44px] ${nameError ? 'border-destructive' : ''}`}
+                autoComplete="name"
+                autoCorrect="off"
               />
               {nameError && (
                 <p className="text-xs text-destructive">{nameError}</p>
@@ -472,7 +474,8 @@ const Profile = () => {
                 value={phone}
                 onChange={(e) => setPhone(formatPhone(e.target.value))}
                 placeholder="(11) 99999-9999"
-                className="rounded-xl"
+                className="rounded-xl text-base min-h-[44px]"
+                autoComplete="tel"
               />
             </div>
             <Button
@@ -499,7 +502,7 @@ const Profile = () => {
           transition={{ duration: 0.4, delay: 0.5 }}
         >
           <button
-            className="flex w-full items-center gap-3 rounded-2xl bg-card px-4 py-3 text-left transition-colors hover:bg-secondary"
+            className="flex w-full min-h-[44px] items-center gap-3 rounded-2xl bg-card px-4 py-3 text-left transition-colors hover:bg-secondary"
             onClick={() => navigate('/reset-password')}
           >
             <KeyRound className="h-5 w-5 text-primary shrink-0" />
@@ -508,7 +511,7 @@ const Profile = () => {
           </button>
 
           <button
-            className="flex w-full items-center gap-3 rounded-2xl bg-destructive/10 px-4 py-3 text-left transition-colors hover:bg-destructive/15"
+            className="flex w-full min-h-[44px] items-center gap-3 rounded-2xl bg-destructive/10 px-4 py-3 text-left transition-colors hover:bg-destructive/15"
             onClick={() => setShowLogoutConfirm((v) => !v)}
           >
             <LogOut className="h-5 w-5 text-destructive shrink-0" />

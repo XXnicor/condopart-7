@@ -44,13 +44,13 @@ const FeedPreview = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-border bg-card/95 px-4 py-3 backdrop-blur-md">
-        <div className="mx-auto flex max-w-[480px] items-center gap-3">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
-            className="text-muted-foreground hover:text-foreground"
+            className="min-h-[44px] min-w-[44px] flex items-center justify-center text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
@@ -59,7 +59,7 @@ const FeedPreview = () => {
       </header>
 
       {/* Main content */}
-      <main className="mx-auto max-w-[480px] px-4 py-4">
+      <main className="px-4 py-4 overflow-y-auto overscroll-contain">
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}

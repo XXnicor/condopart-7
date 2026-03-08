@@ -82,7 +82,7 @@ const AlertDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background pb-20">
+      <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
         <header className="sticky top-0 z-40 border-b border-border bg-card/95 px-4 py-3 backdrop-blur-md">
           <div className="mx-auto flex max-w-[480px] items-center gap-3">
             <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
@@ -106,7 +106,7 @@ const AlertDetail = () => {
 
   if (!alert) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background gap-3">
+      <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-background gap-3">
         <p className="text-muted-foreground">Alerta não encontrado</p>
         <Button variant="outline" onClick={() => navigate('/')}>Voltar</Button>
       </div>
@@ -120,7 +120,7 @@ const AlertDetail = () => {
   const canCancel = isOwner && isActive;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background">
       {/* Hero section with overlay */}
       <motion.div
         initial={{ opacity: 0 }}
