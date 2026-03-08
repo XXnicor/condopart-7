@@ -50,10 +50,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
     map.setView([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], GOLDEN_PARK_CONDO.zoom);
     setPendingCoords({ lat: GOLDEN_PARK_CONDO.lat, lng: GOLDEN_PARK_CONDO.lng });
 
-    // Reference marker
-    L.marker([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], { icon: refIcon, interactive: true })
-      .addTo(map)
-      .bindPopup(GOLDEN_PARK_CONDO.name);
 
     setMapReady(true);
 

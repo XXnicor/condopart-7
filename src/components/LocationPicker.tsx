@@ -36,10 +36,6 @@ const LocationPicker = ({ value, onChange, error }: LocationPickerProps) => {
     map.setView([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], GOLDEN_PARK_CONDO.zoom);
     setPendingCoords({ lat: GOLDEN_PARK_CONDO.lat, lng: GOLDEN_PARK_CONDO.lng });
 
-    // Reference marker for the condo
-    L.marker([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], { icon: refIcon, interactive: true })
-      .addTo(map)
-      .bindPopup(GOLDEN_PARK_CONDO.name);
 
     setMapStatus('ready');
 
