@@ -16,6 +16,7 @@ import {
   Loader2,
   MapPin,
   PawPrint,
+  Share2,
   XCircle,
 } from 'lucide-react';
 import { SkeletonCard } from '@/components/ui/skeleton-card';
