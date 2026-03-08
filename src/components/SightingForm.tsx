@@ -62,6 +62,7 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
 
 
     setMapReady(true);
+    setTimeout(() => map.invalidateSize(), 100);
 
     map.on('dragstart', () => setDragging(true));
     map.on('dragend', () => {

@@ -14,8 +14,8 @@ const SightingMiniMap = ({ location, className }: SightingMiniMapProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
 
-  const lat = location.lat || GOLDEN_PARK_CONDO.lat;
-  const lng = location.lng || GOLDEN_PARK_CONDO.lng;
+  const lat = parseFloat(String(location.lat)) || GOLDEN_PARK_CONDO.lat;
+  const lng = parseFloat(String(location.lng)) || GOLDEN_PARK_CONDO.lng;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -40,7 +40,19 @@ const SightingMiniMap = ({ location, className }: SightingMiniMapProps) => {
     });
 
     L.marker([lat, lng], { icon }).addTo(map);
+
+    const refIcon = L.divIcon({
+      className: '',
+      html: `<div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;color:white;font-size:13px;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.3);">🏢</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+    });
+    L.marker([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], { icon: refIcon, interactive: true })
+      .addTo(map)
+      .bindPopup(GOLDEN_PARK_CONDO.name);
+
     mapRef.current = map;
+    setTimeout(() => map.invalidateSize(), 100);
 
     return () => {
       mapRef.current?.remove();

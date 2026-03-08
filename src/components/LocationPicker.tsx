@@ -48,6 +48,7 @@ const LocationPicker = ({ value, onChange, error }: LocationPickerProps) => {
 
 
     setMapStatus('ready');
+    setTimeout(() => map.invalidateSize(), 100);
 
     map.on('dragstart', () => setDragging(true));
     map.on('dragend', () => {
