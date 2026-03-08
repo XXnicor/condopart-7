@@ -13,13 +13,6 @@ interface LocationPickerProps {
   error?: string;
 }
 
-const refIcon = L.divIcon({
-  className: '',
-  html: `<div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;color:white;font-size:14px;">🏢</div>`,
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
-});
-
 const LocationPicker = ({ value, onChange, error }: LocationPickerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -43,10 +36,6 @@ const LocationPicker = ({ value, onChange, error }: LocationPickerProps) => {
     map.setView([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], GOLDEN_PARK_CONDO.zoom);
     setPendingCoords({ lat: GOLDEN_PARK_CONDO.lat, lng: GOLDEN_PARK_CONDO.lng });
 
-    // Reference marker for the condo
-    L.marker([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], { icon: refIcon, interactive: true })
-      .addTo(map)
-      .bindPopup(GOLDEN_PARK_CONDO.name);
 
     setMapStatus('ready');
 

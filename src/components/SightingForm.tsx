@@ -21,13 +21,6 @@ interface FormErrors {
   location?: string;
 }
 
-const refIcon = L.divIcon({
-  className: '',
-  html: `<div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;color:white;font-size:14px;">🏢</div>`,
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
-});
-
 const SightingForm = ({ alertId }: SightingFormProps) => {
   const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
@@ -57,10 +50,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
     map.setView([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], GOLDEN_PARK_CONDO.zoom);
     setPendingCoords({ lat: GOLDEN_PARK_CONDO.lat, lng: GOLDEN_PARK_CONDO.lng });
 
-    // Reference marker
-    L.marker([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], { icon: refIcon, interactive: true })
-      .addTo(map)
-      .bindPopup(GOLDEN_PARK_CONDO.name);
 
     setMapReady(true);
 
