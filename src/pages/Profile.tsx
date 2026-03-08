@@ -554,8 +554,6 @@ const Profile = () => {
         </motion.div>
       </motion.div>
 
-      </motion.div>
-
       <BottomNav />
     </div>
   );
