@@ -21,13 +21,6 @@ interface FormErrors {
   location?: string;
 }
 
-const refIcon = L.divIcon({
-  className: '',
-  html: `<div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;color:white;font-size:14px;">🏢</div>`,
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
-});
-
 const SightingForm = ({ alertId }: SightingFormProps) => {
   const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
