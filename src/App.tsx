@@ -17,6 +17,7 @@ import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import PublicAlert from "./pages/PublicAlert";
 import FeedPreview from "./pages/FeedPreview";
+import DesignPreview from "./pages/DesignPreview";
 
 const queryClient = new QueryClient();
 
@@ -43,7 +44,8 @@ const AnimatedRoutes = () => {
           <Route path="/syndic" element={<ProtectedRoute><Syndic /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/p/alert/:id" element={<PublicAlert />} />
-          <Route path="*" element={<NotFound />} />
+            <Route path="/preview" element={<DesignPreview />} />
+            <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
