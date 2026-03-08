@@ -29,6 +29,7 @@ import AlertMap from '@/components/AlertMap';
 import SightingForm from '@/components/SightingForm';
 import AlertFeed from '@/components/AlertFeed';
 import ResolveAlertModal from '@/components/ResolveAlertModal';
+import ShareAlertSheet from '@/components/ShareAlertSheet';
 
 const statusConfig = {
   active: { label: '🔍 Procurando', className: 'bg-success text-success-foreground' },
