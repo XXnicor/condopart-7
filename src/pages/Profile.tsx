@@ -228,14 +228,14 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
+      {/* Header with gradient background */}
       <motion.div
-        className="mx-auto max-w-[480px] space-y-6 px-4 py-6"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        className="bg-gradient-to-r from-amber-400 via-amber-500 to-orange-400 rounded-b-3xl overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
       >
-        {/* ── 1. HEADER ── */}
-        <div className="flex flex-col items-center gap-2">
+        <div className="mx-auto max-w-[480px] px-4 py-8 flex flex-col items-center gap-3">
           <input
             ref={avatarInputRef}
             type="file"
@@ -243,19 +243,22 @@ const Profile = () => {
             className="hidden"
             onChange={handleAvatarChange}
           />
-          <button
+          <motion.button
             className="relative group"
             onClick={() => avatarInputRef.current?.click()}
             disabled={uploadingAvatar}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
           >
             {profile.avatar_url ? (
               <img
                 src={profile.avatar_url}
                 alt={profile.full_name ?? 'Avatar'}
-                className="h-20 w-20 rounded-full object-cover"
+                className="h-20 w-20 rounded-full object-cover ring-4 ring-white shadow-lg"
               />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white text-primary text-2xl font-bold ring-4 ring-white shadow-lg">
                 {getInitials(profile.full_name)}
               </div>
             )}
@@ -266,30 +269,55 @@ const Profile = () => {
                 <Camera className="h-5 w-5 text-white" />
               )}
             </div>
-          </button>
-          <p className="text-lg font-semibold text-foreground">
-            {profile.full_name || 'Sem nome'}
-          </p>
-          {profile.role === 'syndic' ? (
-            <Badge className="bg-primary/10 text-primary border-primary/30 gap-1" variant="outline">
-              <Shield className="h-3 w-3" /> Síndico
-            </Badge>
-          ) : (
-            <Badge variant="outline" className="text-muted-foreground">
-              Morador
-            </Badge>
-          )}
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <Building2 className="h-3.5 w-3.5" />
-            <span>{condoName ?? 'Condomínio não definido'}</span>
-          </div>
-        </div>
+          </motion.button>
 
-        {/* ── 2. MEUS PETS ── */}
-        <div>
-          <h2 className="mb-3 text-base font-semibold text-foreground">Meus pets</h2>
+          <motion.div
+            className="flex flex-col items-center gap-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.15 }}
+          >
+            <h1 className="text-2xl font-display font-bold text-white drop-shadow-md">
+              {profile.full_name || 'Sem nome'}
+            </h1>
+
+            <div className="flex items-center gap-2">
+              {profile.role === 'syndic' ? (
+                <Badge className="bg-white/20 text-white border-white/40 gap-1 backdrop-blur-sm">
+                  <Shield className="h-3 w-3" /> Síndico
+                </Badge>
+              ) : (
+                <Badge className="bg-white/20 text-white border-white/40 backdrop-blur-sm">
+                  Morador
+                </Badge>
+              )}
+            </div>
+
+            <div className="flex items-center gap-1 text-sm text-white/90">
+              <Building2 className="h-4 w-4" />
+              <span className="font-medium">{condoName ?? 'Condomínio não definido'}</span>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="mx-auto max-w-[480px] px-4 space-y-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+      >
+
+        {/* ── MEUS PETS ── */}
+        <motion.div
+          className="relative -mt-6 rounded-2xl bg-card p-4 shadow-lg"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
+          <h2 className="mb-4 text-base font-semibold text-foreground">Meus pets</h2>
           {petsLoading ? (
-            <div className="flex gap-3">
+            <div className="flex gap-4 justify-center">
               {[1, 2, 3].map((i) => (
                 <Skeleton key={i} className="h-14 w-14 rounded-full shrink-0" />
               ))}
@@ -303,52 +331,66 @@ const Profile = () => {
                 onClick={() => toast.info('Cadastro de pets em breve!')}
                 className="flex flex-col items-center gap-1"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-primary/50">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-primary/50 hover:border-primary transition-colors">
                   <Plus className="h-5 w-5 text-primary" />
                 </div>
                 <span className="text-xs text-primary font-medium">Adicionar</span>
               </button>
             </div>
           ) : (
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
-              {myPets.map((pet) => (
-                <div key={pet.id} className="flex flex-col items-center gap-1 shrink-0">
+            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide justify-center">
+              {myPets.map((pet, idx) => (
+                <motion.div
+                  key={pet.id}
+                  className="flex flex-col items-center gap-2 shrink-0"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.3, delay: idx * 0.08 }}
+                >
                   {pet.photo_url ? (
                     <img
                       src={pet.photo_url}
                       alt={pet.name}
-                      className="h-14 w-14 rounded-full object-cover"
+                      className="h-14 w-14 rounded-full object-cover ring-2 ring-primary/20"
                     />
                   ) : (
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary text-secondary-foreground text-sm font-semibold">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary text-secondary-foreground text-sm font-semibold ring-2 ring-primary/20">
                       {pet.name[0]?.toUpperCase() ?? '?'}
                     </div>
                   )}
                   <span className="w-14 text-center text-xs text-foreground truncate">
                     {pet.name}
                   </span>
-                </div>
+                </motion.div>
               ))}
-              <button
+              <motion.button
                 onClick={() => toast.info('Cadastro de pets em breve!')}
                 className="flex flex-col items-center gap-1 shrink-0"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.3, delay: (myPets.length) * 0.08 }}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-primary/50">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-primary/50 hover:border-primary hover:bg-primary/5 transition-colors">
                   <Plus className="h-5 w-5 text-primary" />
                 </div>
                 <span className="text-xs text-primary font-medium">Adicionar</span>
-              </button>
+              </motion.button>
             </div>
           )}
-        </div>
+        </motion.div>
 
-        {/* ── 3. MINHA ATIVIDADE ── */}
-        <div>
+        {/* ── MINHA ATIVIDADE ── */}
+        <motion.div
+          className="rounded-2xl bg-card p-4 shadow-md"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
           <h2 className="mb-3 text-base font-semibold text-foreground">Minha atividade</h2>
           {alertsLoading ? (
             <div className="space-y-3">
               {[1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-10 w-full" />
+                <Skeleton key={i} className="h-12 w-full" />
               ))}
             </div>
           ) : !myAlerts?.length ? (
@@ -359,63 +401,69 @@ const Profile = () => {
               </p>
               <button
                 onClick={() => navigate('/create-alert')}
-                className="text-sm font-medium text-primary"
+                className="text-sm font-medium text-primary hover:underline"
               >
                 Criar alerta agora →
               </button>
             </div>
           ) : (
-            <div>
-              {myAlerts.map((alert, idx) => {
+            <div className="space-y-2">
+              {myAlerts.slice(0, 3).map((alert, idx) => {
                 const s = statusMap[alert.status] ?? statusMap.active;
                 return (
-                  <div key={alert.id}>
-                    <button
-                      className="flex w-full items-center gap-3 py-3 text-left"
-                      onClick={() => navigate(`/alert/${alert.id}`)}
-                    >
-                      <PawPrint className="h-5 w-5 text-primary shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-foreground truncate">
-                          {alert.title}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {format(new Date(alert.created_at), "d 'de' MMMM", { locale: ptBR })}
-                        </p>
-                      </div>
-                      <Badge variant={s.variant} className={s.className}>
-                        {s.label}
-                      </Badge>
-                    </button>
-                    {idx < myAlerts.length - 1 && <Separator />}
-                  </div>
+                  <motion.button
+                    key={alert.id}
+                    className="flex w-full items-center gap-3 rounded-xl bg-secondary/50 p-3 text-left transition-colors hover:bg-secondary"
+                    onClick={() => navigate(`/alert/${alert.id}`)}
+                    initial={{ x: -10, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.35 + idx * 0.08 }}
+                  >
+                    <PawPrint className="h-5 w-5 text-primary shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-foreground truncate">
+                        {alert.title}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {format(new Date(alert.created_at), "d 'de' MMMM 'às' HH:mm", { locale: ptBR })}
+                      </p>
+                    </div>
+                    <Badge variant={s.variant} className={`${s.className} text-xs`}>
+                      {s.label}
+                    </Badge>
+                  </motion.button>
                 );
               })}
             </div>
           )}
-        </div>
+        </motion.div>
 
-        {/* ── 4. INFORMAÇÕES DA CONTA ── */}
-        <Card className="rounded-2xl border-border/50 shadow-md">
-          <CardContent className="space-y-4 p-4">
-            <h2 className="text-base font-semibold text-foreground">Informações da conta</h2>
-            <div className="space-y-1.5">
-              <Label htmlFor="full_name" className="text-xs text-muted-foreground">
-                Nome
+        {/* ── INFORMAÇÕES DA CONTA ── */}
+        <motion.div
+          className="rounded-2xl bg-card p-4 shadow-md"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+        >
+          <h2 className="mb-4 text-base font-semibold text-foreground">Informações da conta</h2>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="full_name" className="text-xs font-medium text-muted-foreground">
+                Nome completo
               </Label>
               <Input
                 id="full_name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 maxLength={100}
-                className={nameError ? 'border-destructive' : ''}
+                className={`rounded-xl ${nameError ? 'border-destructive' : ''}`}
               />
               {nameError && (
                 <p className="text-xs text-destructive">{nameError}</p>
               )}
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="phone" className="text-xs text-muted-foreground">
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="text-xs font-medium text-muted-foreground">
                 Telefone
               </Label>
               <Input
@@ -424,10 +472,11 @@ const Profile = () => {
                 value={phone}
                 onChange={(e) => setPhone(formatPhone(e.target.value))}
                 placeholder="(11) 99999-9999"
+                className="rounded-xl"
               />
             </div>
             <Button
-              className="w-full rounded-2xl"
+              className="w-full rounded-2xl h-11 font-semibold"
               disabled={!canSave}
               onClick={handleSave}
             >
@@ -439,26 +488,31 @@ const Profile = () => {
                 'Salvar alterações'
               )}
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </motion.div>
 
-        {/* ── 5. RODAPÉ ── */}
-        <div className="space-y-1">
+        {/* ── AÇÕES ── */}
+        <motion.div
+          className="space-y-2"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+        >
           <button
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors hover:bg-muted"
+            className="flex w-full items-center gap-3 rounded-2xl bg-card px-4 py-3 text-left transition-colors hover:bg-secondary"
             onClick={() => navigate('/reset-password')}
           >
-            <KeyRound className="h-5 w-5 text-muted-foreground" />
-            <span className="flex-1 text-sm text-foreground">Redefinir senha</span>
+            <KeyRound className="h-5 w-5 text-primary shrink-0" />
+            <span className="flex-1 text-sm font-medium text-foreground">Redefinir senha</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>
 
           <button
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors hover:bg-destructive/5"
+            className="flex w-full items-center gap-3 rounded-2xl bg-destructive/10 px-4 py-3 text-left transition-colors hover:bg-destructive/15"
             onClick={() => setShowLogoutConfirm((v) => !v)}
           >
-            <LogOut className="h-5 w-5 text-destructive" />
-            <span className="flex-1 text-sm text-destructive">Sair da conta</span>
+            <LogOut className="h-5 w-5 text-destructive shrink-0" />
+            <span className="flex-1 text-sm font-medium text-destructive">Sair da conta</span>
             <ChevronRight className="h-4 w-4 text-destructive" />
           </button>
 
@@ -471,8 +525,8 @@ const Profile = () => {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <div className="space-y-2 px-3 pb-2 pt-1">
-                  <p className="text-sm text-center text-muted-foreground">
+                <div className="rounded-2xl bg-destructive/5 border border-destructive/20 space-y-3 p-4 mt-2">
+                  <p className="text-sm font-medium text-center text-foreground">
                     Tem certeza que deseja sair?
                   </p>
                   <div className="flex gap-2">
@@ -484,8 +538,7 @@ const Profile = () => {
                       Cancelar
                     </Button>
                     <Button
-                      variant="outline"
-                      className="flex-1 rounded-2xl border-destructive/30 text-destructive hover:bg-destructive/5 hover:text-destructive"
+                      className="flex-1 rounded-2xl bg-destructive hover:bg-destructive/90 text-white font-semibold"
                       onClick={handleLogout}
                     >
                       <LogOut className="mr-2 h-4 w-4" /> Sair
@@ -495,7 +548,9 @@ const Profile = () => {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
+      </motion.div>
+
       </motion.div>
 
       <BottomNav />
