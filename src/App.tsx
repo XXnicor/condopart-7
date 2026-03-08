@@ -15,6 +15,7 @@ import Syndic from "./pages/Syndic";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import PublicAlert from "./pages/PublicAlert";
+import FeedPreview from "./pages/FeedPreview";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/condo-selection" element={<ProtectedRoute><CondoSelection /></ProtectedRoute>} />
             <Route path="/create-alert" element={<ProtectedRoute><CreateAlert /></ProtectedRoute>} />
             <Route path="/alert/:id" element={<ProtectedRoute><AlertDetail /></ProtectedRoute>} />
+            <Route path="/feed-preview" element={<ProtectedRoute><FeedPreview /></ProtectedRoute>} />
             <Route path="/syndic" element={<ProtectedRoute><Syndic /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/p/alert/:id" element={<PublicAlert />} />
