@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { SightingLocation } from '@/lib/sightings';
+import { GOLDEN_PARK_CONDO } from '@/lib/constants';
 
 interface SightingFormProps {
   alertId: string;
@@ -19,6 +20,13 @@ interface FormErrors {
   notes?: string;
   location?: string;
 }
+
+const refIcon = L.divIcon({
+  className: '',
+  html: `<div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:#f59e0b;border-radius:50%;color:white;font-size:14px;">🏢</div>`,
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+});
 
 const SightingForm = ({ alertId }: SightingFormProps) => {
   const [notes, setNotes] = useState('');
@@ -40,26 +48,21 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
-    const map = L.map(containerRef.current, { zoomControl: false });
+    const map = L.map(containerRef.current, { zoomControl: false, minZoom: 14 });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
     }).addTo(map);
     mapRef.current = map;
 
-    // Try user location, fallback to default
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        map.setView([pos.coords.latitude, pos.coords.longitude], 17);
-        setPendingCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-        setMapReady(true);
-      },
-      () => {
-        map.setView([-23.5015, -47.4526], 17);
-        setPendingCoords({ lat: -23.5015, lng: -47.4526 });
-        setMapReady(true);
-      },
-      { timeout: 5000 },
-    );
+    map.setView([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], GOLDEN_PARK_CONDO.zoom);
+    setPendingCoords({ lat: GOLDEN_PARK_CONDO.lat, lng: GOLDEN_PARK_CONDO.lng });
+
+    // Reference marker
+    L.marker([GOLDEN_PARK_CONDO.lat, GOLDEN_PARK_CONDO.lng], { icon: refIcon, interactive: true })
+      .addTo(map)
+      .bindPopup(GOLDEN_PARK_CONDO.name);
+
+    setMapReady(true);
 
     map.on('dragstart', () => setDragging(true));
     map.on('dragend', () => {
@@ -174,7 +177,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
                 className={`rounded-xl overflow-hidden border ${errors.location ? 'border-destructive' : 'border-border'}`}
               />
 
-              {/* Loading */}
               {!mapReady && (
                 <div className="absolute inset-0 z-[1000] flex items-center justify-center rounded-xl bg-background/80">
                   <Loader2 className="h-4 w-4 animate-spin text-primary" />
@@ -182,7 +184,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
                 </div>
               )}
 
-              {/* Fixed center pin */}
               {mapReady && (
                 <div className="pointer-events-none absolute inset-0 z-[1000] flex items-center justify-center">
                   <div
@@ -202,7 +203,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
                 </div>
               )}
 
-              {/* Instruction chip */}
               {mapReady && !confirmedCoords && (
                 <div className="absolute left-0 right-0 top-2 z-[1000] flex justify-center">
                   <div className="rounded-full bg-background/90 px-2.5 py-1 text-[10px] font-medium text-foreground shadow-sm backdrop-blur-sm">
@@ -211,7 +211,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
                 </div>
               )}
 
-              {/* Confirmed overlay */}
               {confirmedCoords && resolvedLabel && (
                 <div className="absolute left-2 right-2 top-2 z-[1000] flex items-center gap-1.5 rounded-lg bg-background/95 px-2.5 py-1.5 shadow-sm backdrop-blur-sm">
                   <MapPin className="h-3.5 w-3.5 shrink-0 text-primary" />
@@ -226,7 +225,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
                 </div>
               )}
 
-              {/* GPS button */}
               {mapReady && (
                 <button
                   type="button"
@@ -249,7 +247,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
             {errors.location && <p className="text-xs text-destructive">{errors.location}</p>}
           </div>
 
-          {/* Confirm location button */}
           {mapReady && !confirmedCoords && (
             <Button
               type="button"
@@ -271,7 +268,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
             </Button>
           )}
 
-          {/* Editable label after confirm */}
           {confirmedCoords && (
             <Input
               placeholder="Ex: Próximo ao portão 2"
@@ -282,7 +278,6 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
             />
           )}
 
-          {/* Submit */}
           <Button type="submit" size="sm" className="w-full" disabled={isCreating}>
             {isCreating ? (
               <>
