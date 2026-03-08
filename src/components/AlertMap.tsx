@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Sighting } from '@/lib/sightings';
+import { GOLDEN_PARK_CONDO } from '@/lib/constants';
 
 // Fix default marker icons
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
@@ -30,10 +31,14 @@ const AlertMap = ({ sightings, className }: AlertMapProps) => {
 
   // Init map once
   useEffect(() => {
-    if (!containerRef.current || mapped.length === 0 || mapRef.current) return;
+    if (!containerRef.current || mapRef.current) return;
 
-    const centerLat = mapped.reduce((sum, s) => sum + s.location.lat, 0) / mapped.length;
-    const centerLng = mapped.reduce((sum, s) => sum + s.location.lng, 0) / mapped.length;
+    const centerLat = mapped.length > 0
+      ? mapped.reduce((sum, s) => sum + s.location.lat, 0) / mapped.length
+      : GOLDEN_PARK_CONDO.lat;
+    const centerLng = mapped.length > 0
+      ? mapped.reduce((sum, s) => sum + s.location.lng, 0) / mapped.length
+      : GOLDEN_PARK_CONDO.lng;
 
     const map = L.map(containerRef.current).setView([centerLat, centerLng], 16);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -68,8 +73,6 @@ const AlertMap = ({ sightings, className }: AlertMapProps) => {
         );
     });
   }, [mapped]);
-
-  if (mapped.length === 0) return null;
 
   return (
     <div className={cn('rounded-2xl border border-border/50 bg-card shadow-md overflow-hidden', className)}>

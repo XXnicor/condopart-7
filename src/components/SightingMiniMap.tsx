@@ -3,6 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { cn } from '@/lib/utils';
 import type { SightingLocation } from '@/lib/sightings';
+import { GOLDEN_PARK_CONDO } from '@/lib/constants';
 
 interface SightingMiniMapProps {
   location: SightingLocation;
@@ -12,6 +13,9 @@ interface SightingMiniMapProps {
 const SightingMiniMap = ({ location, className }: SightingMiniMapProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
+
+  const lat = location.lat || GOLDEN_PARK_CONDO.lat;
+  const lng = location.lng || GOLDEN_PARK_CONDO.lng;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -24,7 +28,7 @@ const SightingMiniMap = ({ location, className }: SightingMiniMapProps) => {
       zoomControl: false,
       keyboard: false,
       attributionControl: false,
-    }).setView([location.lat, location.lng], 17);
+    }).setView([lat, lng], 17);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
@@ -35,14 +39,14 @@ const SightingMiniMap = ({ location, className }: SightingMiniMapProps) => {
       iconAnchor: [16, 16],
     });
 
-    L.marker([location.lat, location.lng], { icon }).addTo(map);
+    L.marker([lat, lng], { icon }).addTo(map);
     mapRef.current = map;
 
     return () => {
       mapRef.current?.remove();
       mapRef.current = null;
     };
-  }, [location.lat, location.lng]);
+  }, [lat, lng]);
 
   return (
     <div
