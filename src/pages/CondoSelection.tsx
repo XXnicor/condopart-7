@@ -45,7 +45,7 @@ const CondoSelection = () => {
             {GOLDEN_PARK_CONDO.name}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {GOLDEN_PARK_CONDO.neighborhood} — {GOLDEN_PARK_CONDO.city}
+            {GOLDEN_PARK_CONDO.address}
           </p>
         </div>
 
