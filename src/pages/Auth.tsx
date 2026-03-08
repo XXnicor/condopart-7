@@ -44,8 +44,10 @@ const Auth = () => {
   const [signupErrors, setSignupErrors] = useState<{ name?: string; email?: string; password?: string; confirmPassword?: string }>({});
   const [signupSuccess, setSignupSuccess] = useState<string | null>(null);
 
+  const redirectTo = new URLSearchParams(window.location.search).get('redirect') || '/';
+
   if (session) {
-    navigate('/', { replace: true });
+    navigate(redirectTo, { replace: true });
     return null;
   }
 
