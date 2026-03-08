@@ -229,8 +229,10 @@ const LocationPicker = ({ value, onChange, error }: LocationPickerProps) => {
           placeholder="Ex: Próximo ao portão, perto da churrasqueira..."
           value={labelInput}
           onChange={(e) => setLabelInput(e.target.value)}
-          className="rounded-xl text-sm"
+          className="rounded-xl text-base min-h-[44px]"
           maxLength={200}
+          autoComplete="off"
+          autoCorrect="off"
         />
       )}
 

@@ -161,7 +161,8 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
               }}
               rows={2}
               maxLength={500}
-              className={errors.notes ? 'border-destructive' : ''}
+              className={`text-base min-h-[44px] ${errors.notes ? 'border-destructive' : ''}`}
+              autoCorrect="off"
             />
             {errors.notes && <p className="text-xs text-destructive">{errors.notes}</p>}
           </div>
@@ -274,7 +275,9 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
               value={labelInput}
               onChange={(e) => setLabelInput(e.target.value)}
               maxLength={200}
-              className="text-xs rounded-lg"
+              className="text-base min-h-[44px] rounded-lg"
+              autoComplete="off"
+              autoCorrect="off"
             />
           )}
 

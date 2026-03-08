@@ -51,7 +51,7 @@ const getInitials = (name: string | null) => {
 /* ── sub-components ─────────────────────────────────── */
 
 const ProfileSkeleton = () => (
-  <div className="mx-auto max-w-[480px] space-y-6 px-4 py-6">
+  <div className="space-y-6 px-4 py-6">
     {/* header */}
     <div className="flex flex-col items-center gap-3">
       <Skeleton className="h-20 w-20 rounded-full" />

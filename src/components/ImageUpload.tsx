@@ -111,14 +111,12 @@ const ImageUpload = ({
               ? 'border-destructive bg-destructive/5'
               : 'border-amber-300 bg-amber-50 hover:border-amber-400 hover:bg-amber-100/50'
           )}
-          style={{ paddingBottom: '50%', position: 'relative' }}
+          style={{ height: '200px' }}
         >
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <Camera className="mb-2 h-8 w-8 text-amber-500" />
-            <span className="text-sm font-medium text-muted-foreground">
-              Toque para adicionar uma foto
-            </span>
-          </div>
+          <Camera className="mb-2 h-8 w-8 text-amber-500" />
+          <span className="text-sm font-medium text-muted-foreground">
+            Toque para adicionar uma foto
+          </span>
         </button>
       )}
 

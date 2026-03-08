@@ -55,11 +55,15 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <AnimatedRoutes />
-        </AuthProvider>
-      </BrowserRouter>
+      <div className="min-h-screen w-full bg-gray-50">
+        <div className="mx-auto flex justify-center">
+          <BrowserRouter>
+            <AuthProvider>
+              <AnimatedRoutes />
+            </AuthProvider>
+          </BrowserRouter>
+        </div>
+      </div>
     </TooltipProvider>
   </QueryClientProvider>
 );

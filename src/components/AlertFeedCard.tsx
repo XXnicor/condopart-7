@@ -116,7 +116,7 @@ const AlertFeedCard = ({
           </div>
 
           {/* Footer with counters */}
-          <div className="flex gap-2 bg-amber-50 -mx-3 -mb-3 px-3 py-2 border-t border-amber-100/50">
+          <div className="flex gap-2 bg-amber-50 rounded-b-lg px-3 py-2 border-t border-amber-100/50 mt-auto">
             <div className="flex items-center gap-1 text-[10px] text-amber-900 font-semibold">
               <Eye className="h-3 w-3" />
               <span>{sighting_count} avistamentos</span>

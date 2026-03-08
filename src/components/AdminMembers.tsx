@@ -104,6 +104,9 @@ export default function AdminMembers({ condoId, currentUserId }: Props) {
         placeholder="Buscar por nome..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        className="text-base min-h-[44px]"
+        autoComplete="off"
+        autoCorrect="off"
       />
 
       {filtered.length === 0 ? (

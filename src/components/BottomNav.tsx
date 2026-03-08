@@ -19,10 +19,15 @@ const BottomNav = () => {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      className="fixed bottom-0 left-1/2 z-50 border-t border-border bg-card/95 backdrop-blur-md"
+      style={{
+        transform: 'translateX(-50%)',
+        width: '100%',
+        maxWidth: '480px',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
     >
-      <div className="mx-auto flex max-w-[480px] items-center justify-around py-2">
+      <div className="flex items-center justify-around py-2">
         {items.map(({ icon: Icon, label, path }) => {
           const active = location.pathname === path;
           return (
