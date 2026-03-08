@@ -45,7 +45,7 @@ const CondoSelection = () => {
             {GOLDEN_PARK_CONDO.name}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Av. Ipanema, 5870 - Sorocaba, SP
+            {GOLDEN_PARK_CONDO.neighborhood} — {GOLDEN_PARK_CONDO.city}
           </p>
         </div>
 
