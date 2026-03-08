@@ -34,6 +34,7 @@ const App = () => (
             <Route path="/alert/:id" element={<ProtectedRoute><AlertDetail /></ProtectedRoute>} />
             <Route path="/syndic" element={<ProtectedRoute><Syndic /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/p/alert/:id" element={<PublicAlert />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

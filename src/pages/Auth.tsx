@@ -89,7 +89,7 @@ const Auth = () => {
       }
       toast.error(msg);
     } else {
-      navigate('/');
+      navigate(redirectTo);
     }
   };
 

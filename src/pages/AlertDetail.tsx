@@ -291,6 +291,14 @@ const AlertDetail = () => {
         onSuccess={handleResolveSuccess}
       />
 
+      <ShareAlertSheet
+        isOpen={showShareSheet}
+        onClose={() => setShowShareSheet(false)}
+        alertId={id!}
+        alertTitle={alert.title}
+        alertDescription={alert.description}
+      />
+
       <BottomNav />
     </div>
   );
