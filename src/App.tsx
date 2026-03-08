@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import Syndic from "./pages/Syndic";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
+import PublicAlert from "./pages/PublicAlert";
 
 const queryClient = new QueryClient();
 
