@@ -103,4 +103,13 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Nunito', sans-serif;
   }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

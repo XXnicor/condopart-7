@@ -6,17 +6,17 @@ import { useAlert } from '@/hooks/useAlert';
 import { useAlertActions } from '@/hooks/useAlertActions';
 import { useSightings } from '@/hooks/useSightings';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import {
   ArrowLeft,
   CheckCircle2,
   Clock,
+  Eye,
   Loader2,
   MapPin,
   PawPrint,
   Share2,
+  User,
   XCircle,
 } from 'lucide-react';
 import { SkeletonCard } from '@/components/ui/skeleton-card';
@@ -48,6 +48,7 @@ const AlertDetail = () => {
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showShareSheet, setShowShareSheet] = useState(false);
+  const [expandedDescription, setExpandedDescription] = useState(false);
 
   // Broadcast listener for alert-resolved events
   useEffect(() => {
@@ -119,91 +120,231 @@ const AlertDetail = () => {
   const canCancel = isOwner && isActive;
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <header className="sticky top-0 z-40 border-b border-border bg-card/95 px-4 py-3 backdrop-blur-md">
-        <div className="mx-auto flex max-w-[480px] items-center gap-3">
-          <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-          <h1 className="font-display text-lg font-bold truncate">{alert.title}</h1>
-          <div className="ml-auto flex items-center gap-2">
-            <button onClick={() => setShowShareSheet(true)} className="rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
-              <Share2 className="h-5 w-5" />
-            </button>
-            {statusBadge(alert.status)}
+    <div className="min-h-screen bg-background">
+      {/* Hero section with overlay */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+        className="relative overflow-hidden bg-secondary"
+        style={{ height: '280px' }}
+      >
+        {/* Photo with gradient overlay */}
+        {alert.photo_url ? (
+          <img
+            src={alert.photo_url}
+            alt={alert.title}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-secondary to-secondary/80">
+            <PawPrint className="h-24 w-24 text-muted-foreground/20" />
           </div>
+        )}
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/60" />
+
+        {/* Pet name overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          <h1 className="font-display text-3xl font-bold text-white drop-shadow-lg">
+            {alert.title}
+          </h1>
         </div>
-      </header>
 
-      <main className="mx-auto max-w-[480px] px-4 py-4 space-y-4">
-        {/* Status Banner — Found */}
-        {alert.status === 'found' && (
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="rounded-2xl border border-success/30 bg-success/10 p-4"
-          >
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-success" />
-              <span className="font-display font-bold text-foreground">Pet encontrado! 🐾</span>
-            </div>
-            {alert.resolved_at && (
-              <p className="mt-1 text-xs text-muted-foreground">
-                Encerrado em {format(new Date(alert.resolved_at), "d 'de' MMMM 'às' HH:mm", { locale: ptBR })}
-              </p>
+        {/* Floating status badge */}
+        <motion.div
+          className="absolute right-4 top-4 z-10"
+          animate={alert.status === 'active' ? { scale: [1, 1.05, 1] } : {}}
+          transition={alert.status === 'active' ? { duration: 2, repeat: Infinity } : {}}
+        >
+          {statusBadge(alert.status)}
+        </motion.div>
+
+        {/* Back button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute left-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+
+        {/* Share button */}
+        <button
+          onClick={() => setShowShareSheet(true)}
+          className="absolute right-14 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
+        >
+          <Share2 className="h-5 w-5" />
+        </button>
+      </motion.div>
+
+      <main className="mx-auto max-w-[480px] px-4 pb-24">
+        {/* Card content sobreposto */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="relative -mt-12 rounded-t-3xl bg-card shadow-lg"
+        >
+          <div className="space-y-4 p-4">
+            {/* Status Banner — Found */}
+            {alert.status === 'found' && (
+              <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="rounded-2xl border border-success/30 bg-success/10 p-3"
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-success" />
+                  <span className="font-display font-semibold text-success">Pet encontrado! 🐾</span>
+                </div>
+                {alert.resolved_at && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Encerrado em {format(new Date(alert.resolved_at), "d 'de' MMMM 'às' HH:mm", { locale: ptBR })}
+                  </p>
+                )}
+                {alert.resolution_note && (
+                  <p className="mt-2 text-sm italic text-foreground/80">{alert.resolution_note}</p>
+                )}
+              </motion.div>
             )}
-            {alert.resolution_note && (
-              <p className="mt-2 text-sm italic text-foreground/80">{alert.resolution_note}</p>
+
+            {/* Status Banner — Cancelled */}
+            {alert.status === 'cancelled' && (
+              <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="rounded-2xl border border-border bg-muted p-3 text-center"
+              >
+                <p className="text-sm text-muted-foreground">Este alerta foi cancelado pelo dono.</p>
+              </motion.div>
             )}
-          </motion.div>
-        )}
 
-        {/* Status Banner — Cancelled */}
-        {alert.status === 'cancelled' && (
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="rounded-2xl border border-border bg-muted p-4 text-center"
-          >
-            <p className="text-sm text-muted-foreground">Este alerta foi cancelado pelo dono.</p>
-          </motion.div>
-        )}
-
-        {/* Photo */}
-        <div className="overflow-hidden rounded-2xl bg-secondary shadow-md">
-          <AspectRatio ratio={4 / 3}>
-            {alert.photo_url ? (
-              <img src={alert.photo_url} alt={alert.title} className="h-full w-full object-cover" />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center">
-                <PawPrint className="h-16 w-16 text-muted-foreground/30" />
+            {/* Reporter info */}
+            <div className="flex items-center gap-3 rounded-xl bg-secondary/50 p-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <User className="h-5 w-5 text-primary" />
               </div>
-            )}
-          </AspectRatio>
-        </div>
-
-        {/* Info */}
-        <Card className="rounded-2xl border-border/50 shadow-md">
-          <CardContent className="space-y-3 p-4">
-            <p className="text-sm leading-relaxed text-foreground">{alert.description}</p>
-            <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {alert.location_label || 'Local não informado'}</span>
-              <span className="flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" />
-                {format(new Date(alert.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
-              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-muted-foreground">Reportado por</p>
+                <p className="truncate text-sm font-display font-bold text-foreground">{alert.reporter?.full_name || 'Morador'}</p>
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">
-              {formatDistanceToNow(new Date(alert.created_at), { addSuffix: true, locale: ptBR })}
-            </p>
-          </CardContent>
-        </Card>
+
+            {/* Description (Expandable) */}
+            <motion.div
+              initial={false}
+              animate={{ height: 'auto' }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-3">
+                <div>
+                  <p
+                    className={`text-sm leading-relaxed transition-all ${
+                      expandedDescription ? 'text-foreground' : 'line-clamp-2 text-foreground'
+                    }`}
+                  >
+                    {alert.description}
+                  </p>
+                  {alert.description && alert.description.length > 100 && (
+                    <button
+                      onClick={() => setExpandedDescription(!expandedDescription)}
+                      className="mt-2 text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+                    >
+                      {expandedDescription ? 'Menos' : 'Leia mais'}
+                    </button>
+                  )}
+                </div>
+
+                {/* Location & Time */}
+                <div className="space-y-2 border-t border-border/50 pt-3">
+                  <div className="flex items-start gap-2 text-sm">
+                    <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
+                    <span className="text-foreground">{alert.location_label || 'Local não informado'}</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                    <Clock className="h-4 w-4 shrink-0 mt-0.5" />
+                    <div>
+                      <p>{format(new Date(alert.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}</p>
+                      <p>{formatDistanceToNow(new Date(alert.created_at), { addSuffix: true, locale: ptBR })}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Sightings Carousel */}
+            {!loadingSightings && sightings.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="border-t border-border/50 pt-3 space-y-2"
+              >
+                <div className="flex items-center gap-1.5 font-display text-sm font-bold text-foreground">
+                  <Eye className="h-4 w-4 text-primary" />
+                  Avistamentos ({sightings.length})
+                </div>
+                <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory scrollbar-hide">
+                  {sightings.map((sighting, idx) => (
+                    <motion.div
+                      key={sighting.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: idx * 0.05 }}
+                      className="flex-shrink-0 snap-start"
+                    >
+                      <div className="rounded-xl overflow-hidden border border-border/50 bg-secondary/50 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="w-32 h-24 bg-muted flex items-center justify-center text-xs text-muted-foreground">
+                          📍 {formatDistanceToNow(new Date(sighting.created_at), { locale: ptBR, addSuffix: true })}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Map */}
+            {!loadingSightings && sightings.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.25 }}
+                className="pt-3"
+              >
+                <h3 className="mb-2 font-display text-sm font-bold text-foreground">Mapa de avistamentos</h3>
+                <div className="rounded-2xl overflow-hidden border border-border/50 shadow-sm" style={{ height: '180px' }}>
+                  <AlertMap sightings={sightings} className="h-full" />
+                </div>
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Sighting form — only when active */}
+        {isActive && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="mt-4"
+          >
+            <SightingForm alertId={id!} />
+          </motion.div>
+        )}
 
         {/* Action buttons */}
         {(canResolve || canCancel) && (
-          <div className="space-y-2">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.35 }}
+            className="mt-4 space-y-2"
+          >
             <AnimatePresence mode="wait">
               {showCancelConfirm ? (
                 <motion.div
@@ -248,7 +389,7 @@ const AlertDetail = () => {
                   {canResolve && (
                     <Button
                       onClick={() => setShowResolveModal(true)}
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-2xl h-12"
                     >
                       <CheckCircle2 className="mr-2 h-4 w-4" />
                       Marcar como Encontrado ✓
@@ -258,7 +399,7 @@ const AlertDetail = () => {
                     <Button
                       onClick={() => setShowCancelConfirm(true)}
                       variant="outline"
-                      className="w-full border-destructive text-destructive hover:bg-destructive/10 font-semibold"
+                      className="w-full border-destructive text-destructive hover:bg-destructive/10 font-semibold rounded-2xl h-12"
                     >
                       <XCircle className="mr-2 h-4 w-4" />
                       Cancelar alerta
@@ -267,19 +408,18 @@ const AlertDetail = () => {
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
-        )}
-
-        {/* Sighting form — only when active */}
-        {isActive && <SightingForm alertId={id!} />}
-
-        {/* Map */}
-        {!loadingSightings && sightings.length > 0 && (
-          <AlertMap sightings={sightings} className="mb-4" />
+          </motion.div>
         )}
 
         {/* Feed */}
-        <AlertFeed alertId={id!} readOnly={!isActive} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+          className="mt-4 rounded-2xl bg-card p-4 shadow-md"
+        >
+          <AlertFeed alertId={id!} readOnly={!isActive} />
+        </motion.div>
       </main>
 
       {/* Resolve modal */}
