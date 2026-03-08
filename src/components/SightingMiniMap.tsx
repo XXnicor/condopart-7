@@ -14,8 +14,8 @@ const SightingMiniMap = ({ location, className }: SightingMiniMapProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
 
-  const lat = location.lat || GOLDEN_PARK_CONDO.lat;
-  const lng = location.lng || GOLDEN_PARK_CONDO.lng;
+  const lat = parseFloat(String(location.lat)) || GOLDEN_PARK_CONDO.lat;
+  const lng = parseFloat(String(location.lng)) || GOLDEN_PARK_CONDO.lng;
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
