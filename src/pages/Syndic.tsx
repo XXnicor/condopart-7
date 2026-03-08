@@ -152,7 +152,7 @@ const Syndic = () => {
   // ── Render ───────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
       {/* Header */}
       <header className="px-4 pt-6 pb-2">
         <div className="flex items-center gap-2">
@@ -164,7 +164,7 @@ const Syndic = () => {
         )}
       </header>
 
-      <main className="mx-auto max-w-lg space-y-6 px-4">
+      <main className="space-y-6 px-4 overflow-y-auto overscroll-contain">
         {/* ── Section 1: Stats ── */}
         {loading ? (
           <div className="grid grid-cols-2 gap-3">
@@ -250,6 +250,10 @@ const Syndic = () => {
             placeholder="Buscar por pet ou morador..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            className="text-base min-h-[44px]"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
           />
 
           <div className="flex gap-2">

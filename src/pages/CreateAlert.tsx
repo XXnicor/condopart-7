@@ -82,9 +82,9 @@ const CreateAlert = () => {
   const isSubmitDisabled = loading || uploading;
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
       <header className="sticky top-0 z-40 border-b border-border bg-card/95 px-4 py-3 backdrop-blur-md">
-        <div className="mx-auto flex max-w-[480px] items-center gap-3">
+        <div className="flex items-center gap-3">
           <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-5 w-5" />
           </button>
@@ -92,7 +92,7 @@ const CreateAlert = () => {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[480px] px-4 py-4">
+      <main className="px-4 py-4 overflow-y-auto overscroll-contain">
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Photo upload */}
           <ImageUpload
@@ -111,8 +111,10 @@ const CreateAlert = () => {
                 placeholder="Ex: Rex, Luna..."
                 value={petName}
                 onChange={(e) => { setPetName(e.target.value); setErrors(prev => ({ ...prev, petName: undefined })); }}
-                className={`pl-9 ${errors.petName ? 'border-destructive' : ''}`}
+                className={`pl-9 text-base min-h-[44px] ${errors.petName ? 'border-destructive' : ''}`}
                 maxLength={100}
+                autoComplete="off"
+                autoCorrect="off"
               />
             </div>
             {errors.petName && <p className="text-xs text-destructive">{errors.petName}</p>}
@@ -127,7 +129,8 @@ const CreateAlert = () => {
               onChange={(e) => { setDescription(e.target.value); setErrors(prev => ({ ...prev, description: undefined })); }}
               rows={3}
               maxLength={1000}
-              className={errors.description ? 'border-destructive' : ''}
+              className={`text-base ${errors.description ? 'border-destructive' : ''}`}
+              autoCorrect="off"
             />
             {errors.description && <p className="text-xs text-destructive">{errors.description}</p>}
           </div>

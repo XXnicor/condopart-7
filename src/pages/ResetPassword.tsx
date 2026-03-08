@@ -71,8 +71,8 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
-      <div className="w-full max-w-[480px] mx-auto">
+    <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-background px-4">
+      <div className="w-full">
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-lg">
             <PawPrint className="h-9 w-9 text-primary-foreground" />
@@ -120,7 +120,8 @@ const ResetPassword = () => {
                     placeholder="Mínimo 8 caracteres"
                     value={password}
                     onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: undefined })); }}
-                    className={errors.password ? 'border-destructive' : ''}
+                    className={`text-base min-h-[44px] ${errors.password ? 'border-destructive' : ''}`}
+                    autoComplete="new-password"
                   />
                   {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
                 </div>
@@ -132,7 +133,8 @@ const ResetPassword = () => {
                     placeholder="Repita a nova senha"
                     value={confirmPassword}
                     onChange={(e) => { setConfirmPassword(e.target.value); setErrors(prev => ({ ...prev, confirmPassword: undefined })); }}
-                    className={errors.confirmPassword ? 'border-destructive' : ''}
+                    className={`text-base min-h-[44px] ${errors.confirmPassword ? 'border-destructive' : ''}`}
+                    autoComplete="new-password"
                   />
                   {errors.confirmPassword && <p className="text-xs text-destructive">{errors.confirmPassword}</p>}
                 </div>

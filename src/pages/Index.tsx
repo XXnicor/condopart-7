@@ -186,7 +186,10 @@ const Index = () => {
           placeholder="Buscar por nome ou descrição..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-9"
+          className="pl-9 text-base min-h-[44px]"
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
         />
       </div>
 
@@ -233,9 +236,9 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
       <header className="sticky top-0 z-40 border-b border-border bg-card/95 px-4 py-3 backdrop-blur-md">
-        <div className="mx-auto flex max-w-[480px] items-center gap-2">
+        <div className="flex items-center gap-2">
           <PawPrint className="h-6 w-6 text-primary" />
           <h1 className="font-display text-lg font-bold">
             Pet<span className="text-primary">Alert</span>
@@ -246,7 +249,7 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[480px] px-4 py-4">
+      <main className="px-4 py-4 overflow-y-auto overscroll-contain">
         {isSyndicOrAdmin ? (
           <Tabs defaultValue="active" onValueChange={(v) => { if (v === 'found') fetchFoundAlerts(); }}>
             <TabsList className="mb-4 w-full">
@@ -264,7 +267,8 @@ const Index = () => {
       {/* FAB */}
       <button
         onClick={() => navigate('/create-alert')}
-        className="fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30 transition-transform hover:scale-105 active:scale-95"
+        className="fixed right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30 transition-transform hover:scale-105 active:scale-95"
+        style={{ bottom: 'calc(80px + env(safe-area-inset-bottom))' }}
       >
         <Plus className="h-7 w-7 text-primary-foreground" />
       </button>

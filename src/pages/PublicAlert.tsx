@@ -59,14 +59,12 @@ const PublicAlert = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <header className="border-b border-border bg-card px-4 py-3">
-          <div className="mx-auto max-w-[480px]">
-            <span className="font-display text-xl font-extrabold text-primary">PetAlert 🐾</span>
-          </div>
-        </header>
-        <main className="mx-auto max-w-[480px] space-y-4 px-4 py-4">
-          <Skeleton className="h-[280px] w-full rounded-2xl" />
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background">
+      <header className="border-b border-border bg-card px-4 py-3">
+        <span className="font-display text-xl font-extrabold text-primary">PetAlert</span>
+      </header>
+      <main className="space-y-4 px-4 py-4 overflow-y-auto overscroll-contain">
+        <Skeleton className="h-[280px] w-full rounded-2xl" />
           <Skeleton className="h-5 w-2/3" />
           <Skeleton className="h-4 w-1/2" />
           <Skeleton className="h-4 w-full" />
@@ -78,7 +76,7 @@ const PublicAlert = () => {
 
   if (!alert) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background gap-4 px-4">
+      <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-background gap-4 px-4">
         <SearchX className="h-16 w-16 text-muted-foreground/30" />
         <p className="text-lg font-semibold text-foreground">Alerta não encontrado</p>
         <p className="text-sm text-muted-foreground text-center">Este link pode ter expirado ou sido removido.</p>
@@ -92,15 +90,13 @@ const PublicAlert = () => {
   const isLong = description.length > 180;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card px-4 py-3">
-        <div className="mx-auto max-w-[480px]">
-          <span className="font-display text-xl font-extrabold text-primary">PetAlert 🐾</span>
-        </div>
+        <span className="font-display text-xl font-extrabold text-primary">PetAlert</span>
       </header>
 
-      <main className="mx-auto max-w-[480px] space-y-4 px-4 py-4">
+      <main className="space-y-4 px-4 py-4 pb-8 overflow-y-auto overscroll-contain">
         {/* Photo */}
         <div className="overflow-hidden rounded-2xl bg-secondary shadow-md">
           <AspectRatio ratio={4 / 3}>

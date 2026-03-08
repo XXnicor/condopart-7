@@ -18,8 +18,16 @@ const BottomNav = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md safe-area-bottom">
-      <div className="mx-auto flex max-w-lg items-center justify-around py-2">
+    <nav
+      className="fixed bottom-0 left-1/2 z-50 border-t border-border bg-card/95 backdrop-blur-md"
+      style={{
+        transform: 'translateX(-50%)',
+        width: '100%',
+        maxWidth: '480px',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
+    >
+      <div className="flex items-center justify-around py-2">
         {items.map(({ icon: Icon, label, path }) => {
           const active = location.pathname === path;
           return (
@@ -27,7 +35,7 @@ const BottomNav = () => {
               key={path}
               onClick={() => navigate(path)}
               className={cn(
-                'flex flex-col items-center gap-0.5 rounded-lg px-4 py-1.5 transition-colors',
+                'flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-lg px-4 py-1.5 transition-colors',
                 active ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               )}
             >
