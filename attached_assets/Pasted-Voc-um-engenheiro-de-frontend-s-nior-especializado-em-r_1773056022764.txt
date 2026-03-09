@@ -1,0 +1,152 @@
+Você é um engenheiro de frontend sênior especializado em refinamento 
+de interfaces já existentes. Sua missão é elevar a qualidade de execução 
+do PetAlert Condo ao nível técnico de produtos como Vercel v0 e Linear —
+preservando 100% do design atual como base, apenas refinando e evoluindo.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGRA ABSOLUTA — LER ANTES DE QUALQUER COISA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ NÃO redesenhe. O design atual é bom e é a base de tudo.
+❌ NÃO altere identidade visual: as cores amber/orange, o estilo dos 
+   cards, o layout mobile-first — tudo isso permanece.
+❌ NÃO altere rotas, lógica de negócio, chamadas ao Supabase, 
+   AuthContext, RLS, tipos TypeScript.
+❌ NÃO troque bibliotecas (manter Tailwind CSS + shadcn/ui + Framer Motion).
+❌ NÃO crie novas páginas, NÃO remova páginas existentes.
+
+✅ APENAS refine: consistência de espaçamento, hierarquia tipográfica,
+   micro-animações, empty states, loading states, estados de hover/focus,
+   feedback visual de ações, polimento de formulários.
+
+A pergunta-guia para cada decisão:
+"Isso melhora o que já existe ou está mudando o design?"
+Se mudar → não faça.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTEXTO DO PROJETO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+App: PetAlert Condo — moradores encontram pets perdidos no condomínio.
+Stack: React 18 + TypeScript + Vite + Tailwind CSS + shadcn/ui + Framer Motion
+Mobile-first, max-width 480px centralizado no desktop.
+Cores base: primary amber-500, accent orange-400.
+Todos os textos de UI em português do Brasil.
+Status: MVP completo e funcional, entrando em validação com usuários reais.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+O QUE SIGNIFICA "NÍVEL V0 VERCEL" AQUI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NÃO é sobre copiar o estilo visual da Vercel.
+É sobre o NÍVEL DE EXECUÇÃO técnica:
+
+- Espaçamento consistente com um sistema claro (não valores aleatórios)
+- Tipografia com hierarquia real de 4 níveis bem definidos
+- Estados interativos completos: hover, focus, active, disabled, loading
+- Feedback visual imediato em toda ação do usuário
+- Transições suaves e intencionais (não decorativas)
+- Empty states que guiam o usuário, não apenas "sem dados"
+- Loading states que espelham o layout real (skeleton fiel)
+- Formulários com validação visual clara e humanizada
+- Zero inconsistência visual entre páginas
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REFINAMENTOS POR CATEGORIA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### TIPOGRAFIA — audite e padronize:
+- Headline pages: text-2xl font-bold tracking-tight
+- Section titles: text-lg font-semibold
+- Body: text-sm leading-relaxed
+- Captions/meta: text-xs font-medium text-stone-400 uppercase tracking-wide
+→ Aplique esses níveis de forma consistente em TODAS as páginas.
+→ Não mude fontes. Apenas hierarquia e peso.
+
+### ESPAÇAMENTO — sistema consistente:
+- Page padding: px-4 py-6
+- Seções: space-y-6
+- Elementos internos de card: space-y-2 ou space-y-3
+→ Audite inconsistências. Padronize sem alterar o layout.
+
+### ESTADOS INTERATIVOS — complete o que falta:
+- Todo botão: hover + active:scale-[0.98] + disabled:opacity-50
+- Todo input: focus:ring-2 ring-amber-500/20 + border-amber-400
+- Todo card clicável: hover:shadow-md transition-shadow duration-200
+- FAB: hover:shadow-xl active:scale-95
+
+### MICRO-ANIMAÇÕES — Framer Motion onde já faz sentido:
+Page enter (onde ainda não tiver):
+  initial={{ opacity: 0, y: 12 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.25, ease: "easeOut" }}
+
+Lista de cards (stagger sutil):
+  staggerChildren: 0.05
+
+Botões com ação crítica:
+  whileTap={{ scale: 0.97 }}
+
+→ Não adicione animação onde já existe. Não exagere.
+
+### EMPTY STATES — contextuais e úteis:
+Estrutura: ícone (48px, stone-300) + título + subtítulo explicativo + CTA
+- Feed sem alertas: "Nenhum alerta por aqui" / "Crie um alerta se seu 
+  pet estiver perdido."
+- Busca sem resultado: "Nenhum resultado" / "Tente outro nome ou descrição."
+- Sem avistamentos: "Nenhum avistamento ainda" / "Seja o primeiro a informar."
+
+### LOADING STATES — skeleton fiel:
+- Skeleton deve espelhar exatamente o layout do card/conteúdo real
+- Usar shadcn/ui Skeleton existente com bg-stone-100 animate-pulse
+- Feed: mostrar 3 skeleton cards enquanto carrega
+
+### FORMULÁRIOS — polimento final:
+- Labels: text-sm font-medium mb-1.5
+- Erros: text-xs text-rose-500 mt-1 com ícone AlertCircle
+- Upload de foto: hover:border-amber-400 hover:bg-amber-50 transition-all
+- Submit com loading: spinner branco dentro do botão, texto "Salvando..."
+- Contador de caracteres na descrição
+
+### BOTTOM NAV — refinamento:
+- bg-white/80 backdrop-blur-md border-t border-stone-100
+- Item ativo: text-amber-500
+- Item inativo: text-stone-400 hover:text-stone-600 transition-colors
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ORDEM DE EXECUÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Um arquivo por vez, confirme zero erros TypeScript antes de avançar:
+
+1. Componentes base: Button, Input, Badge — padronizar estados
+2. BottomNav — refinamento
+3. SkeletonCard — fidelidade ao card real
+4. / — Feed (empty state + skeleton + card hover)
+5. /auth — inputs + feedback de erro + loading no submit
+6. /alert/:id — empty state avistamentos + animações
+7. /create-alert — upload area + loading submit + contador
+8. /profile — avatar placeholder + mini-cards alertas
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHECKLIST ANTES DE CADA ENTREGA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ ] Design existente preservado — nada reinventado
+[ ] TypeScript sem erros, zero `any` novo
+[ ] Lógica e Supabase intactos
+[ ] Estados hover/focus/active/disabled completos
+[ ] Responsivo em 375px e 480px
+[ ] Textos em português do Brasil
+[ ] Nenhuma regressão em features anteriores
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PADRÃO DE QUALIDADE ESPERADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+O teste de qualidade é simples:
+"Cada interação dá feedback imediato. Cada estado vazio orienta o usuário.
+Cada pixel está no lugar certo. Nada parece inacabado."
+
+Se em dúvida entre duas abordagens: escolha a mais consistente 
+com o que já existe, não a mais elaborada.
