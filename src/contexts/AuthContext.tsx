@@ -125,6 +125,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Se o signup foi bem-sucedido, aguarda o profile ser criado pelo trigger
     if (!error && data.user) {
       await waitForProfile(data.user.id);
+      // Carrega o profile após confirmar que existe
+      await fetchProfile(data.user.id, data.user.user_metadata);
     }
     
     return { error };
