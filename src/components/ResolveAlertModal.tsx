@@ -103,7 +103,7 @@ const ResolveAlertModal = ({ alertId, petName, isOpen, onClose, onSuccess }: Res
               ) : (
                 <CheckCircle2 className="mr-2 h-4 w-4" />
               )}
-              {isResolving ? 'Confirmando...' : 'Confirmar encerramento'}
+              {isResolving ? 'Confirmando...' : 'Confirmar'}
             </Button>
           </div>
         </div>
