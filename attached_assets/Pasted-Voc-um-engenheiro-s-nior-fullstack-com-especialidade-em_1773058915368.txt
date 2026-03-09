@@ -1,0 +1,98 @@
+Você é um engenheiro sênior fullstack com especialidade em React, TypeScript 
+e Supabase. Faça uma auditoria completa e silenciosa do projeto EncontraPet 
+antes de tocar em qualquer código.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FASE 1 — LEITURA TOTAL (não edite nada ainda)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Leia todos os arquivos do projeto e monte um relatório com:
+
+### 1. BUGS CRÍTICOS
+Erros que quebram funcionalidade para o usuário final.
+- Descrição do problema
+- Arquivo e linha
+- Impacto no usuário
+- Correção proposta
+
+### 2. BUGS MENORES
+Comportamentos incorretos que não quebram o fluxo principal.
+- Descrição
+- Arquivo e linha
+- Correção proposta
+
+### 3. ERROS TYPESCRIPT
+- Todo `as any` existente e se pode ser tipado corretamente agora
+- Tipos ausentes ou incorretos
+- Inferências perigosas
+
+### 4. PROBLEMAS DE SEGURANÇA
+- RLS do Supabase — alguma query bypassando as policies?
+- Dados sensíveis expostos no client?
+- Upload de arquivo sem validação de tipo/tamanho?
+- Usuário consegue ver/editar dados de outro condomínio?
+
+### 5. PROBLEMAS DE UX SILENCIOSOS
+- Ação do usuário sem feedback visual (loading, sucesso, erro)
+- Formulário que falha sem mensagem clara
+- Navegação que pode deixar o usuário perdido
+- Edge cases sem tratamento (foto corrompida, nome vazio, etc.)
+
+### 6. TRADE-OFFS TÉCNICOS CONHECIDOS
+Liste os trade-offs que existem no código atual com avaliação:
+- Qual é o trade-off
+- Risco real na validação com usuários
+- Vale corrigir agora ou pode esperar pós-validação?
+
+### 7. PERFORMANCE
+- Re-renders desnecessários (useEffect com dependências erradas)
+- Queries ao Supabase que buscam mais dados do que precisam
+- Imagens sem lazy loading
+- Qualquer coisa que deixa o app lento no mobile
+
+### 8. CONSISTÊNCIA DE CÓDIGO
+- Padrões misturados (ex: async/await vs .then())
+- Componentes duplicados que poderiam ser unificados
+- Lógica repetida que poderia virar um hook customizado
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FASE 2 — PRIORIZAÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Após o relatório, monte uma lista priorizada:
+
+🔴 CORRIGIR AGORA — quebra a validação com usuários reais
+🟡 CORRIGIR LOGO — degradam experiência mas não bloqueiam
+🟢 PÓS-VALIDAÇÃO — dívida técnica aceitável por ora
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FASE 3 — EXECUÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Aguarde minha aprovação do relatório antes de editar qualquer arquivo.
+
+Quando aprovado, execute APENAS os itens 🔴 nesta sessão:
+- Um arquivo por vez
+- Confirme zero erros TypeScript após cada edição
+- Descreva em uma linha o que foi corrigido e por quê
+- Sinalize se a correção de um item revelou outro problema
+
+❌ NÃO corrija 🟡 ou 🟢 sem minha autorização explícita.
+❌ NÃO refatore código funcionando para "ficar mais bonito".
+❌ NÃO altere nada de UI, design ou textos visíveis.
+❌ NÃO toque em migrations ou schema do Supabase.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTEXTO DO PROJETO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Stack: React 18 + TypeScript + Vite + Supabase + Tailwind + shadcn/ui + Framer Motion
+Auth: Supabase Auth com AuthContext customizado
+Database: condos, profiles, alerts, sightings — todas com RLS ativa
+Storage: bucket pet-photos (leitura pública, upload autenticado)
+Deploy target: Vercel
+Status: MVP completo, próximo passo é validação com usuários reais.
+
+O critério de qualidade é simples:
+"Um usuário real usando pela primeira vez não pode encontrar 
+nenhum bug, tela quebrada ou ação sem resposta."
