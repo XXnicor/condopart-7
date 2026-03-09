@@ -22,13 +22,27 @@ const ResetPassword = () => {
   useEffect(() => {
     const initializeRecovery = async () => {
       try {
-        // Parse hash fragment for recovery tokens
+        // FORMATO 2: Detectar PKCE code na query string (supabase-js v2 padrão)
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (!error) {
+            setRecoveryReady(true);
+            setChecking(false);
+            // Limpar URL para evitar expor o code
+            window.history.replaceState({}, document.title, window.location.pathname);
+            return;
+          }
+        }
+
+        // FORMATO 1: Detectar hash fragment com tokens (formato antigo)
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get('access_token');
         const refreshToken = hashParams.get('refresh_token');
         const type = hashParams.get('type');
 
-        // If we have recovery tokens in the hash, set the session manually
         if (type === 'recovery' && accessToken) {
           const { error: setSessionError } = await supabase.auth.setSession({
             access_token: accessToken,
@@ -38,41 +52,29 @@ const ResetPassword = () => {
           if (!setSessionError) {
             setRecoveryReady(true);
             setChecking(false);
-            // Clear the hash from URL to avoid exposing tokens
+            // Limpar hash para evitar expor tokens
             window.history.replaceState({}, document.title, window.location.pathname);
             return;
           }
         }
 
-        // Fallback: listen for PASSWORD_RECOVERY event
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-          if (event === 'PASSWORD_RECOVERY') {
-            setRecoveryReady(true);
-            setChecking(false);
-          }
-        });
-
-        // Give it a moment to detect the recovery event
-        const timeout = setTimeout(() => {
+        // CASO 3: Verificar se já existe sessão ativa (usuário voltou após trocar code)
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          setRecoveryReady(true);
           setChecking(false);
-          subscription.unsubscribe();
-        }, 2000);
+          return;
+        }
 
-        return () => {
-          subscription.unsubscribe();
-          clearTimeout(timeout);
-        };
+        // CASO 4: Nenhum token válido encontrado
+        setRecoveryReady(false);
+        setChecking(false);
       } catch (err) {
         setChecking(false);
       }
     };
 
-    const cleanup = initializeRecovery();
-    return () => {
-      if (cleanup instanceof Promise) {
-        // Handle async cleanup if needed
-      }
-    };
+    initializeRecovery();
   }, []);
 
   useEffect(() => {
