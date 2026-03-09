@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-// import { AnimatePresence, motion } from "framer-motion"; // desativado temporariamente para teste
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import BottomNav from '@/components/BottomNav';
@@ -26,8 +26,19 @@ const ROUTES_WITHOUT_NAV = ['/auth', '/reset-password', '/preview'];
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
+  const duration = shouldReduceMotion ? 0 : 0.15;
+
   return (
-    <div style={{ width: '100%' }}>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration, ease: 'easeInOut' }}
+        style={{ width: '100%' }}
+      >
         <Routes location={location}>
           <Route path="/auth" element={<Auth />} />
           <Route path="/reset-password" element={<ResetPassword />} />
@@ -42,7 +53,8 @@ const AnimatedRoutes = () => {
             <Route path="/preview" element={<DesignPreview />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
-      </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
