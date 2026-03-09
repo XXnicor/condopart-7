@@ -95,30 +95,74 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setLoading(true);
+    let mounted = true;
+
+    const initAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (!mounted) return;
+
+        if (error) {
+          console.error('getSession error:', error);
+          setSession(null);
+          setUser(null);
+          return;
+        }
+
         setSession(session);
         setUser(session?.user ?? null);
+
         if (session?.user) {
-          await fetchProfile(session.user.id, session.user.user_metadata);
-        } else {
-          setProfile(null);
+          try {
+            await fetchProfile(session.user.id, session.user.user_metadata);
+          } catch (profileError) {
+            console.error('initAuth profile error:', profileError);
+          }
         }
-        setLoading(false);
+      } catch (err) {
+        console.error('initAuth error:', err);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    initAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        if (!mounted) return;
+        try {
+          setSession(session);
+          setUser(session?.user ?? null);
+
+          if (session?.user) {
+            try {
+              await fetchProfile(session.user.id, session.user.user_metadata);
+            } catch (profileError) {
+              console.error('profile error on auth change:', profileError);
+            }
+          } else {
+            setProfile(null);
+          }
+        } finally {
+          if (mounted) setLoading(false);
+        }
       }
     );
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        await fetchProfile(session.user.id, session.user.user_metadata);
+    const safetyTimeout = setTimeout(() => {
+      if (mounted) {
+        console.warn('Auth timeout — forcing loading false');
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    }, 5000);
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+      clearTimeout(safetyTimeout);
+    };
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
