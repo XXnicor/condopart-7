@@ -84,8 +84,6 @@ const Auth = () => {
         setResendSuccess(false);
       }
       toast.error(msg);
-    } else {
-      navigate(redirectTo);
     }
   };
 
