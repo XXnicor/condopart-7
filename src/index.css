@@ -92,6 +92,10 @@
 }
 
 @layer base {
+  html {
+    background-color: hsl(var(--background));
+  }
+
   * {
     @apply border-border;
     box-sizing: border-box;
@@ -100,7 +104,8 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body;
+    @apply text-foreground font-body;
+    background-color: hsl(var(--background));
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
