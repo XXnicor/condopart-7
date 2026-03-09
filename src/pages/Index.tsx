@@ -14,6 +14,7 @@ import { formatDistanceToNow, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { toast } from 'sonner';
 import BottomNav from '@/components/BottomNav';
+import TutoriaisSection from '@/components/TutoriaisSection';
 import MoradorInfo from '@/components/MoradorInfo';
 import type { Tables } from '@/integrations/supabase/types';
 
@@ -333,6 +334,8 @@ const Index = () => {
         ) : (
           renderActiveContent()
         )}
+
+        <TutoriaisSection />
       </main>
 
       <button
