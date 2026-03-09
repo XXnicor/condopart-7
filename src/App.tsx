@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 // import { AnimatePresence, motion } from "framer-motion"; // desativado temporariamente para teste
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import BottomNav from '@/components/BottomNav';
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import CondoSelection from "./pages/CondoSelection";
@@ -20,6 +21,8 @@ import FeedPreview from "./pages/FeedPreview";
 import DesignPreview from "./pages/DesignPreview";
 
 const queryClient = new QueryClient();
+
+const ROUTES_WITHOUT_NAV = ['/auth', '/reset-password', '/preview'];
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -43,6 +46,20 @@ const AnimatedRoutes = () => {
   );
 };
 
+const AppShell = () => {
+  const location = useLocation();
+  const showNav =
+    !ROUTES_WITHOUT_NAV.includes(location.pathname) &&
+    !location.pathname.startsWith('/p/');
+
+  return (
+    <>
+      <AnimatedRoutes />
+      {showNav && <BottomNav />}
+    </>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -52,7 +69,7 @@ const App = () => (
         <div className="mx-auto flex justify-center">
           <BrowserRouter>
             <AuthProvider>
-              <AnimatedRoutes />
+              <AppShell />
             </AuthProvider>
           </BrowserRouter>
         </div>

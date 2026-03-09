@@ -27,7 +27,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import BottomNav from '@/components/BottomNav';
 
 /* ── helpers ────────────────────────────────────────── */
 
@@ -216,7 +215,6 @@ const Profile = () => {
     return (
       <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
         <ProfileSkeleton />
-        <BottomNav />
       </div>
     );
   }
@@ -554,7 +552,6 @@ const Profile = () => {
         </motion.div>
       </motion.div>
 
-      <BottomNav />
     </div>
   );
 };

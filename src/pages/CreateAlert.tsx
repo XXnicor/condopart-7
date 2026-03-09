@@ -10,8 +10,6 @@ import { ArrowLeft, PawPrint, Loader2, AlertCircle } from 'lucide-react';
 import LocationPicker from '@/components/LocationPicker';
 import ImageUpload from '@/components/ImageUpload';
 import { toast } from 'sonner';
-import BottomNav from '@/components/BottomNav';
-
 const CreateAlert = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
@@ -160,7 +158,6 @@ const CreateAlert = () => {
         </form>
       </main>
 
-      <BottomNav />
     </div>
   );
 };

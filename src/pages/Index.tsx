@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input';
 import { formatDistanceToNow, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { toast } from 'sonner';
-import BottomNav from '@/components/BottomNav';
 import MoradorInfo from '@/components/MoradorInfo';
 import OnboardingOverlay from '@/components/OnboardingOverlay';
 import type { Tables } from '@/integrations/supabase/types';
@@ -346,7 +345,6 @@ const Index = () => {
         <Plus className="h-7 w-7 text-primary-foreground" />
       </button>
 
-      <BottomNav />
     </div>
   );
 };

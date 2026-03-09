@@ -40,8 +40,6 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
-import BottomNav from '@/components/BottomNav';
-
 // ── Helpers ────────────────────────────────────────────
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
@@ -360,7 +358,6 @@ const Syndic = () => {
         )}
       </main>
 
-      <BottomNav />
     </div>
   );
 };

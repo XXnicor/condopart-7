@@ -24,7 +24,6 @@ import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
-import BottomNav from '@/components/BottomNav';
 import AlertMap from '@/components/AlertMap';
 import SightingForm from '@/components/SightingForm';
 import AlertFeed from '@/components/AlertFeed';
@@ -100,7 +99,6 @@ const AlertDetail = () => {
             <SkeletonCard variant="sighting" count={2} />
           </div>
         </main>
-        <BottomNav />
       </div>
     );
   }
@@ -452,7 +450,6 @@ const AlertDetail = () => {
         alertDescription={alert.description}
       />
 
-      <BottomNav />
     </div>
   );
 };
