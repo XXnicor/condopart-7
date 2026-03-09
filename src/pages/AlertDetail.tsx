@@ -16,7 +16,7 @@ import {
   MapPin,
   PawPrint,
   Share2,
-  User,
+
   XCircle,
 } from 'lucide-react';
 import { SkeletonCard } from '@/components/ui/skeleton-card';
@@ -28,6 +28,7 @@ import BottomNav from '@/components/BottomNav';
 import AlertMap from '@/components/AlertMap';
 import SightingForm from '@/components/SightingForm';
 import AlertFeed from '@/components/AlertFeed';
+import MoradorInfo from '@/components/MoradorInfo';
 import ResolveAlertModal from '@/components/ResolveAlertModal';
 import ShareAlertSheet from '@/components/ShareAlertSheet';
 
@@ -223,14 +224,13 @@ const AlertDetail = () => {
             )}
 
             {/* Reporter info */}
-            <div className="flex items-center gap-3 rounded-xl bg-secondary/50 p-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                <User className="h-5 w-5 text-primary" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-muted-foreground">Reportado por</p>
-                <p className="truncate text-sm font-display font-bold text-foreground">{alert.reporter?.full_name || 'Morador'}</p>
-              </div>
+            <div className="rounded-xl bg-secondary/50 p-3">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-stone-400">Reportado por</p>
+              <MoradorInfo
+                full_name={alert.reporter_profile?.full_name ?? 'Morador'}
+                avatar_url={alert.reporter_profile?.avatar_url ?? null}
+                role={alert.reporter_profile?.role ?? undefined}
+              />
             </div>
 
             {/* Description (Expandable) */}

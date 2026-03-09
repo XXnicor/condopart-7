@@ -14,15 +14,24 @@ import { formatDistanceToNow, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { toast } from 'sonner';
 import BottomNav from '@/components/BottomNav';
+import MoradorInfo from '@/components/MoradorInfo';
 import type { Tables } from '@/integrations/supabase/types';
 
 type AlertRow = Tables<'alerts'>;
 
+type ProfileData = {
+  full_name: string | null;
+  avatar_url: string | null;
+  role: string | null;
+};
+
+type AlertWithProfile = AlertRow & { reporter_profile?: ProfileData | null };
+
 const Index = () => {
   const { profile } = useAuth();
   const navigate = useNavigate();
-  const [alerts, setAlerts] = useState<AlertRow[]>([]);
-  const [foundAlerts, setFoundAlerts] = useState<AlertRow[]>([]);
+  const [alerts, setAlerts] = useState<AlertWithProfile[]>([]);
+  const [foundAlerts, setFoundAlerts] = useState<AlertWithProfile[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -91,7 +100,24 @@ const Index = () => {
       setError(true);
       toast.error('Erro ao carregar alertas. Tente novamente.');
     } else {
-      setAlerts(data || []);
+      const alertsData = data || [];
+      const reporterIds = [...new Set(alertsData.map(a => a.reporter_id).filter(Boolean))];
+
+      let profileMap: Record<string, ProfileData> = {};
+      if (reporterIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, full_name, avatar_url, role')
+          .in('id', reporterIds);
+        if (profiles) {
+          profileMap = Object.fromEntries(profiles.map(p => [p.id, p]));
+        }
+      }
+
+      setAlerts(alertsData.map(a => ({
+        ...a,
+        reporter_profile: profileMap[a.reporter_id] ?? null,
+      })));
     }
     setLoading(false);
   };
@@ -101,7 +127,21 @@ const Index = () => {
     setLoadingFound(true);
     try {
       const data = await getFoundAlerts(profile.condominium_id);
-      setFoundAlerts(data as unknown as AlertRow[]);
+      const reporterIds = [...new Set(data.map(a => a.reporter_id).filter(Boolean))];
+      let profileMap: Record<string, ProfileData> = {};
+      if (reporterIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, full_name, avatar_url, role')
+          .in('id', reporterIds);
+        if (profiles) {
+          profileMap = Object.fromEntries(profiles.map(p => [p.id, p]));
+        }
+      }
+      setFoundAlerts(data.map(a => ({
+        ...a,
+        reporter_profile: profileMap[a.reporter_id] ?? null,
+      })));
     } catch {
       toast.error('Erro ao carregar pets encontrados.');
     }
@@ -129,7 +169,7 @@ const Index = () => {
     );
   };
 
-  const renderAlertCard = (alert: AlertRow, showResolutionNote = false) => (
+  const renderAlertCard = (alert: AlertWithProfile, showResolutionNote = false) => (
     <Card
       key={alert.id}
       className={`cursor-pointer overflow-hidden rounded-2xl border-glow shadow-sm card-elevated ${
@@ -174,6 +214,13 @@ const Index = () => {
           </div>
         </div>
       </CardContent>
+      <div className="border-t border-stone-100 dark:border-stone-800 px-3 py-2">
+        <MoradorInfo
+          full_name={alert.reporter_profile?.full_name ?? 'Morador'}
+          avatar_url={alert.reporter_profile?.avatar_url ?? null}
+          role={alert.reporter_profile?.role ?? undefined}
+        />
+      </div>
     </Card>
   );
 

@@ -17,6 +17,7 @@ A React/Vite frontend application for reporting and tracking lost pets within re
 - User authentication (sign up / sign in / password reset) via Supabase Auth
 - Lost pet alert creation with photo upload and map location picker
 - Real-time alert feed with sightings and comments per condominium
+- Reporter identity display (avatar + name + role) on feed cards and alert detail via MoradorInfo component
 - Syndic/admin dashboard with stats, charts, member management, and CSV export
 - Public alert sharing page (no auth required)
 

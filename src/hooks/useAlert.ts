@@ -4,8 +4,16 @@ import type { Tables } from '@/integrations/supabase/types';
 
 type AlertRow = Tables<'alerts'>;
 
+type ProfileData = {
+  full_name: string | null;
+  avatar_url: string | null;
+  role: string | null;
+};
+
+export type AlertWithProfile = AlertRow & { reporter_profile?: ProfileData | null };
+
 export function useAlert(alertId: string) {
-  const [alert, setAlert] = useState<AlertRow | null>(null);
+  const [alert, setAlert] = useState<AlertWithProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -26,8 +34,17 @@ export function useAlert(alertId: string) {
 
       if (fetchError) {
         setError(new Error(fetchError.message));
-      } else {
-        setAlert(data);
+      } else if (data) {
+        let reporterProfile: ProfileData | null = null;
+        if (data.reporter_id) {
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('full_name, avatar_url, role')
+            .eq('id', data.reporter_id)
+            .single();
+          if (profileData) reporterProfile = profileData;
+        }
+        setAlert({ ...data, reporter_profile: reporterProfile });
       }
       setIsLoading(false);
     };
@@ -44,8 +61,8 @@ export function useAlert(alertId: string) {
           table: 'alerts',
           filter: `id=eq.${alertId}`,
         },
-        (payload) => {
-          setAlert(payload.new as AlertRow);
+        () => {
+          fetchAlert();
         },
       )
       .subscribe();

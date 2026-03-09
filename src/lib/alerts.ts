@@ -98,7 +98,7 @@ export async function cancelAlert(alertId: string): Promise<void> {
   if (error) throw new Error('Não foi possível cancelar o alerta. Tente novamente.');
 }
 
-export async function getFoundAlerts(condoId: string): Promise<Alert[]> {
+export async function getFoundAlerts(condoId: string) {
   const { data, error } = await supabase
     .from('alerts')
     .select('*')
@@ -107,7 +107,7 @@ export async function getFoundAlerts(condoId: string): Promise<Alert[]> {
     .order('resolved_at' as any, { ascending: false });
 
   if (error) throw new Error('Erro ao buscar alertas encontrados.');
-  return (data ?? []) as unknown as Alert[];
+  return data ?? [];
 }
 
 export async function getActiveAlerts(condoId: string): Promise<Alert[]> {
