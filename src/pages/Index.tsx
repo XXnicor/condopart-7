@@ -177,13 +177,13 @@ const Index = () => {
     </Card>
   );
 
-  const renderEmptyState = (message: string, sub: string) => (
+  const renderEmptyState = (message: string, sub: string, icon?: React.ReactNode) => (
     <div className="flex flex-col items-center gap-3 py-16 text-center animate-slide-up">
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
-        <PawPrint className="h-8 w-8 text-muted-foreground" />
+        {icon || <PawPrint className="h-8 w-8 text-stone-300" />}
       </div>
-      <p className="font-display font-semibold text-foreground" data-testid="text-empty-title">{message}</p>
-      <p className="text-sm text-muted-foreground" data-testid="text-empty-sub">{sub}</p>
+      <p className="font-display text-lg font-semibold text-foreground" data-testid="text-empty-title">{message}</p>
+      <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-empty-sub">{sub}</p>
     </div>
   );
 
@@ -226,8 +226,14 @@ const Index = () => {
             Tentar novamente
           </Button>
         </div>
+      ) : filtered.length === 0 && debouncedSearch ? (
+        renderEmptyState(
+          'Nenhum resultado',
+          'Tente outro nome ou descrição.',
+          <Search className="h-8 w-8 text-stone-300" />
+        )
       ) : filtered.length === 0 ? (
-        renderEmptyState('Nenhum alerta ativo no seu condomínio', 'Quando um pet for perdido, ele aparecerá aqui')
+        renderEmptyState('Nenhum alerta por aqui', 'Crie um alerta se seu pet estiver perdido.')
       ) : (
         <div className="space-y-3 stagger-in">{filtered.map((a) => renderAlertCard(a))}</div>
       )}
@@ -239,7 +245,7 @@ const Index = () => {
       {loadingFound ? (
         <div className="space-y-3"><SkeletonCard variant="feed" count={3} /></div>
       ) : foundAlerts.length === 0 ? (
-        renderEmptyState('Nenhum pet encontrado ainda', 'Alertas encerrados aparecerão aqui')
+        renderEmptyState('Nenhum pet encontrado ainda', 'Alertas encerrados aparecerão aqui.')
       ) : (
         <div className="space-y-3 stagger-in">{foundAlerts.map((a) => renderAlertCard(a, true))}</div>
       )}

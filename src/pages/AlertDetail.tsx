@@ -276,6 +276,19 @@ const AlertDetail = () => {
               </div>
             </motion.div>
 
+            {/* Sightings Empty State */}
+            {!loadingSightings && sightings.length === 0 && isActive && (
+              <div className="border-t border-border/50 pt-3">
+                <div className="flex flex-col items-center gap-2 py-6 text-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+                    <Eye className="h-6 w-6 text-stone-300" />
+                  </div>
+                  <p className="text-sm font-semibold text-foreground">Nenhum avistamento ainda</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">Seja o primeiro a informar.</p>
+                </div>
+              </div>
+            )}
+
             {/* Sightings Carousel */}
             {!loadingSightings && sightings.length > 0 && (
               <motion.div

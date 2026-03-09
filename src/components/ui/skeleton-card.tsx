@@ -17,7 +17,7 @@ interface SkeletonCardProps {
   count?: number;
 }
 
-const skeletonBase = 'bg-amber-50';
+const skeletonBase = 'bg-stone-100 dark:bg-stone-800';
 
 const FeedSkeleton = () => (
   <Card className="overflow-hidden rounded-2xl border-border/50 shadow-md">

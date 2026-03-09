@@ -302,7 +302,7 @@ const Profile = () => {
       </motion.div>
 
       <motion.div
-        className="px-4 space-y-4"
+        className="px-4 space-y-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.1 }}
@@ -456,7 +456,7 @@ const Profile = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 maxLength={100}
-                className={`rounded-xl text-base min-h-[44px] ${nameError ? 'border-destructive' : ''}`}
+                className={`rounded-xl text-base min-h-[44px] input-glow ${nameError ? 'border-destructive' : ''}`}
                 autoComplete="name"
                 autoCorrect="off"
               />
@@ -474,7 +474,7 @@ const Profile = () => {
                 value={phone}
                 onChange={(e) => setPhone(formatPhone(e.target.value))}
                 placeholder="(11) 99999-9999"
-                className="rounded-xl text-base min-h-[44px]"
+                className="rounded-xl text-base min-h-[44px] input-glow"
                 autoComplete="tel"
               />
             </div>
@@ -496,7 +496,7 @@ const Profile = () => {
 
         {/* ── AÇÕES ── */}
         <motion.div
-          className="space-y-2"
+          className="space-y-2 pb-6"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.5 }}

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, PawPrint, Loader2 } from 'lucide-react';
+import { ArrowLeft, PawPrint, Loader2, AlertCircle } from 'lucide-react';
 import LocationPicker from '@/components/LocationPicker';
 import ImageUpload from '@/components/ImageUpload';
 import { toast } from 'sonner';
@@ -111,17 +111,18 @@ const CreateAlert = () => {
                 placeholder="Ex: Rex, Luna..."
                 value={petName}
                 onChange={(e) => { setPetName(e.target.value); setErrors(prev => ({ ...prev, petName: undefined })); }}
-                className={`pl-9 text-base min-h-[44px] ${errors.petName ? 'border-destructive' : ''}`}
+                className={`pl-9 text-base min-h-[44px] input-glow ${errors.petName ? 'border-destructive' : ''}`}
                 maxLength={100}
                 autoComplete="off"
                 autoCorrect="off"
+                data-testid="input-pet-name"
               />
             </div>
-            {errors.petName && <p className="text-xs text-destructive">{errors.petName}</p>}
+            {errors.petName && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{errors.petName}</p>}
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="description">Descrição *</Label>
+            <Label htmlFor="description" className="text-sm font-medium">Descrição *</Label>
             <Textarea
               id="description"
               placeholder="Cor, raça, tamanho, coleira... (mínimo 10 caracteres)"
@@ -129,10 +130,16 @@ const CreateAlert = () => {
               onChange={(e) => { setDescription(e.target.value); setErrors(prev => ({ ...prev, description: undefined })); }}
               rows={3}
               maxLength={1000}
-              className={`text-base ${errors.description ? 'border-destructive' : ''}`}
+              className={`text-base input-glow ${errors.description ? 'border-destructive' : ''}`}
               autoCorrect="off"
+              data-testid="input-description"
             />
-            {errors.description && <p className="text-xs text-destructive">{errors.description}</p>}
+            <div className="flex items-center justify-between">
+              {errors.description ? <p className="flex items-center gap-1 text-xs text-rose-500"><AlertCircle className="h-3 w-3 shrink-0" />{errors.description}</p> : <span />}
+              <span className={`text-xs font-medium ${description.length > 900 ? 'text-warning' : 'text-stone-400'} tabular-nums`}>
+                {description.length}/1000
+              </span>
+            </div>
           </div>
 
           <LocationPicker
@@ -141,8 +148,8 @@ const CreateAlert = () => {
             error={errors.lastSeen}
           />
 
-          <Button type="submit" className="w-full font-semibold" size="lg" disabled={isSubmitDisabled}>
-            {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando alerta...</> : '🐾 Criar Alerta'}
+          <Button type="submit" className="w-full font-semibold btn-tactile h-12 text-base" size="lg" disabled={isSubmitDisabled} data-testid="button-submit-alert">
+            {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : '🐾 Criar Alerta'}
           </Button>
         </form>
       </main>

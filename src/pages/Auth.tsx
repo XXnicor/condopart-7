@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PawPrint, Loader2, Mail, CheckCircle2 } from 'lucide-react';
+import { PawPrint, Loader2, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { translateSupabaseError } from '@/hooks/useFormError';
 
@@ -203,7 +203,7 @@ const Auth = () => {
                           autoCapitalize="off"
                           data-testid="input-forgot-email"
                         />
-                        {forgotErrors.email && <p className="text-xs text-destructive">{forgotErrors.email}</p>}
+                        {forgotErrors.email && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{forgotErrors.email}</p>}
                       </div>
                       <Button type="submit" className="w-full font-semibold btn-tactile" disabled={forgotLoading} data-testid="button-forgot-submit">
                         {forgotLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...</> : 'Enviar link de recuperação'}
@@ -231,7 +231,7 @@ const Auth = () => {
                         autoCapitalize="off"
                         data-testid="input-login-email"
                       />
-                      {loginErrors.email && <p className="text-xs text-destructive">{loginErrors.email}</p>}
+                      {loginErrors.email && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{loginErrors.email}</p>}
                     </div>
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
@@ -255,7 +255,7 @@ const Auth = () => {
                         autoComplete="current-password"
                         data-testid="input-login-password"
                       />
-                      {loginErrors.password && <p className="text-xs text-destructive">{loginErrors.password}</p>}
+                      {loginErrors.password && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{loginErrors.password}</p>}
                     </div>
                     <Button type="submit" className="w-full font-semibold btn-tactile h-12 text-base" disabled={loading} data-testid="button-login">
                       {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Entrando...</> : 'Entrar'}
@@ -313,7 +313,7 @@ const Auth = () => {
                         autoCorrect="off"
                         data-testid="input-signup-name"
                       />
-                      {signupErrors.name && <p className="text-xs text-destructive">{signupErrors.name}</p>}
+                      {signupErrors.name && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{signupErrors.name}</p>}
                     </div>
                     <div className="space-y-1.5">
                       <Label htmlFor="signup-email">Email</Label>
@@ -329,7 +329,7 @@ const Auth = () => {
                         autoCapitalize="off"
                         data-testid="input-signup-email"
                       />
-                      {signupErrors.email && <p className="text-xs text-destructive">{signupErrors.email}</p>}
+                      {signupErrors.email && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{signupErrors.email}</p>}
                     </div>
                     <div className="space-y-1.5">
                       <Label htmlFor="signup-password">Senha</Label>
@@ -343,7 +343,7 @@ const Auth = () => {
                         autoComplete="new-password"
                         data-testid="input-signup-password"
                       />
-                      {signupErrors.password && <p className="text-xs text-destructive">{signupErrors.password}</p>}
+                      {signupErrors.password && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{signupErrors.password}</p>}
                     </div>
                     <div className="space-y-1.5">
                       <Label htmlFor="signup-confirm-password">Confirmar senha</Label>
@@ -357,7 +357,7 @@ const Auth = () => {
                         autoComplete="new-password"
                         data-testid="input-signup-confirm-password"
                       />
-                      {signupErrors.confirmPassword && <p className="text-xs text-destructive">{signupErrors.confirmPassword}</p>}
+                      {signupErrors.confirmPassword && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{signupErrors.confirmPassword}</p>}
                     </div>
                     <Button type="submit" className="w-full font-semibold btn-tactile h-12 text-base" disabled={loading} data-testid="button-signup">
                       {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Cadastrando...</> : 'Cadastrar'}
