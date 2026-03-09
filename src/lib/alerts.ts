@@ -4,7 +4,7 @@ export type AlertStatus = 'active' | 'found' | 'cancelled';
 
 export interface Alert {
   id: string;
-  title: string;
+  pet_name:string;
   description: string;
   status: AlertStatus;
   reporter_id: string;
