@@ -20,25 +20,64 @@ const ResetPassword = () => {
   const [errors, setErrors] = useState<{ password?: string; confirmPassword?: string }>({});
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        setRecoveryReady(true);
+    const initializeRecovery = async () => {
+      try {
+        // Parse hash fragment for recovery tokens
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
+        const type = hashParams.get('type');
+
+        // If we have recovery tokens in the hash, set the session manually
+        if (type === 'recovery' && accessToken) {
+          const { error: setSessionError } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken ?? ''
+          });
+
+          if (!setSessionError) {
+            setRecoveryReady(true);
+            setChecking(false);
+            // Clear the hash from URL to avoid exposing tokens
+            window.history.replaceState({}, document.title, window.location.pathname);
+            return;
+          }
+        }
+
+        // Fallback: listen for PASSWORD_RECOVERY event
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+          if (event === 'PASSWORD_RECOVERY') {
+            setRecoveryReady(true);
+            setChecking(false);
+          }
+        });
+
+        // Give it a moment to detect the recovery event
+        const timeout = setTimeout(() => {
+          setChecking(false);
+          subscription.unsubscribe();
+        }, 2000);
+
+        return () => {
+          subscription.unsubscribe();
+          clearTimeout(timeout);
+        };
+      } catch (err) {
         setChecking(false);
       }
-    });
+    };
 
-    // Give it a moment to detect the recovery event from the URL hash
-    const timeout = setTimeout(() => setChecking(false), 2000);
-
+    const cleanup = initializeRecovery();
     return () => {
-      subscription.unsubscribe();
-      clearTimeout(timeout);
+      if (cleanup instanceof Promise) {
+        // Handle async cleanup if needed
+      }
     };
   }, []);
 
   useEffect(() => {
     if (success) {
-      const timeout = setTimeout(() => navigate('/', { replace: true }), 2000);
+      const timeout = setTimeout(() => navigate('/feed', { replace: true }), 2000);
       return () => clearTimeout(timeout);
     }
   }, [success, navigate]);
