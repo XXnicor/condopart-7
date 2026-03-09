@@ -73,6 +73,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (user) await fetchProfile(user.id);
   };
 
+  const waitForProfile = async (userId: string): Promise<void> => {
+    for (let i = 0; i < 10; i++) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', userId)
+        .single();
+
+      if (data) return;
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
@@ -100,7 +113,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -108,6 +121,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         emailRedirectTo: window.location.origin,
       },
     });
+    
+    // Se o signup foi bem-sucedido, aguarda o profile ser criado pelo trigger
+    if (!error && data.user) {
+      await waitForProfile(data.user.id);
+    }
+    
     return { error };
   };
 
