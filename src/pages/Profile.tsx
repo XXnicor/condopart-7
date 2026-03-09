@@ -245,9 +245,9 @@ const Profile = () => {
             className="relative group"
             onClick={() => avatarInputRef.current?.click()}
             disabled={uploadingAvatar}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
+            initial={{ scale: 0.95 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.05, duration: 0.15 }}
           >
             {profile.avatar_url ? (
               <img
@@ -271,9 +271,9 @@ const Profile = () => {
 
           <motion.div
             className="flex flex-col items-center gap-2"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.15 }}
+            initial={{ y: 8 }}
+            animate={{ y: 0 }}
+            transition={{ delay: 0.08, duration: 0.15 }}
           >
             <h1 className="text-2xl font-display font-bold text-white drop-shadow-md">
               {profile.full_name || 'Sem nome'}
@@ -309,9 +309,9 @@ const Profile = () => {
         {/* ── MEUS PETS ── */}
         <motion.div
           className="relative -mt-6 rounded-2xl bg-card p-4 shadow-lg"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
+          initial={{ y: 10 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.10, duration: 0.18 }}
         >
           <h2 className="mb-4 text-base font-semibold text-foreground">Meus pets</h2>
           {petsLoading ? (
@@ -341,9 +341,9 @@ const Profile = () => {
                 <motion.div
                   key={pet.id}
                   className="flex flex-col items-center gap-2 shrink-0"
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.3, delay: idx * 0.08 }}
+                  initial={{ scale: 0.95 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: idx * 0.04, duration: 0.15 }}
                 >
                   {pet.photo_url ? (
                     <img
@@ -364,9 +364,9 @@ const Profile = () => {
               <motion.button
                 onClick={() => toast.info('Cadastro de pets em breve!')}
                 className="flex flex-col items-center gap-1 shrink-0"
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.3, delay: (myPets.length) * 0.08 }}
+                initial={{ scale: 0.95 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: (myPets.length) * 0.04, duration: 0.15 }}
               >
                 <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-primary/50 hover:border-primary hover:bg-primary/5 transition-colors">
                   <Plus className="h-5 w-5 text-primary" />
@@ -380,9 +380,9 @@ const Profile = () => {
         {/* ── MINHA ATIVIDADE ── */}
         <motion.div
           className="rounded-2xl bg-card p-4 shadow-md"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.3 }}
+          initial={{ y: 10 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.13, duration: 0.18 }}
         >
           <h2 className="mb-3 text-base font-semibold text-foreground">Minha atividade</h2>
           {alertsLoading ? (
@@ -413,9 +413,9 @@ const Profile = () => {
                     key={alert.id}
                     className="flex w-full items-center gap-3 rounded-xl bg-secondary/50 p-3 text-left transition-colors hover:bg-secondary"
                     onClick={() => navigate(`/alert/${alert.id}`)}
-                    initial={{ x: -10, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.35 + idx * 0.08 }}
+                    initial={{ y: 6 }}
+                    animate={{ y: 0 }}
+                    transition={{ delay: 0.10 + idx * 0.03, duration: 0.15 }}
                   >
                     <PawPrint className="h-5 w-5 text-primary shrink-0" />
                     <div className="min-w-0 flex-1">
@@ -439,9 +439,9 @@ const Profile = () => {
         {/* ── INFORMAÇÕES DA CONTA ── */}
         <motion.div
           className="rounded-2xl bg-card p-4 shadow-md"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
+          initial={{ y: 10 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.16, duration: 0.18 }}
         >
           <h2 className="mb-4 text-base font-semibold text-foreground">Informações da conta</h2>
           <div className="space-y-4">
@@ -495,9 +495,9 @@ const Profile = () => {
         {/* ── AÇÕES ── */}
         <motion.div
           className="space-y-2 pb-6"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.5 }}
+          initial={{ y: 10 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.18, duration: 0.18 }}
         >
           <button
             className="flex w-full min-h-[44px] items-center gap-3 rounded-2xl bg-card px-4 py-3 text-left transition-colors hover:bg-secondary"
