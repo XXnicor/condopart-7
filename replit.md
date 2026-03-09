@@ -6,7 +6,9 @@ A React/Vite frontend application for reporting and tracking lost pets within re
 
 - **Frontend**: React 18 + TypeScript + Vite, hosted on port 5000
 - **Backend/Auth/DB**: Supabase (hosted, external) — handles authentication, PostgreSQL database, realtime subscriptions, and file storage
-- **Styling**: Tailwind CSS + shadcn/ui components
+- **Styling**: Tailwind CSS + shadcn/ui components + custom design system
+- **Fonts**: Syne (display/headings) + DM Sans (body) via Google Fonts
+- **Visual System**: Gradient mesh backgrounds, grain textures, glassmorphism headers, tactile micro-interactions, staggered animations
 - **Routing**: React Router v6
 - **State**: TanStack React Query
 

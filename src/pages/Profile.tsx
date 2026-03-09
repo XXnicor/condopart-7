@@ -214,7 +214,7 @@ const Profile = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
+      <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
         <ProfileSkeleton />
         <BottomNav />
       </div>
@@ -227,7 +227,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
       {/* Header with gradient background */}
       <motion.div
         className="bg-gradient-to-r from-amber-400 via-amber-500 to-orange-400 rounded-b-3xl overflow-hidden"

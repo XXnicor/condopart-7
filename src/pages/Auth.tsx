@@ -18,25 +18,21 @@ const Auth = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  // Resend confirmation
   const [showResend, setShowResend] = useState(false);
   const [resendEmail, setResendEmail] = useState('');
   const [resending, setResending] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
 
-  // Forgot password
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotLoading, setForgotLoading] = useState(false);
   const [forgotSuccess, setForgotSuccess] = useState(false);
   const [forgotErrors, setForgotErrors] = useState<{ email?: string }>({});
 
-  // Login form
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginErrors, setLoginErrors] = useState<{ email?: string; password?: string }>({});
 
-  // Signup form
   const [signupName, setSignupName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
@@ -145,24 +141,30 @@ const Auth = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-background px-4">
-      <div className="w-full">
-        <div className="mb-8 flex flex-col items-center gap-2">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-lg">
-            <PawPrint className="h-9 w-9 text-primary-foreground" />
+    <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-mesh-light dark:bg-mesh-dark bg-auth-pattern bg-grain px-4 relative">
+      <div className="w-full relative z-10 stagger-in">
+        <div className="mb-10 flex flex-col items-center gap-3">
+          <div
+            className="flex h-18 w-18 items-center justify-center rounded-2xl fab-gradient animate-bounce-in"
+            style={{ width: '72px', height: '72px' }}
+            data-testid="logo-icon"
+          >
+            <PawPrint className="h-10 w-10 text-primary-foreground animate-paw-bounce" />
           </div>
-          <h1 className="font-display text-3xl font-extrabold text-foreground">
+          <h1 className="font-display text-foreground tracking-tight text-center" data-testid="text-brand" style={{ fontSize: 'clamp(1.75rem, 6vw, 2.25rem)' }}>
             Pet<span className="text-primary">Alert</span> Condo
           </h1>
-          <p className="text-sm text-muted-foreground">Encontre pets perdidos no seu condomínio</p>
+          <p className="text-sm text-muted-foreground font-medium tracking-wide" data-testid="text-tagline">
+            Encontre pets perdidos no seu condomínio
+          </p>
         </div>
 
-        <Card className="w-full rounded-2xl border-border/50 shadow-md">
+        <Card className="w-full rounded-2xl border-glow shadow-lg dark:shadow-2xl overflow-hidden animate-slide-up" data-testid="card-auth">
           <Tabs defaultValue="login">
             <CardHeader className="pb-2">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Entrar</TabsTrigger>
-                <TabsTrigger value="signup">Cadastrar</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2" data-testid="tabs-auth">
+                <TabsTrigger value="login" data-testid="tab-login">Entrar</TabsTrigger>
+                <TabsTrigger value="signup" data-testid="tab-signup">Cadastrar</TabsTrigger>
               </TabsList>
             </CardHeader>
 
@@ -171,14 +173,14 @@ const Auth = () => {
                 <CardContent className="space-y-4">
                   {forgotSuccess ? (
                     <div className="flex flex-col items-center gap-3 py-4 text-center">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
-                        <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 animate-scale-in">
+                        <CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                       </div>
-                      <p className="text-sm font-medium text-foreground">
+                      <p className="text-sm font-medium text-foreground" data-testid="text-forgot-success">
                         Enviamos um link de recuperação para <strong>{forgotEmail}</strong>.
                         <br />Verifique sua caixa de entrada e a pasta de spam.
                       </p>
-                      <Button variant="outline" size="sm" onClick={resetForgotState}>
+                      <Button variant="outline" size="sm" onClick={resetForgotState} className="btn-tactile" data-testid="button-back-login">
                         Voltar para o login
                       </Button>
                     </div>
@@ -195,17 +197,18 @@ const Auth = () => {
                           placeholder="seu@email.com"
                           value={forgotEmail}
                           onChange={(e) => { setForgotEmail(e.target.value); setForgotErrors({}); }}
-                          className={`text-base min-h-[44px] ${forgotErrors.email ? 'border-destructive' : ''}`}
+                          className={`text-base min-h-[44px] input-glow ${forgotErrors.email ? 'border-destructive' : ''}`}
                           autoComplete="email"
                           autoCorrect="off"
                           autoCapitalize="off"
+                          data-testid="input-forgot-email"
                         />
                         {forgotErrors.email && <p className="text-xs text-destructive">{forgotErrors.email}</p>}
                       </div>
-                      <Button type="submit" className="w-full font-semibold" disabled={forgotLoading}>
+                      <Button type="submit" className="w-full font-semibold btn-tactile" disabled={forgotLoading} data-testid="button-forgot-submit">
                         {forgotLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...</> : 'Enviar link de recuperação'}
                       </Button>
-                      <Button type="button" variant="ghost" className="w-full text-sm" onClick={resetForgotState}>
+                      <Button type="button" variant="ghost" className="w-full text-sm" onClick={resetForgotState} data-testid="button-forgot-back">
                         Voltar para o login
                       </Button>
                     </form>
@@ -222,10 +225,11 @@ const Auth = () => {
                         placeholder="seu@email.com"
                         value={loginEmail}
                         onChange={(e) => { setLoginEmail(e.target.value); setLoginErrors(prev => ({ ...prev, email: undefined })); }}
-                        className={`text-base min-h-[44px] ${loginErrors.email ? 'border-destructive' : ''}`}
+                        className={`text-base min-h-[44px] input-glow ${loginErrors.email ? 'border-destructive' : ''}`}
                         autoComplete="email"
                         autoCorrect="off"
                         autoCapitalize="off"
+                        data-testid="input-login-email"
                       />
                       {loginErrors.email && <p className="text-xs text-destructive">{loginErrors.email}</p>}
                     </div>
@@ -234,8 +238,9 @@ const Auth = () => {
                         <Label htmlFor="login-password">Senha</Label>
                         <button
                           type="button"
-                          className="text-sm text-amber-600 hover:underline cursor-pointer"
+                          className="text-sm text-primary hover:text-accent transition-colors cursor-pointer font-medium"
                           onClick={() => { setShowForgotPassword(true); setForgotEmail(loginEmail); }}
+                          data-testid="link-forgot-password"
                         >
                           Esqueci minha senha
                         </button>
@@ -246,12 +251,13 @@ const Auth = () => {
                         placeholder="••••••••"
                         value={loginPassword}
                         onChange={(e) => { setLoginPassword(e.target.value); setLoginErrors(prev => ({ ...prev, password: undefined })); }}
-                        className={`text-base min-h-[44px] ${loginErrors.password ? 'border-destructive' : ''}`}
+                        className={`text-base min-h-[44px] input-glow ${loginErrors.password ? 'border-destructive' : ''}`}
                         autoComplete="current-password"
+                        data-testid="input-login-password"
                       />
                       {loginErrors.password && <p className="text-xs text-destructive">{loginErrors.password}</p>}
                     </div>
-                    <Button type="submit" className="w-full font-semibold" disabled={loading}>
+                    <Button type="submit" className="w-full font-semibold btn-tactile h-12 text-base" disabled={loading} data-testid="button-login">
                       {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Entrando...</> : 'Entrar'}
                     </Button>
 
@@ -259,16 +265,17 @@ const Auth = () => {
                       <Button
                         type="button"
                         variant="outline"
-                        className="w-full border-amber-500 text-amber-600 hover:bg-amber-50"
+                        className="w-full border-amber-500 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 btn-tactile"
                         onClick={handleResend}
                         disabled={resending}
+                        data-testid="button-resend"
                       >
                         {resending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Reenviando...</> : <><Mail className="mr-2 h-4 w-4" /> Reenviar email de confirmação</>}
                       </Button>
                     )}
 
                     {showResend && resendSuccess && (
-                      <div className="flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-700">
+                      <div className="flex items-center gap-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 p-3 text-sm text-emerald-700 dark:text-emerald-400 animate-slide-up" data-testid="text-resend-success">
                         <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
                         <span>Email reenviado! Verifique sua caixa de entrada e a pasta de spam.</span>
                       </div>
@@ -282,11 +289,11 @@ const Auth = () => {
               {signupSuccess ? (
                 <CardContent>
                   <div className="flex flex-col items-center gap-3 py-4 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
-                      <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 animate-scale-in">
+                      <CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                     </div>
-                    <p className="text-sm text-foreground font-medium">{signupSuccess}</p>
-                    <Button variant="outline" size="sm" onClick={() => setSignupSuccess(null)}>
+                    <p className="text-sm text-foreground font-medium" data-testid="text-signup-success">{signupSuccess}</p>
+                    <Button variant="outline" size="sm" onClick={() => setSignupSuccess(null)} className="btn-tactile" data-testid="button-back-signup">
                       Voltar ao cadastro
                     </Button>
                   </div>
@@ -301,9 +308,10 @@ const Auth = () => {
                         placeholder="Seu nome"
                         value={signupName}
                         onChange={(e) => { setSignupName(e.target.value); setSignupErrors(prev => ({ ...prev, name: undefined })); }}
-                        className={`text-base min-h-[44px] ${signupErrors.name ? 'border-destructive' : ''}`}
+                        className={`text-base min-h-[44px] input-glow ${signupErrors.name ? 'border-destructive' : ''}`}
                         autoComplete="name"
                         autoCorrect="off"
+                        data-testid="input-signup-name"
                       />
                       {signupErrors.name && <p className="text-xs text-destructive">{signupErrors.name}</p>}
                     </div>
@@ -315,10 +323,11 @@ const Auth = () => {
                         placeholder="seu@email.com"
                         value={signupEmail}
                         onChange={(e) => { setSignupEmail(e.target.value); setSignupErrors(prev => ({ ...prev, email: undefined })); }}
-                        className={`text-base min-h-[44px] ${signupErrors.email ? 'border-destructive' : ''}`}
+                        className={`text-base min-h-[44px] input-glow ${signupErrors.email ? 'border-destructive' : ''}`}
                         autoComplete="email"
                         autoCorrect="off"
                         autoCapitalize="off"
+                        data-testid="input-signup-email"
                       />
                       {signupErrors.email && <p className="text-xs text-destructive">{signupErrors.email}</p>}
                     </div>
@@ -330,8 +339,9 @@ const Auth = () => {
                         placeholder="Mínimo 8 caracteres"
                         value={signupPassword}
                         onChange={(e) => { setSignupPassword(e.target.value); setSignupErrors(prev => ({ ...prev, password: undefined })); }}
-                        className={`text-base min-h-[44px] ${signupErrors.password ? 'border-destructive' : ''}`}
+                        className={`text-base min-h-[44px] input-glow ${signupErrors.password ? 'border-destructive' : ''}`}
                         autoComplete="new-password"
+                        data-testid="input-signup-password"
                       />
                       {signupErrors.password && <p className="text-xs text-destructive">{signupErrors.password}</p>}
                     </div>
@@ -343,12 +353,13 @@ const Auth = () => {
                         placeholder="Repita sua senha"
                         value={signupConfirmPassword}
                         onChange={(e) => { setSignupConfirmPassword(e.target.value); setSignupErrors(prev => ({ ...prev, confirmPassword: undefined })); }}
-                        className={`text-base min-h-[44px] ${signupErrors.confirmPassword ? 'border-destructive' : ''}`}
+                        className={`text-base min-h-[44px] input-glow ${signupErrors.confirmPassword ? 'border-destructive' : ''}`}
                         autoComplete="new-password"
+                        data-testid="input-signup-confirm-password"
                       />
                       {signupErrors.confirmPassword && <p className="text-xs text-destructive">{signupErrors.confirmPassword}</p>}
                     </div>
-                    <Button type="submit" className="w-full font-semibold" disabled={loading}>
+                    <Button type="submit" className="w-full font-semibold btn-tactile h-12 text-base" disabled={loading} data-testid="button-signup">
                       {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Cadastrando...</> : 'Cadastrar'}
                     </Button>
                   </CardContent>

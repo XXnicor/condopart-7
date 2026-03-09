@@ -21,7 +21,7 @@ const FeedCard = ({ item, currentUserId, onDeleteComment }: FeedCardProps) => {
   if (item.type === 'sighting') {
     const s = item.data;
     return (
-      <Card className="rounded-2xl border-border/50 shadow-sm">
+      <Card className="rounded-2xl border-glow shadow-sm card-elevated">
         <CardContent className="space-y-2 p-3">
           {/* Header */}
           <div className="flex items-center gap-2">
@@ -60,7 +60,7 @@ const FeedCard = ({ item, currentUserId, onDeleteComment }: FeedCardProps) => {
   const initial = c.author?.full_name?.charAt(0).toUpperCase() ?? '?';
 
   return (
-    <Card className="rounded-2xl border-border/50 bg-muted/30 shadow-sm">
+    <Card className="rounded-2xl border-glow bg-muted/30 shadow-sm card-elevated">
       <CardContent className="space-y-1 p-3">
         {/* Header */}
         <div className="flex items-center gap-2">

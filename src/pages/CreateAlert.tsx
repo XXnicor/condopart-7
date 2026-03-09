@@ -82,8 +82,8 @@ const CreateAlert = () => {
   const isSubmitDisabled = loading || uploading;
 
   return (
-    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
-      <header className="sticky top-0 z-40 border-b border-border bg-card/95 px-4 py-3 backdrop-blur-md">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
+      <header className="sticky top-0 z-40 glass-strong px-4 py-3">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-5 w-5" />

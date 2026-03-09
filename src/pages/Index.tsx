@@ -44,7 +44,6 @@ const Index = () => {
     if (profile?.condominium_id) fetchAlerts();
   }, [profile]);
 
-  // Refetch when page regains focus
   useEffect(() => {
     const handleFocus = () => {
       if (profile?.condominium_id) fetchAlerts();
@@ -53,7 +52,6 @@ const Index = () => {
     return () => window.removeEventListener('focus', handleFocus);
   }, [profile]);
 
-  // Realtime subscription for alert changes
   useEffect(() => {
     if (!profile?.condominium_id) return;
     const channel = supabase
@@ -65,7 +63,6 @@ const Index = () => {
     return () => { supabase.removeChannel(channel); };
   }, [profile?.condominium_id]);
 
-  // Broadcast listener for alert-resolved toast
   useEffect(() => {
     if (!profile?.condominium_id) return;
     const channel = supabase
@@ -119,19 +116,30 @@ const Index = () => {
 
   const statusBadge = (status: string) => {
     if (status === 'found') {
-      return <Badge className="bg-success text-success-foreground text-[10px]">Encontrado</Badge>;
+      return (
+        <Badge className="bg-success text-success-foreground text-[10px] font-semibold" data-testid={`badge-status-found`}>
+          Encontrado
+        </Badge>
+      );
     }
-    return <Badge className="bg-warning text-warning-foreground text-[10px]">Ativo</Badge>;
+    return (
+      <Badge className="bg-warning text-warning-foreground text-[10px] font-semibold status-pulse" data-testid={`badge-status-active`}>
+        Ativo
+      </Badge>
+    );
   };
 
   const renderAlertCard = (alert: AlertRow, showResolutionNote = false) => (
     <Card
       key={alert.id}
-      className="cursor-pointer overflow-hidden rounded-2xl border-border/50 shadow-md transition-shadow hover:shadow-lg"
+      className={`cursor-pointer overflow-hidden rounded-2xl border-glow shadow-sm card-elevated ${
+        alert.status === 'active' ? 'alert-card-active' : alert.status === 'found' ? 'alert-card-found' : ''
+      }`}
       onClick={() => navigate(`/alert/${alert.id}`)}
+      data-testid={`card-alert-${alert.id}`}
     >
       <CardContent className="flex gap-3 p-3">
-        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-secondary">
+        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-secondary">
           {alert.photo_url ? (
             <img src={alert.photo_url} alt={alert.title} className="h-full w-full object-cover" />
           ) : (
@@ -143,7 +151,9 @@ const Index = () => {
         <div className="flex flex-1 flex-col justify-between">
           <div>
             <div className="flex items-start justify-between gap-2">
-              <h3 className="font-display text-base font-bold leading-tight">{alert.title}</h3>
+              <h3 className="font-display text-base font-bold leading-tight tracking-tight" data-testid={`text-alert-title-${alert.id}`}>
+                {alert.title}
+              </h3>
               {statusBadge(alert.status)}
             </div>
             <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{alert.description}</p>
@@ -153,7 +163,7 @@ const Index = () => {
           </div>
           <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
             <span className="flex items-center gap-1">
-              <MapPin className="h-3 w-3" /> {alert.location_label || 'Local não informado'}
+              <MapPin className="h-3 w-3 text-primary/70" /> {alert.location_label || 'Local não informado'}
             </span>
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
@@ -168,38 +178,37 @@ const Index = () => {
   );
 
   const renderEmptyState = (message: string, sub: string) => (
-    <div className="flex flex-col items-center gap-3 py-16 text-center">
+    <div className="flex flex-col items-center gap-3 py-16 text-center animate-slide-up">
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
         <PawPrint className="h-8 w-8 text-muted-foreground" />
       </div>
-      <p className="font-medium text-foreground">{message}</p>
-      <p className="text-sm text-muted-foreground">{sub}</p>
+      <p className="font-display font-semibold text-foreground" data-testid="text-empty-title">{message}</p>
+      <p className="text-sm text-muted-foreground" data-testid="text-empty-sub">{sub}</p>
     </div>
   );
 
   const renderActiveContent = () => (
     <>
-      {/* Search */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="Buscar por nome ou descrição..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-9 text-base min-h-[44px]"
+          className="pl-9 text-base min-h-[44px] input-glow"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
+          data-testid="input-search"
         />
       </div>
 
-      {/* Alert count */}
       {!loading && !error && (
         <div className="mb-3 flex items-center justify-between">
-          <p className="text-sm font-medium text-muted-foreground">
+          <p className="text-sm font-medium text-muted-foreground" data-testid="text-alert-count">
             {filtered.length} alerta{filtered.length !== 1 ? 's' : ''}
           </p>
-          <Badge variant="outline" className="border-primary/30 text-primary">
+          <Badge variant="outline" className="border-primary/30 text-primary font-medium" data-testid="badge-condo">
             <PawPrint className="mr-1 h-3 w-3" /> Seu condomínio
           </Badge>
         </div>
@@ -208,17 +217,19 @@ const Index = () => {
       {loading ? (
         <div className="space-y-3"><SkeletonCard variant="feed" count={3} /></div>
       ) : error ? (
-        <div className="flex flex-col items-center gap-3 py-16 text-center">
+        <div className="flex flex-col items-center gap-3 py-16 text-center animate-slide-up">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10">
             <AlertTriangle className="h-7 w-7 text-destructive" />
           </div>
-          <p className="font-medium text-foreground">Erro ao carregar alertas</p>
-          <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={fetchAlerts}>Tentar novamente</Button>
+          <p className="font-display font-semibold text-foreground" data-testid="text-error">Erro ao carregar alertas</p>
+          <Button size="sm" className="bg-primary hover:bg-primary/90 btn-tactile" onClick={fetchAlerts} data-testid="button-retry">
+            Tentar novamente
+          </Button>
         </div>
       ) : filtered.length === 0 ? (
         renderEmptyState('Nenhum alerta ativo no seu condomínio', 'Quando um pet for perdido, ele aparecerá aqui')
       ) : (
-        <div className="space-y-3">{filtered.map((a) => renderAlertCard(a))}</div>
+        <div className="space-y-3 stagger-in">{filtered.map((a) => renderAlertCard(a))}</div>
       )}
     </>
   );
@@ -230,31 +241,38 @@ const Index = () => {
       ) : foundAlerts.length === 0 ? (
         renderEmptyState('Nenhum pet encontrado ainda', 'Alertas encerrados aparecerão aqui')
       ) : (
-        <div className="space-y-3">{foundAlerts.map((a) => renderAlertCard(a, true))}</div>
+        <div className="space-y-3 stagger-in">{foundAlerts.map((a) => renderAlertCard(a, true))}</div>
       )}
     </>
   );
 
   return (
-    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
-      <header className="sticky top-0 z-40 border-b border-border bg-card/95 px-4 py-3 backdrop-blur-md">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
+      <header className="sticky top-0 z-40 glass-strong px-4 py-3">
         <div className="flex items-center gap-2">
-          <PawPrint className="h-6 w-6 text-primary" />
-          <h1 className="font-display text-lg font-bold">
+          <PawPrint className="h-6 w-6 text-primary" data-testid="icon-header-paw" />
+          <h1 className="font-display text-lg font-bold tracking-tight" data-testid="text-header-brand" style={{ fontSize: '1.125rem' }}>
             Pet<span className="text-primary">Alert</span>
           </h1>
-          <Button variant="ghost" size="icon" className="ml-auto h-8 w-8 text-muted-foreground" onClick={fetchAlerts} disabled={loading}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="ml-auto h-8 w-8 text-muted-foreground btn-tactile"
+            onClick={fetchAlerts}
+            disabled={loading}
+            data-testid="button-refresh"
+          >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           </Button>
         </div>
       </header>
 
-      <main className="px-4 py-4 overflow-y-auto overscroll-contain">
+      <main className="px-4 py-4 overflow-y-auto overscroll-contain relative z-10">
         {isSyndicOrAdmin ? (
           <Tabs defaultValue="active" onValueChange={(v) => { if (v === 'found') fetchFoundAlerts(); }}>
-            <TabsList className="mb-4 w-full">
-              <TabsTrigger value="active" className="flex-1">Alertas Ativos</TabsTrigger>
-              <TabsTrigger value="found" className="flex-1">Pets Encontrados</TabsTrigger>
+            <TabsList className="mb-4 w-full" data-testid="tabs-feed">
+              <TabsTrigger value="active" className="flex-1" data-testid="tab-active">Alertas Ativos</TabsTrigger>
+              <TabsTrigger value="found" className="flex-1" data-testid="tab-found">Pets Encontrados</TabsTrigger>
             </TabsList>
             <TabsContent value="active">{renderActiveContent()}</TabsContent>
             <TabsContent value="found">{renderFoundContent()}</TabsContent>
@@ -264,11 +282,11 @@ const Index = () => {
         )}
       </main>
 
-      {/* FAB */}
       <button
         onClick={() => navigate('/create-alert')}
-        className="fixed right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30 transition-transform hover:scale-105 active:scale-95"
+        className="fixed right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full fab-gradient transition-all duration-300 hover:scale-110 active:scale-95 animate-bounce-in"
         style={{ bottom: 'calc(80px + env(safe-area-inset-bottom))' }}
+        data-testid="button-fab-create"
       >
         <Plus className="h-7 w-7 text-primary-foreground" />
       </button>

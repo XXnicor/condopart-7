@@ -44,9 +44,9 @@ const FeedPreview = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border bg-card/95 px-4 py-3 backdrop-blur-md">
+      <header className="sticky top-0 z-40 glass-strong px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}

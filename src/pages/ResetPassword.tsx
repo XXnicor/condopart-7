@@ -121,7 +121,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-mesh-light dark:bg-mesh-dark bg-auth-pattern bg-grain px-4">
       <div className="w-full">
         <div className="mb-8 flex flex-col items-center gap-2">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-lg">

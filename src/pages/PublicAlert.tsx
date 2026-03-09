@@ -59,8 +59,8 @@ const PublicAlert = () => {
 
   if (loading) {
     return (
-    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background">
-      <header className="border-b border-border bg-card px-4 py-3">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain">
+      <header className="glass-strong px-4 py-3">
         <span className="font-display text-xl font-extrabold text-primary">PetAlert</span>
       </header>
       <main className="space-y-4 px-4 py-4 overflow-y-auto overscroll-contain">
@@ -76,7 +76,7 @@ const PublicAlert = () => {
 
   if (!alert) {
     return (
-      <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-background gap-4 px-4">
+      <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-mesh-light dark:bg-mesh-dark gap-4 px-4">
         <SearchX className="h-16 w-16 text-muted-foreground/30" />
         <p className="text-lg font-semibold text-foreground">Alerta não encontrado</p>
         <p className="text-sm text-muted-foreground text-center">Este link pode ter expirado ou sido removido.</p>
@@ -90,10 +90,10 @@ const PublicAlert = () => {
   const isLong = description.length > 180;
 
   return (
-    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain">
       {/* Header */}
-      <header className="border-b border-border bg-card px-4 py-3">
-        <span className="font-display text-xl font-extrabold text-primary">PetAlert</span>
+      <header className="glass-strong px-4 py-3">
+        <span className="font-display text-xl font-extrabold text-primary tracking-tight">PetAlert</span>
       </header>
 
       <main className="space-y-4 px-4 py-4 pb-8 overflow-y-auto overscroll-contain">

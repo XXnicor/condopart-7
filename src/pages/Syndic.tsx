@@ -152,12 +152,12 @@ const Syndic = () => {
   // ── Render ───────────────────────────────────────────
 
   return (
-    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-background pb-24">
+    <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
       {/* Header */}
       <header className="px-4 pt-6 pb-2">
         <div className="flex items-center gap-2">
           <ShieldCheck className="h-6 w-6 text-amber-500" />
-          <h1 className="text-xl font-bold text-foreground">Painel do Síndico</h1>
+          <h1 className="font-display text-xl font-bold text-foreground tracking-tight">Painel do Síndico</h1>
         </div>
         {condoName && (
           <p className="mt-0.5 text-sm text-muted-foreground">{condoName}</p>
