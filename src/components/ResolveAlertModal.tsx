@@ -64,9 +64,9 @@ const ResolveAlertModal = ({ alertId, petName, isOpen, onClose, onSuccess }: Res
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
             className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-[480px]"
           >
-            <div className="rounded-t-3xl bg-card shadow-2xl flex flex-col max-h-[85vh]">
+            <div className="rounded-t-3xl bg-card shadow-2xl flex flex-col max-h-[85dvh] overflow-hidden">
               {/* Scrollable content */}
-              <div className="flex-1 overflow-y-auto px-6 pt-6 pb-2">
+              <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-6 pb-2">
                 {/* Handle bar */}
                 <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-muted" />
 
