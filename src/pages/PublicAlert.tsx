@@ -20,24 +20,42 @@ function setMetaTag(property: string, content: string) {
   el.setAttribute('content', content);
 }
 
+interface PublicAlertData {
+  id: string;
+  title: string;
+  description: string | null;
+  photo_url: string | null;
+  status: string;
+  location_label: string | null;
+  created_at: string;
+}
+
 const PublicAlert = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [alert, setAlert] = useState<any>(null);
+  const [alert, setAlert] = useState<PublicAlertData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  useEffect(() => {
+  const fetchAlert = async () => {
     if (!id) return;
-    const fetchAlert = async () => {
-      const { data } = await supabase
-        .from('alerts')
-        .select('id, title, description, photo_url, status, location_label, created_at')
-        .eq('id', id)
-        .maybeSingle();
+    setLoading(true);
+    setFetchError(false);
+    const { data, error } = await supabase
+      .from('alerts')
+      .select('id, title, description, photo_url, status, location_label, created_at')
+      .eq('id', id)
+      .maybeSingle();
+    if (error) {
+      setFetchError(true);
+    } else {
       setAlert(data);
-      setLoading(false);
-    };
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchAlert();
   }, [id]);
 
@@ -70,6 +88,17 @@ const PublicAlert = () => {
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-12 w-full rounded-xl" />
         </main>
+      </div>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-mesh-light dark:bg-mesh-dark gap-4 px-4">
+        <SearchX className="h-16 w-16 text-muted-foreground/30" />
+        <p className="text-lg font-semibold text-foreground">Erro ao carregar alerta</p>
+        <p className="text-sm text-muted-foreground text-center">Verifique sua conexão e tente novamente.</p>
+        <Button variant="outline" onClick={() => fetchAlert()} data-testid="button-retry-public">Tentar novamente</Button>
       </div>
     );
   }

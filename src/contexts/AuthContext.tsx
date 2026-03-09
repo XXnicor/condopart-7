@@ -32,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string, userMeta?: Record<string, unknown>) => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', userId)
@@ -50,21 +50,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
 
-    // Fallback: create profile if trigger didn't fire
+    if (error && error.code !== 'PGRST116') {
+      console.error('Failed to fetch profile:', error.message);
+      return;
+    }
+
     const fullName = (userMeta?.full_name as string) ?? null;
-    const { data: inserted } = await supabase
+    await supabase
       .from('profiles')
-      .insert({ id: userId, full_name: fullName })
+      .upsert({ id: userId, full_name: fullName }, { onConflict: 'id', ignoreDuplicates: true });
+
+    const { data: refetched } = await supabase
+      .from('profiles')
       .select('*')
+      .eq('id', userId)
       .single();
-    if (inserted) {
+    if (refetched) {
       setProfile({
-        id: inserted.id,
-        full_name: inserted.full_name,
-        phone: inserted.phone,
-        condominium_id: inserted.condominium_id,
-        role: inserted.role,
-        avatar_url: inserted.avatar_url,
+        id: refetched.id,
+        full_name: refetched.full_name,
+        phone: refetched.phone,
+        condominium_id: refetched.condominium_id,
+        role: refetched.role,
+        avatar_url: refetched.avatar_url,
       });
     }
   };

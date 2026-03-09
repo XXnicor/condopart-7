@@ -38,6 +38,12 @@ const CreateAlert = () => {
     e.preventDefault();
     if (!validate()) return;
 
+    if (!user || !profile?.condominium_id) {
+      toast.error('Não foi possível identificar seu condomínio. Faça login novamente.');
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
 
     // Parse location data from LocationPicker (JSON string with lat, lng, label)
@@ -57,8 +63,8 @@ const CreateAlert = () => {
     }
 
     const { data: insertData, error } = await supabase.from('alerts').insert({
-      reporter_id: user!.id,
-      condominium_id: profile!.condominium_id,
+      reporter_id: user.id,
+      condominium_id: profile.condominium_id,
       title: petName.trim(),
       description: description.trim(),
       location_lat: locationLat,
