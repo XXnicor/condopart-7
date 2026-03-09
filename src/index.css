@@ -392,11 +392,31 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.page-transition {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .stagger-in > * {
     opacity: 1;
     transform: none;
     animation: none;
+  }
+
+  .page-transition {
+    will-change: auto;
   }
 
   .card-elevated:hover {

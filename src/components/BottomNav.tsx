@@ -1,5 +1,6 @@
 import { Home, PlusCircle, User, LayoutDashboard } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -32,9 +33,11 @@ const BottomNav = () => {
         {items.map(({ icon: Icon, label, path }) => {
           const active = location.pathname === path;
           return (
-            <button
+            <motion.button
               key={path}
               onClick={() => navigate(path)}
+              whileTap={{ scale: 0.88 }}
+              transition={{ duration: 0.1 }}
               aria-current={active ? 'page' : undefined}
               aria-label={label}
               className={cn(
@@ -50,7 +53,7 @@ const BottomNav = () => {
               {active && (
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-amber-500" />
               )}
-            </button>
+            </motion.button>
           );
         })}
       </div>

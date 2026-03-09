@@ -9,6 +9,7 @@ A React/Vite frontend application for reporting and tracking lost pets within re
 - **Styling**: Tailwind CSS + shadcn/ui components + custom design system
 - **Fonts**: Syne (display/headings) + DM Sans (body) via Google Fonts
 - **Visual System**: Gradient mesh backgrounds, grain textures, glassmorphism headers, tactile micro-interactions, staggered animations, polished interactive states (focus rings, active:scale, transition-all on all base components), AlertCircle error icons, character counters on textareas, contextual empty states, neutral stone-100 skeletons
+- **Motion/Transitions**: Framer Motion page-level transitions (PageTransition component with forward/back/tab/modal variants), FadeIn stagger wrapper for sections, AnimatePresence on route switches and loading states, whileTap feedback on BottomNav and FAB, stagger card animations in feed, GPU-promoted `.page-transition` CSS class, `prefers-reduced-motion` support
 - **Routing**: React Router v6
 - **State**: TanStack React Query
 
@@ -52,7 +53,7 @@ src/
   integrations/supabase/ — Supabase client + TypeScript types
   lib/                 — data access functions (alerts, sightings, comments, storage, syndic)
   hooks/               — React hooks for data fetching
-  components/          — UI components
+  components/          — UI components (incl. PageTransition.tsx, FadeIn.tsx for motion layer)
   pages/               — route-level page components
 supabase/migrations/   — SQL migration history
 ```

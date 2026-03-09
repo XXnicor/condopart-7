@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { getFoundAlerts } from '@/lib/alerts';
@@ -16,7 +17,21 @@ import { toast } from 'sonner';
 import BottomNav from '@/components/BottomNav';
 import TutoriaisSection from '@/components/TutoriaisSection';
 import MoradorInfo from '@/components/MoradorInfo';
+import FadeIn from '@/components/FadeIn';
 import type { Tables } from '@/integrations/supabase/types';
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06 } }
+};
+
+const cardVariants = {
+  hidden:  { opacity: 0, y: 16, scale: 0.98 },
+  visible: {
+    opacity: 1, y: 0, scale: 1,
+    transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
+  }
+};
 
 type AlertRow = Tables<'alerts'>;
 
@@ -171,8 +186,12 @@ const Index = () => {
   };
 
   const renderAlertCard = (alert: AlertWithProfile, showResolutionNote = false) => (
-    <Card
+    <motion.div
       key={alert.id}
+      variants={cardVariants}
+      whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
+    >
+    <Card
       className={`cursor-pointer overflow-hidden rounded-2xl border-glow shadow-sm card-elevated ${
         alert.status === 'active' ? 'alert-card-active' : alert.status === 'found' ? 'alert-card-found' : ''
       }`}
@@ -223,6 +242,7 @@ const Index = () => {
         />
       </div>
     </Card>
+    </motion.div>
   );
 
   const renderEmptyState = (message: string, sub: string, icon?: React.ReactNode) => (
@@ -262,29 +282,41 @@ const Index = () => {
         </div>
       )}
 
-      {loading ? (
-        <div className="space-y-3"><SkeletonCard variant="feed" count={3} /></div>
-      ) : error ? (
-        <div className="flex flex-col items-center gap-3 py-16 text-center animate-slide-up">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10">
-            <AlertTriangle className="h-7 w-7 text-destructive" />
-          </div>
-          <p className="font-display font-semibold text-foreground" data-testid="text-error">Erro ao carregar alertas</p>
-          <Button size="sm" className="bg-primary hover:bg-primary/90 btn-tactile" onClick={fetchAlerts} data-testid="button-retry">
-            Tentar novamente
-          </Button>
-        </div>
-      ) : filtered.length === 0 && debouncedSearch ? (
-        renderEmptyState(
-          'Nenhum resultado',
-          'Tente outro nome ou descrição.',
-          <Search className="h-8 w-8 text-stone-300" />
-        )
-      ) : filtered.length === 0 ? (
-        renderEmptyState('Nenhum alerta por aqui', 'Crie um alerta se seu pet estiver perdido.')
-      ) : (
-        <div className="space-y-3 stagger-in">{filtered.map((a) => renderAlertCard(a))}</div>
-      )}
+      <AnimatePresence mode="wait">
+        {loading ? (
+          <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+            <div className="space-y-3"><SkeletonCard variant="feed" count={3} /></div>
+          </motion.div>
+        ) : error ? (
+          <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+            <div className="flex flex-col items-center gap-3 py-16 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10">
+                <AlertTriangle className="h-7 w-7 text-destructive" />
+              </div>
+              <p className="font-display font-semibold text-foreground" data-testid="text-error">Erro ao carregar alertas</p>
+              <Button size="sm" className="bg-primary hover:bg-primary/90 btn-tactile" onClick={fetchAlerts} data-testid="button-retry">
+                Tentar novamente
+              </Button>
+            </div>
+          </motion.div>
+        ) : filtered.length === 0 && debouncedSearch ? (
+          <motion.div key="no-results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+            {renderEmptyState(
+              'Nenhum resultado',
+              'Tente outro nome ou descrição.',
+              <Search className="h-8 w-8 text-stone-300" />
+            )}
+          </motion.div>
+        ) : filtered.length === 0 ? (
+          <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+            {renderEmptyState('Nenhum alerta por aqui', 'Crie um alerta se seu pet estiver perdido.')}
+          </motion.div>
+        ) : (
+          <motion.div key="cards" variants={containerVariants} initial="hidden" animate="visible" className="space-y-3">
+            {filtered.map((a) => renderAlertCard(a))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 
@@ -295,57 +327,66 @@ const Index = () => {
       ) : foundAlerts.length === 0 ? (
         renderEmptyState('Nenhum pet encontrado ainda', 'Alertas encerrados aparecerão aqui.')
       ) : (
-        <div className="space-y-3 stagger-in">{foundAlerts.map((a) => renderAlertCard(a, true))}</div>
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-3">{foundAlerts.map((a) => renderAlertCard(a, true))}</motion.div>
       )}
     </>
   );
 
   return (
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
-      <header className="sticky top-0 z-40 glass-strong px-4 py-3">
-        <div className="flex items-center gap-2">
-          <PawPrint className="h-6 w-6 text-primary" data-testid="icon-header-paw" />
-          <h1 className="font-display text-lg font-bold tracking-tight" data-testid="text-header-brand" style={{ fontSize: '1.125rem' }}>
-            Encontra<span className="text-primary">Pet</span>
-          </h1>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="ml-auto h-8 w-8 text-muted-foreground btn-tactile"
-            onClick={fetchAlerts}
-            disabled={loading}
-            data-testid="button-refresh"
-          >
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-          </Button>
-        </div>
-      </header>
+      <FadeIn>
+        <header className="sticky top-0 z-40 glass-strong px-4 py-3">
+          <div className="flex items-center gap-2">
+            <PawPrint className="h-6 w-6 text-primary" data-testid="icon-header-paw" />
+            <h1 className="font-display text-lg font-bold tracking-tight" data-testid="text-header-brand" style={{ fontSize: '1.125rem' }}>
+              Encontra<span className="text-primary">Pet</span>
+            </h1>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="ml-auto h-8 w-8 text-muted-foreground btn-tactile"
+              onClick={fetchAlerts}
+              disabled={loading}
+              data-testid="button-refresh"
+            >
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            </Button>
+          </div>
+        </header>
+      </FadeIn>
 
       <main className="px-4 py-4 overflow-y-auto overscroll-contain relative z-10">
-        {isSyndicOrAdmin ? (
-          <Tabs defaultValue="active" onValueChange={(v) => { if (v === 'found') fetchFoundAlerts(); }}>
-            <TabsList className="mb-4 w-full" data-testid="tabs-feed">
-              <TabsTrigger value="active" className="flex-1" data-testid="tab-active">Alertas Ativos</TabsTrigger>
-              <TabsTrigger value="found" className="flex-1" data-testid="tab-found">Pets Encontrados</TabsTrigger>
-            </TabsList>
-            <TabsContent value="active">{renderActiveContent()}</TabsContent>
-            <TabsContent value="found">{renderFoundContent()}</TabsContent>
-          </Tabs>
-        ) : (
-          renderActiveContent()
-        )}
+        <FadeIn delay={0.05}>
+          {isSyndicOrAdmin ? (
+            <Tabs defaultValue="active" onValueChange={(v) => { if (v === 'found') fetchFoundAlerts(); }}>
+              <TabsList className="mb-4 w-full" data-testid="tabs-feed">
+                <TabsTrigger value="active" className="flex-1" data-testid="tab-active">Alertas Ativos</TabsTrigger>
+                <TabsTrigger value="found" className="flex-1" data-testid="tab-found">Pets Encontrados</TabsTrigger>
+              </TabsList>
+              <TabsContent value="active">{renderActiveContent()}</TabsContent>
+              <TabsContent value="found">{renderFoundContent()}</TabsContent>
+            </Tabs>
+          ) : (
+            renderActiveContent()
+          )}
+        </FadeIn>
 
-        <TutoriaisSection />
+        <FadeIn delay={0.15}>
+          <TutoriaisSection />
+        </FadeIn>
       </main>
 
-      <button
+      <motion.button
         onClick={() => navigate('/create-alert')}
-        className="fixed right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full fab-gradient transition-all duration-300 hover:scale-110 active:scale-95 animate-bounce-in"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.93 }}
+        transition={{ duration: 0.15 }}
+        className="fixed right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full fab-gradient animate-bounce-in"
         style={{ bottom: 'calc(80px + env(safe-area-inset-bottom))' }}
         data-testid="button-fab-create"
       >
         <Plus className="h-7 w-7 text-primary-foreground" />
-      </button>
+      </motion.button>
 
       <BottomNav />
     </div>
