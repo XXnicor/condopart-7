@@ -93,7 +93,8 @@ const ResolveAlertModal = ({ alertId, petName, isOpen, onClose, onSuccess }: Res
               Cancelar
             </Button>
             <Button
-              className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+              variant="default"
+              className="flex-1"
               onClick={handleConfirm}
               disabled={isResolving || (touched && trimmed.length < 10 && trimmed.length > 0)}
             >
