@@ -65,8 +65,13 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <div className="min-h-screen w-full bg-gray-50">
-        <div className="mx-auto flex justify-center">
+      <div
+        className="fixed inset-0 w-full bg-gray-50 flex justify-center"
+      >
+        <div
+          className="relative w-full max-w-[480px] h-full overflow-y-auto overflow-x-hidden"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           <BrowserRouter>
             <AuthProvider>
               <AppShell />

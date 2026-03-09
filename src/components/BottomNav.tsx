@@ -19,11 +19,10 @@ const BottomNav = () => {
 
   return (
     <nav
-      className="fixed bottom-0 left-1/2 z-50 bg-white/80 dark:bg-card/80 backdrop-blur-md border-t border-stone-100 dark:border-stone-800"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 dark:bg-card/80 backdrop-blur-md border-t border-stone-100 dark:border-stone-800"
       style={{
-        transform: 'translateX(-50%)',
-        width: '100%',
         maxWidth: '480px',
+        margin: '0 auto',
         paddingBottom: 'env(safe-area-inset-bottom)',
       }}
       data-testid="nav-bottom"
