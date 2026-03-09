@@ -31,7 +31,12 @@ const AnimatedRoutes = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         transition={{ duration: 0.15 }}
-        style={{ width: '100%' }}
+        style={{
+          width: '100%',
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden',
+          willChange: 'opacity, transform',
+        }}
       >
         <Routes location={location}>
           <Route path="/auth" element={<Auth />} />
