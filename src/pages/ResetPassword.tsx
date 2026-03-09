@@ -20,64 +20,75 @@ const ResetPassword = () => {
   const [errors, setErrors] = useState<{ password?: string; confirmPassword?: string }>({});
 
   useEffect(() => {
+    let cancelled = false;
+
     const initializeRecovery = async () => {
       try {
-        // Parse hash fragment for recovery tokens
+        // 1. PKCE format: ?code=xxx (default for supabase-js v2)
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (!cancelled) {
+            if (!error) {
+              setRecoveryReady(true);
+              // Remove code from URL to avoid re-use attempts
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            setChecking(false);
+          }
+          return;
+        }
+
+        // 2. Hash fragment format: #access_token=xxx&refresh_token=yyy&type=recovery (legacy)
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get('access_token');
         const refreshToken = hashParams.get('refresh_token');
         const type = hashParams.get('type');
 
-        // If we have recovery tokens in the hash, set the session manually
         if (type === 'recovery' && accessToken) {
-          const { error: setSessionError } = await supabase.auth.setSession({
+          const { error } = await supabase.auth.setSession({
             access_token: accessToken,
-            refresh_token: refreshToken ?? ''
+            refresh_token: refreshToken ?? '',
           });
-
-          if (!setSessionError) {
-            setRecoveryReady(true);
+          if (!cancelled) {
+            if (!error) {
+              setRecoveryReady(true);
+              // Clear hash to avoid exposing tokens in URL
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }
             setChecking(false);
-            // Clear the hash from URL to avoid exposing tokens
-            window.history.replaceState({}, document.title, window.location.pathname);
-            return;
           }
+          return;
         }
 
-        // Fallback: listen for PASSWORD_RECOVERY event
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-          if (event === 'PASSWORD_RECOVERY') {
+        // 3. Fallback: check if there is already a valid session (user may have already
+        //    exchanged the code on a previous load of this page)
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!cancelled) {
+          if (session) {
             setRecoveryReady(true);
-            setChecking(false);
           }
-        });
-
-        // Give it a moment to detect the recovery event
-        const timeout = setTimeout(() => {
           setChecking(false);
-          subscription.unsubscribe();
-        }, 2000);
-
-        return () => {
-          subscription.unsubscribe();
-          clearTimeout(timeout);
-        };
-      } catch (err) {
-        setChecking(false);
+        }
+      } catch {
+        if (!cancelled) {
+          setChecking(false);
+        }
       }
     };
 
-    const cleanup = initializeRecovery();
+    initializeRecovery();
+
     return () => {
-      if (cleanup instanceof Promise) {
-        // Handle async cleanup if needed
-      }
+      cancelled = true;
     };
   }, []);
 
   useEffect(() => {
     if (success) {
-      const timeout = setTimeout(() => navigate('/feed', { replace: true }), 2000);
+      const timeout = setTimeout(() => navigate('/', { replace: true }), 2000);
       return () => clearTimeout(timeout);
     }
   }, [success, navigate]);
@@ -145,7 +156,7 @@ const ResetPassword = () => {
                   Link inválido ou expirado. Solicite um novo link de recuperação.
                 </p>
                 <Button variant="outline" size="sm" onClick={() => navigate('/auth')}>
-                  Voltar para o login
+                  Solicitar novo link
                 </Button>
               </div>
             ) : (
