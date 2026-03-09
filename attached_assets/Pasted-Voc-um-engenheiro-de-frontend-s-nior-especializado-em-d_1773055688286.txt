@@ -1,0 +1,243 @@
+Você é um engenheiro de frontend sênior especializado em design systems de nível 
+produção. Sua missão é elevar o visual do PetAlert Condo ao nível de apps como 
+Vercel, Linear e Raycast — sem alterar NENHUMA lógica, rota, funcionalidade ou 
+integração com Supabase existente.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGRA ABSOLUTA — LER ANTES DE QUALQUER COISA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ NÃO altere: rotas, lógica de negócio, chamadas ao Supabase, AuthContext, 
+   RLS, tipos TypeScript, nomes de variáveis, props de componentes.
+❌ NÃO crie novas páginas, NÃO remova páginas existentes.
+❌ NÃO quebre nenhuma feature já funcionando.
+❌ NÃO troque bibliotecas (manter Tailwind CSS + shadcn/ui + Framer Motion).
+✅ APENAS melhore: classes Tailwind, estrutura visual JSX, tokens de design,
+   animações Framer Motion, tipografia, espaçamento, hierarquia visual.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTEXTO DO PROJETO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+App: PetAlert Condo — moradores encontram pets perdidos no condomínio.
+Stack: React 18 + TypeScript + Vite + Tailwind CSS + shadcn/ui + Framer Motion
+Mobile-first, max-width 480px centralizado no desktop.
+Cores base: primary amber-500, accent orange-400.
+Todos os textos de UI em português do Brasil.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DIREÇÃO VISUAL — VERCEL V0 LEVEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Referência: Vercel v0, Linear App, Raycast.
+Estilo: minimalista moderno com tipografia forte, espaços generosos,
+hierarquia visual clara, micro-interações refinadas.
+
+PALETA DE CORES — manter amber como primária, expandir com:
+- Background: white (#ffffff) com subtle warm tint (#fafaf9)
+- Surface cards: white com border border-stone-100
+- Text primário: stone-900 (quase preto, não puro)
+- Text secundário: stone-500
+- Text terciário: stone-400
+- Primary action: amber-500 hover:amber-600
+- Accent: orange-400
+- Success: emerald-500
+- Destructive: rose-500
+- Focus rings: amber-500/30
+
+TIPOGRAFIA — hierarquia de 4 níveis:
+- Headline pages: text-2xl font-bold tracking-tight text-stone-900
+- Section titles: text-lg font-semibold text-stone-800  
+- Body text: text-sm font-normal text-stone-600 leading-relaxed
+- Captions/metadata: text-xs font-medium text-stone-400 uppercase tracking-wide
+
+ESPAÇAMENTO — generoso e consistente:
+- Page padding: px-4 py-6 (mobile) 
+- Card padding: p-4 ou p-5
+- Gap entre seções: space-y-6
+- Gap entre elementos internos: space-y-3 ou space-y-2
+
+CARDS — nível elite:
+- rounded-2xl border border-stone-100 bg-white shadow-sm
+- hover: shadow-md transition-shadow duration-200
+- Foto do pet: rounded-xl object-cover com aspect-ratio 4/3
+- Status badge: pill pequeno com cor semântica (amber=ativo, emerald=encontrado)
+
+BOTÕES — níveis distintos:
+- Primary: bg-amber-500 hover:bg-amber-600 text-white font-semibold 
+  rounded-xl px-6 py-3 shadow-sm active:scale-[0.98] transition-all
+- Secondary: bg-stone-100 hover:bg-stone-200 text-stone-700 
+  rounded-xl px-6 py-3 font-medium
+- Ghost: text-stone-500 hover:text-stone-900 hover:bg-stone-50 rounded-lg
+- Danger: bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-xl
+
+INPUTS E FORMULÁRIOS:
+- border border-stone-200 rounded-xl bg-white px-4 py-3
+- focus: ring-2 ring-amber-500/20 border-amber-400 outline-none
+- placeholder: text-stone-400
+- label: text-sm font-medium text-stone-700 mb-1.5
+- Erro: text-xs text-rose-500 mt-1 com ícone
+
+FAB (Floating Action Button):
+- bg-amber-500 hover:bg-amber-600 shadow-lg hover:shadow-xl
+- rounded-2xl w-14 h-14 flex items-center justify-center
+- active:scale-95 transition-all duration-150
+- Ícone branco, tamanho 24px
+
+BOTTOM NAV:
+- bg-white/80 backdrop-blur-md border-t border-stone-100
+- Item ativo: text-amber-500 com dot indicator ou fill do ícone
+- Item inativo: text-stone-400 hover:text-stone-600
+- Altura: h-16, ícones 22px
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MICRO-ANIMAÇÕES — Framer Motion
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Page enter (todas as páginas):
+  initial={{ opacity: 0, y: 16 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.3, ease: "easeOut" }}
+
+Cards em lista (stagger):
+  variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
+  transition={{ staggerChildren: 0.06 }}
+
+Modal/Sheet open:
+  initial={{ opacity: 0, scale: 0.96 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 0.2, ease: "easeOut" }}
+
+Botão press feedback:
+  whileTap={{ scale: 0.97 }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EMPTY STATES — nível produto
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Estrutura padrão para todo empty state:
+- Ícone grande: 48px, cor stone-300, mb-4
+- Título: text-base font-semibold text-stone-700
+- Subtítulo: text-sm text-stone-400 text-center max-w-[240px] mx-auto
+- CTA (quando aplicável): botão primary mt-4
+
+Exemplos contextuais:
+- Feed sem alertas: 🐾 "Nenhum alerta por aqui" / "Seu condomínio está tranquilo. 
+  Crie um alerta se seu pet estiver perdido."
+- Busca sem resultados: 🔍 "Nenhum resultado" / "Tente buscar por outro nome 
+  ou descrição do pet."
+- Sem avistamentos: 👀 "Nenhum avistamento ainda" / "Seja o primeiro a informar 
+  se viu este pet."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LOADING STATES — Skeleton elite
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Usar shadcn/ui Skeleton existente
+- Skeleton cards devem espelhar exatamente o layout do card real
+- animate-pulse em bg-stone-100
+- Mostrar 3 skeleton cards no feed enquanto carrega
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PÁGINAS — INSTRUÇÕES ESPECÍFICAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### /auth — Login e Cadastro
+
+Layout:
+- Fundo: bg-gradient-to-b from-amber-50 to-white min-h-screen
+- Logo/brand no topo: ícone de pata 🐾 + "PetAlert" em font-bold text-2xl 
+  text-stone-900 + tagline text-sm text-stone-500
+- Card centralizado: bg-white rounded-2xl shadow-sm border border-stone-100 p-6
+- Tabs (Login/Cadastro): pill tabs estilo, não underline
+- Todos os inputs seguem o padrão de inputs elite acima
+- Botão submit: full width, primary style
+
+### / — Feed principal
+
+Header:
+- "Alertas Ativos" text-2xl font-bold tracking-tight
+- Subtítulo: nome do condomínio em text-sm text-stone-500
+- Barra de busca: rounded-xl bg-stone-50 border border-stone-200 
+  com ícone de lupa à esquerda
+
+Cards de alerta:
+- Imagem do pet: w-full aspect-[4/3] rounded-xl object-cover
+- Sem imagem: placeholder bg-stone-100 rounded-xl com ícone 🐾 centralizado
+- Pet name: text-base font-semibold text-stone-900
+- Local + tempo: flex gap-2 text-xs text-stone-400 com ícones pequenos
+- Status badge: pill "Ativo" amber / "Encontrado" emerald
+- Card inteiro clicável com hover:shadow-md transition
+
+### /alert/:id — Detalhe do alerta
+
+- Foto hero: w-full aspect-[4/3] rounded-2xl object-cover mb-5
+- Nome do pet: text-2xl font-bold text-stone-900
+- Badges de status e data em row
+- Seção "Informações": cards internos com ícone + label + valor
+- Seção "Avistamentos": lista com avatar do usuário + nota + data
+  Empty state específico se não houver avistamentos
+- Botão "Adicionar avistamento": secondary style
+- Botão "Marcar como Encontrado" (dono): primary amber, full width, bottom
+
+### /create-alert — Criar alerta
+
+- Upload de foto: área de drop visualmente rica — border-2 border-dashed 
+  border-stone-200 rounded-2xl p-8 text-center bg-stone-50
+  hover:border-amber-400 hover:bg-amber-50 transition-all
+  Preview da imagem após upload em aspect-[4/3] rounded-xl
+- Todos os campos: padrão inputs elite
+- Contador de caracteres na descrição (ex: "120/300")
+- Botão submit: primary full width com loading state (spinner branco)
+
+### /profile — Perfil
+
+- Avatar: w-20 h-20 rounded-full border-4 border-amber-100 shadow-sm
+  Placeholder: initials em bg-amber-100 text-amber-600 font-bold
+- Nome: text-xl font-bold text-stone-900
+- Condomínio: text-sm text-stone-500 com ícone de building
+- Seção "Meus Alertas": lista dos alertas do usuário com mini-cards
+- Botão "Sair": ghost style, text-rose-500, bottom da página
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ORDEM DE EXECUÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Execute nessa ordem, um arquivo por vez, confirmando que não há 
+erros de TypeScript antes de avançar:
+
+1. Design tokens globais (tailwind.config + globals.css se necessário)
+2. Componentes base: Button, Input, Badge, Card (shadcn customizado)
+3. BottomNav
+4. SkeletonCard
+5. /auth
+6. / (Feed)
+7. /alert/:id
+8. /create-alert
+9. /profile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHECKLIST ANTES DE CADA ENTREGA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Para cada arquivo modificado, confirme:
+[ ] TypeScript sem erros (zero `any` novo introduzido)
+[ ] Lógica e chamadas Supabase intactas
+[ ] Responsivo em 375px, 390px e 480px
+[ ] Animações Framer Motion funcionando
+[ ] Empty states implementados
+[ ] Loading states implementados
+[ ] Textos em português do Brasil
+[ ] Nenhuma regressão em features anteriores
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PADRÃO DE QUALIDADE ESPERADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+O resultado final deve passar no seguinte teste visual:
+"Se eu mostrar um screenshot deste app para um designer sênior, 
+ele deve confundir com um produto da Vercel, Linear ou Raycast —
+porém com a identidade amber/orange do PetAlert."
+
+Se em algum momento você tiver dúvida entre duas abordagens visuais,
+escolha sempre a mais clean, espaçada e tipograficamente forte.
