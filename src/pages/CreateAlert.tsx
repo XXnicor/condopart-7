@@ -11,7 +11,6 @@ import LocationPicker from '@/components/LocationPicker';
 import ImageUpload from '@/components/ImageUpload';
 import { toast } from 'sonner';
 import BottomNav from '@/components/BottomNav';
-import FadeIn from '@/components/FadeIn';
 
 const CreateAlert = () => {
   const { user, profile } = useAuth();
@@ -90,85 +89,74 @@ const CreateAlert = () => {
 
   return (
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
-      <FadeIn>
-        <header className="sticky top-0 z-40 glass-strong px-4 py-3">
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-            <h1 className="font-display text-lg font-bold">Criar Alerta</h1>
-          </div>
-        </header>
-      </FadeIn>
+      <header className="sticky top-0 z-40 glass-strong px-4 py-3">
+        <div className="flex items-center gap-3">
+          <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <h1 className="font-display text-lg font-bold">Criar Alerta</h1>
+        </div>
+      </header>
 
       <main className="px-4 py-4 overflow-y-auto overscroll-contain">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <FadeIn delay={0.05}>
-            <ImageUpload
-              userId={user?.id ?? ''}
-              onUploadComplete={(url) => setPhotoUrl(url)}
-              onReset={() => setPhotoUrl(null)}
-              onUploadingChange={setUploading}
-            />
-          </FadeIn>
+          {/* Photo upload */}
+          <ImageUpload
+            userId={user?.id ?? ''}
+            onUploadComplete={(url) => setPhotoUrl(url)}
+            onReset={() => setPhotoUrl(null)}
+            onUploadingChange={setUploading}
+          />
 
-          <FadeIn delay={0.1}>
-            <div className="space-y-1.5">
-              <Label htmlFor="pet-name">Nome do pet *</Label>
-              <div className="relative">
-                <PawPrint className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  id="pet-name"
-                  placeholder="Ex: Rex, Luna..."
-                  value={petName}
-                  onChange={(e) => { setPetName(e.target.value); setErrors(prev => ({ ...prev, petName: undefined })); }}
-                  className={`pl-9 text-base min-h-[44px] input-glow ${errors.petName ? 'border-destructive' : ''}`}
-                  maxLength={100}
-                  autoComplete="off"
-                  autoCorrect="off"
-                  data-testid="input-pet-name"
-                />
-              </div>
-              {errors.petName && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{errors.petName}</p>}
-            </div>
-          </FadeIn>
-
-          <FadeIn delay={0.15}>
-            <div className="space-y-1.5">
-              <Label htmlFor="description" className="text-sm font-medium">Descrição *</Label>
-              <Textarea
-                id="description"
-                placeholder="Cor, raça, tamanho, coleira... (mínimo 10 caracteres)"
-                value={description}
-                onChange={(e) => { setDescription(e.target.value); setErrors(prev => ({ ...prev, description: undefined })); }}
-                rows={3}
-                maxLength={1000}
-                className={`text-base input-glow ${errors.description ? 'border-destructive' : ''}`}
+          <div className="space-y-1.5">
+            <Label htmlFor="pet-name">Nome do pet *</Label>
+            <div className="relative">
+              <PawPrint className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="pet-name"
+                placeholder="Ex: Rex, Luna..."
+                value={petName}
+                onChange={(e) => { setPetName(e.target.value); setErrors(prev => ({ ...prev, petName: undefined })); }}
+                className={`pl-9 text-base min-h-[44px] input-glow ${errors.petName ? 'border-destructive' : ''}`}
+                maxLength={100}
+                autoComplete="off"
                 autoCorrect="off"
-                data-testid="input-description"
+                data-testid="input-pet-name"
               />
-              <div className="flex items-center justify-between">
-                {errors.description ? <p className="flex items-center gap-1 text-xs text-rose-500"><AlertCircle className="h-3 w-3 shrink-0" />{errors.description}</p> : <span />}
-                <span className={`text-xs font-medium ${description.length > 900 ? 'text-warning' : 'text-stone-400'} tabular-nums`}>
-                  {description.length}/1000
-                </span>
-              </div>
             </div>
-          </FadeIn>
+            {errors.petName && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{errors.petName}</p>}
+          </div>
 
-          <FadeIn delay={0.2}>
-            <LocationPicker
-              value={lastSeen}
-              onChange={(val) => { setLastSeen(val); setErrors(prev => ({ ...prev, lastSeen: undefined })); }}
-              error={errors.lastSeen}
+          <div className="space-y-1.5">
+            <Label htmlFor="description" className="text-sm font-medium">Descrição *</Label>
+            <Textarea
+              id="description"
+              placeholder="Cor, raça, tamanho, coleira... (mínimo 10 caracteres)"
+              value={description}
+              onChange={(e) => { setDescription(e.target.value); setErrors(prev => ({ ...prev, description: undefined })); }}
+              rows={3}
+              maxLength={1000}
+              className={`text-base input-glow ${errors.description ? 'border-destructive' : ''}`}
+              autoCorrect="off"
+              data-testid="input-description"
             />
-          </FadeIn>
+            <div className="flex items-center justify-between">
+              {errors.description ? <p className="flex items-center gap-1 text-xs text-rose-500"><AlertCircle className="h-3 w-3 shrink-0" />{errors.description}</p> : <span />}
+              <span className={`text-xs font-medium ${description.length > 900 ? 'text-warning' : 'text-stone-400'} tabular-nums`}>
+                {description.length}/1000
+              </span>
+            </div>
+          </div>
 
-          <FadeIn delay={0.25}>
-            <Button type="submit" className="w-full font-semibold btn-tactile h-12 text-base" size="lg" disabled={isSubmitDisabled} data-testid="button-submit-alert">
-              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : '🐾 Criar Alerta'}
-            </Button>
-          </FadeIn>
+          <LocationPicker
+            value={lastSeen}
+            onChange={(val) => { setLastSeen(val); setErrors(prev => ({ ...prev, lastSeen: undefined })); }}
+            error={errors.lastSeen}
+          />
+
+          <Button type="submit" className="w-full font-semibold btn-tactile h-12 text-base" size="lg" disabled={isSubmitDisabled} data-testid="button-submit-alert">
+            {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : '🐾 Criar Alerta'}
+          </Button>
         </form>
       </main>
 

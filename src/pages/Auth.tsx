@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,7 +14,7 @@ import { translateSupabaseError } from '@/hooks/useFormError';
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Auth = () => {
-  const { signIn, signUp, session, loading: authLoading, resendConfirmation } = useAuth();
+  const { signIn, signUp, session, resendConfirmation } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -42,21 +42,10 @@ const Auth = () => {
 
   const redirectTo = new URLSearchParams(window.location.search).get('redirect') || '/';
 
-  useEffect(() => {
-    if (!authLoading && session) {
-      navigate(redirectTo, { replace: true });
-    }
-  }, [session, authLoading, navigate, redirectTo]);
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-mesh-light dark:bg-mesh-dark">
-        <span className="text-3xl animate-bounce">🐾</span>
-      </div>
-    );
+  if (session) {
+    navigate(redirectTo, { replace: true });
+    return null;
   }
-
-  if (session) return null;
 
   const validateLogin = () => {
     const errors: typeof loginErrors = {};
@@ -95,6 +84,8 @@ const Auth = () => {
         setResendSuccess(false);
       }
       toast.error(msg);
+    } else {
+      navigate(redirectTo);
     }
   };
 

@@ -26,7 +26,6 @@ import {
 } from 'lucide-react';
 import AdminMembers from '@/components/AdminMembers';
 import AdminPlatformAlerts from '@/components/AdminPlatformAlerts';
-import FadeIn from '@/components/FadeIn';
 import {
   BarChart,
   Bar,
@@ -154,17 +153,16 @@ const Syndic = () => {
 
   return (
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
-      <FadeIn>
-        <header className="px-4 pt-6 pb-2">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="h-6 w-6 text-amber-500" />
-            <h1 className="font-display text-xl font-bold text-foreground tracking-tight">Painel do Síndico</h1>
-          </div>
-          {condoName && (
-            <p className="mt-0.5 text-sm text-muted-foreground">{condoName}</p>
-          )}
-        </header>
-      </FadeIn>
+      {/* Header */}
+      <header className="px-4 pt-6 pb-2">
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="h-6 w-6 text-amber-500" />
+          <h1 className="font-display text-xl font-bold text-foreground tracking-tight">Painel do Síndico</h1>
+        </div>
+        {condoName && (
+          <p className="mt-0.5 text-sm text-muted-foreground">{condoName}</p>
+        )}
+      </header>
 
       <main className="space-y-6 px-4 overflow-y-auto overscroll-contain">
         {/* ── Section 1: Stats ── */}
@@ -206,7 +204,7 @@ const Syndic = () => {
           </>
         )}
 
-        <FadeIn delay={0.1}>
+        {/* ── Section 2: Chart ── */}
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-foreground">
@@ -243,9 +241,8 @@ const Syndic = () => {
             </ResponsiveContainer>
           )}
         </section>
-        </FadeIn>
 
-        <FadeIn delay={0.2}>
+        {/* ── Section 3: History ── */}
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Histórico de alertas</h2>
 
@@ -340,7 +337,6 @@ const Syndic = () => {
             </div>
           )}
         </section>
-        </FadeIn>
 
         {/* ── Admin-only sections ── */}
         {profile?.role === 'admin' && profile.condominium_id && (
