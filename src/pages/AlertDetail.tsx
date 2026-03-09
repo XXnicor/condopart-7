@@ -22,7 +22,6 @@ import {
 import { SkeletonCard } from '@/components/ui/skeleton-card';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import AlertMap from '@/components/AlertMap';
 import SightingForm from '@/components/SightingForm';
@@ -121,10 +120,7 @@ const AlertDetail = () => {
   return (
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain">
       {/* Hero section with overlay */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
+      <div
         className="relative overflow-hidden bg-secondary"
         style={{ height: '280px' }}
       >
@@ -152,13 +148,9 @@ const AlertDetail = () => {
         </div>
 
         {/* Floating status badge */}
-        <motion.div
-          className="absolute right-4 top-4 z-10"
-          animate={alert.status === 'active' ? { scale: [1, 1.05, 1] } : {}}
-          transition={alert.status === 'active' ? { duration: 2, repeat: Infinity } : {}}
-        >
+        <div className="absolute right-4 top-4 z-10">
           {statusBadge(alert.status)}
-        </motion.div>
+        </div>
 
         {/* Back button */}
         <button
@@ -175,25 +167,15 @@ const AlertDetail = () => {
         >
           <Share2 className="h-5 w-5" />
         </button>
-      </motion.div>
+      </div>
 
       <main className="mx-auto max-w-[480px] px-4 pb-24">
         {/* Card content sobreposto */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="relative -mt-12 rounded-t-3xl bg-card shadow-lg"
-        >
+        <div className="relative -mt-12 rounded-t-3xl bg-card shadow-lg">
           <div className="space-y-4 p-4">
             {/* Status Banner — Found */}
             {alert.status === 'found' && (
-              <motion.div
-                initial={{ opacity: 0, y: -12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="rounded-2xl border border-success/30 bg-success/10 p-3"
-              >
+              <div className="rounded-2xl border border-success/30 bg-success/10 p-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-5 w-5 text-success" />
                   <span className="font-display font-semibold text-success">Pet encontrado! 🐾</span>
@@ -206,19 +188,14 @@ const AlertDetail = () => {
                 {alert.resolution_note && (
                   <p className="mt-2 text-sm italic text-foreground/80">{alert.resolution_note}</p>
                 )}
-              </motion.div>
+              </div>
             )}
 
             {/* Status Banner — Cancelled */}
             {alert.status === 'cancelled' && (
-              <motion.div
-                initial={{ opacity: 0, y: -12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="rounded-2xl border border-border bg-muted p-3 text-center"
-              >
+              <div className="rounded-2xl border border-border bg-muted p-3 text-center">
                 <p className="text-sm text-muted-foreground">Este alerta foi cancelado pelo dono.</p>
-              </motion.div>
+              </div>
             )}
 
             {/* Reporter info */}
@@ -232,12 +209,7 @@ const AlertDetail = () => {
             </div>
 
             {/* Description (Expandable) */}
-            <motion.div
-              initial={false}
-              animate={{ height: 'auto' }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden"
-            >
+            <div className="overflow-hidden">
               <div className="space-y-3">
                 <div>
                   <p
@@ -272,7 +244,7 @@ const AlertDetail = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Sightings Empty State */}
             {!loadingSightings && sightings.length === 0 && isActive && (
@@ -289,23 +261,15 @@ const AlertDetail = () => {
 
             {/* Sightings Carousel */}
             {!loadingSightings && sightings.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.2 }}
-                className="border-t border-border/50 pt-3 space-y-2"
-              >
+              <div className="border-t border-border/50 pt-3 space-y-2">
                 <div className="flex items-center gap-1.5 font-display text-sm font-bold text-foreground">
                   <Eye className="h-4 w-4 text-primary" />
                   Avistamentos ({sightings.length})
                 </div>
                 <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory scrollbar-hide">
-                  {sightings.map((sighting, idx) => (
-                    <motion.div
+                  {sightings.map((sighting) => (
+                    <div
                       key={sighting.id}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: idx * 0.05 }}
                       className="flex-shrink-0 snap-start"
                     >
                       <div className="rounded-xl overflow-hidden border border-border/50 bg-secondary/50 shadow-sm hover:shadow-md transition-shadow">
@@ -313,124 +277,88 @@ const AlertDetail = () => {
                           📍 {formatDistanceToNow(new Date(sighting.created_at), { locale: ptBR, addSuffix: true })}
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {/* Map */}
             {!loadingSightings && sightings.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.25 }}
-                className="pt-3"
-              >
+              <div className="pt-3">
                 <h3 className="mb-2 font-display text-sm font-bold text-foreground">Mapa de avistamentos</h3>
                 <div className="rounded-2xl overflow-hidden border border-border/50 shadow-sm" style={{ height: '180px' }}>
                   <AlertMap sightings={sightings} className="h-full" />
                 </div>
-              </motion.div>
+              </div>
             )}
           </div>
-        </motion.div>
+        </div>
 
         {/* Sighting form — only when active */}
         {isActive && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="mt-4"
-          >
+          <div className="mt-4">
             <SightingForm alertId={id!} />
-          </motion.div>
+          </div>
         )}
 
         {/* Action buttons */}
         {(canResolve || canCancel) && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.35 }}
-            className="mt-4 space-y-2"
-          >
-            <AnimatePresence mode="wait">
-              {showCancelConfirm ? (
-                <motion.div
-                  key="confirm-cancel"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="space-y-2 rounded-xl border border-destructive/30 bg-destructive/5 p-4"
-                >
-                  <p className="text-sm font-medium text-foreground">Tem certeza? Esta ação não pode ser desfeita.</p>
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={handleConfirmCancel}
-                      disabled={isCancelling}
-                      variant="destructive"
-                      className="flex-1 font-semibold"
-                      size="sm"
-                    >
-                      {isCancelling ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <XCircle className="mr-2 h-4 w-4" />}
-                      {isCancelling ? 'Cancelando...' : 'Cancelar alerta'}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowCancelConfirm(false)}
-                      disabled={isCancelling}
-                      size="sm"
-                    >
-                      Voltar
-                    </Button>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="action-buttons"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="space-y-2"
-                >
-                  {canResolve && (
-                    <Button
-                      onClick={() => setShowResolveModal(true)}
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-2xl h-12"
-                    >
-                      <CheckCircle2 className="mr-2 h-4 w-4" />
-                      Marcar como Encontrado ✓
-                    </Button>
-                  )}
-                  {canCancel && (
-                    <Button
-                      onClick={() => setShowCancelConfirm(true)}
-                      variant="outline"
-                      className="w-full border-destructive text-destructive hover:bg-destructive/10 font-semibold rounded-2xl h-12"
-                    >
-                      <XCircle className="mr-2 h-4 w-4" />
-                      Cancelar alerta
-                    </Button>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
+          <div className="mt-4 space-y-2">
+            {showCancelConfirm ? (
+              <div className="space-y-2 rounded-xl border border-destructive/30 bg-destructive/5 p-4">
+                <p className="text-sm font-medium text-foreground">Tem certeza? Esta ação não pode ser desfeita.</p>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleConfirmCancel}
+                    disabled={isCancelling}
+                    variant="destructive"
+                    className="flex-1 font-semibold"
+                    size="sm"
+                  >
+                    {isCancelling ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <XCircle className="mr-2 h-4 w-4" />}
+                    {isCancelling ? 'Cancelando...' : 'Cancelar alerta'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowCancelConfirm(false)}
+                    disabled={isCancelling}
+                    size="sm"
+                  >
+                    Voltar
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {canResolve && (
+                  <Button
+                    onClick={() => setShowResolveModal(true)}
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-2xl h-12"
+                  >
+                    <CheckCircle2 className="mr-2 h-4 w-4" />
+                    Marcar como Encontrado ✓
+                  </Button>
+                )}
+                {canCancel && (
+                  <Button
+                    onClick={() => setShowCancelConfirm(true)}
+                    variant="outline"
+                    className="w-full border-destructive text-destructive hover:bg-destructive/10 font-semibold rounded-2xl h-12"
+                  >
+                    <XCircle className="mr-2 h-4 w-4" />
+                    Cancelar alerta
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
         )}
 
         {/* Feed */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
-          className="mt-4 rounded-2xl bg-card p-4 shadow-md"
-        >
+        <div className="mt-4 rounded-2xl bg-card p-4 shadow-md">
           <AlertFeed alertId={id!} readOnly={!isActive} />
-        </motion.div>
+        </div>
       </main>
 
       {/* Resolve modal */}

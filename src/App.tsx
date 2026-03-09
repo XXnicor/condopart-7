@@ -27,16 +27,27 @@ const ROUTES_WITHOUT_NAV = ['/auth', '/reset-password', '/preview'];
 const AnimatedRoutes = () => {
   const location = useLocation();
   const shouldReduceMotion = useReducedMotion();
-  const duration = shouldReduceMotion ? 0 : 0.15;
+
+  const variants = {
+    initial: { opacity: 0, y: shouldReduceMotion ? 0 : 8 },
+    animate: { opacity: 1, y: 0 },
+    exit:    { opacity: 0, y: shouldReduceMotion ? 0 : -4 },
+  };
+
+  const ease = [0.25, 0.1, 0.25, 1] as const;
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration, ease: 'easeInOut' }}
+        variants={variants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={{
+          duration: shouldReduceMotion ? 0 : 0.22,
+          ease,
+        }}
         style={{ width: '100%' }}
       >
         <Routes location={location}>
@@ -50,8 +61,8 @@ const AnimatedRoutes = () => {
           <Route path="/syndic" element={<ProtectedRoute><Syndic /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/p/alert/:id" element={<PublicAlert />} />
-            <Route path="/preview" element={<DesignPreview />} />
-            <Route path="*" element={<NotFound />} />
+          <Route path="/preview" element={<DesignPreview />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
