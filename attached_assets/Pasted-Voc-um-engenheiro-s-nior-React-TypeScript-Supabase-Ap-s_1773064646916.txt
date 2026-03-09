@@ -1,0 +1,187 @@
+Você é um engenheiro sênior React + TypeScript + Supabase.
+Após a última correção no AuthContext, o app parou de carregar
+no celular — a tela fica em branco/loading infinito.
+
+O problema NÃO é mais o redirect. É o loading state travado.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CAUSA RAIZ — loading nunca vira false
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+O setLoading(false) não está sendo chamado em algum
+caminho de erro ou exception no AuthContext.
+
+Cenários que travam o loading no mobile:
+
+1. getSession() lança erro não capturado → setLoading(false) 
+   nunca é chamado
+
+2. refreshProfile() lança erro → código para antes 
+   do setLoading(false)
+
+3. onAuthStateChange nunca dispara no mobile browser
+   (comum em Safari/iOS com third-party cookies bloqueados)
+
+4. getSession() e onAuthStateChange disputam o setLoading,
+   causando estado inconsistente
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORREÇÃO — AuthContext à prova de falhas
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Substitua TODO o useEffect de autenticação por esta versão
+defensiva e à prova de qualquer caminho de erro:
+
+  useEffect(() => {
+    let mounted = true
+
+    const initAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession()
+        
+        if (!mounted) return
+        
+        if (error) {
+          console.error('getSession error:', error)
+          setSession(null)
+          setUser(null)
+          setLoading(false)
+          return
+        }
+
+        setSession(session)
+        setUser(session?.user ?? null)
+
+        if (session?.user) {
+          try {
+            await refreshProfile(session.user.id)
+          } catch (profileError) {
+            console.error('refreshProfile error:', profileError)
+            // NÃO bloquear o loading por erro de profile
+          }
+        }
+      } catch (err) {
+        console.error('initAuth error:', err)
+      } finally {
+        // SEMPRE liberar o loading, sem exceção
+        if (mounted) setLoading(false)
+      }
+    }
+
+    initAuth()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (!mounted) return
+
+        setSession(session)
+        setUser(session?.user ?? null)
+
+        if (session?.user) {
+          try {
+            await refreshProfile(session.user.id)
+          } catch (profileError) {
+            console.error('profile error on auth change:', profileError)
+          }
+        }
+
+        // Garantir que loading seja false após qualquer evento
+        if (mounted) setLoading(false)
+      }
+    )
+
+    // Timeout de segurança — se após 5s ainda loading, liberar
+    const safetyTimeout = setTimeout(() => {
+      if (mounted) {
+        console.warn('Auth timeout — forcing loading false')
+        setLoading(false)
+      }
+    }, 5000)
+
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+      clearTimeout(safetyTimeout)
+    }
+  }, [])
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORREÇÃO — ProtectedRoute mais robusto
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Garanta que o loading screen tem timeout próprio também:
+
+  const { user, loading } = useAuth()
+
+  // Nunca travar mais de 6s na tela de loading
+  const [forceReady, setForceReady] = useState(false)
+  
+  useEffect(() => {
+    const t = setTimeout(() => setForceReady(true), 6000)
+    return () => clearTimeout(t)
+  }, [])
+
+  if (loading && !forceReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-3">
+          <span className="text-3xl animate-bounce">🐾</span>
+          <p className="text-sm text-stone-400">Carregando...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!user) return <Navigate to="/auth" replace />
+
+  return <>{children}</>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORREÇÃO — Página /auth
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Garanta que a página /auth também respeita o loading:
+
+  const { user, loading } = useAuth()
+  const navigate = useNavigate()
+
+  // Se já está logado, redirecionar sem piscar
+  useEffect(() => {
+    if (!loading && user) {
+      navigate('/', { replace: true })
+    }
+  }, [user, loading, navigate])
+
+  // Enquanto verifica sessão, não mostrar o form ainda
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <span className="text-3xl animate-bounce">🐾</span>
+      </div>
+    )
+  }
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGRAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ NÃO mexa em nenhum outro arquivo além de:
+   AuthContext.tsx, ProtectedRoute.tsx, página /auth
+❌ NÃO altere queries, schema, UI ou design
+✅ O finally{ setLoading(false) } é OBRIGATÓRIO — nunca opcional
+✅ O safetyTimeout é OBRIGATÓRIO — garante mobile Safari/iOS
+✅ O flag mounted evita setState em componente desmontado
+✅ TypeScript sem erros após cada alteração
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHECKLIST FINAL — TESTAR NO CELULAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ ] App carrega no celular sem tela branca infinita
+[ ] Login redireciona automaticamente sem refresh manual
+[ ] Refresh manual mantém usuário logado
+[ ] Logout funciona e redireciona para /auth
+[ ] Funciona no Safari iOS (cookies restritivos)
+[ ] Funciona no Chrome Android
+[ ] Nenhuma feature quebrada
+[ ] Zero erros TypeScript
