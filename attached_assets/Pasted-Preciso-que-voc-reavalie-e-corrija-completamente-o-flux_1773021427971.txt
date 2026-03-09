@@ -1,0 +1,63 @@
+Preciso que você reavalie e corrija completamente o fluxo de 
+redefinição de senha no projeto PetAlert Condo pois o erro 
+"link expirado" persiste.
+
+## CONTEXTO
+O Supabase pode enviar o link de recuperação em dois formatos 
+dependendo da configuração:
+
+FORMATO 1 — Hash fragment (padrão antigo):
+https://app.com/reset-password#access_token=xxx&refresh_token=yyy&type=recovery
+
+FORMATO 2 — PKCE code (padrão novo do supabase-js v2):
+https://app.com/reset-password?code=xxx
+
+## PROBLEMA REAL
+O supabase-js v2 usa PKCE por padrão. O link enviado por email 
+contém ?code=xxx na query string, NÃO no hash fragment.
+A implementação atual só trata hash fragment e ignora o code.
+
+## O QUE PRECISA SER FEITO
+
+### 1. Detectar qual formato chegou
+const urlParams = new URLSearchParams(window.location.search)
+const code = urlParams.get('code')
+
+const hashParams = new URLSearchParams(window.location.hash.substring(1))
+const accessToken = hashParams.get('access_token')
+const type = hashParams.get('type')
+
+### 2. Se tiver ?code= (PKCE — formato novo):
+const { error } = await supabase.auth.exchangeCodeForSession(code)
+// Isso troca o code por uma sessão válida automaticamente
+
+### 3. Se tiver #access_token (formato antigo):
+await supabase.auth.setSession({
+  access_token: accessToken,
+  refresh_token: hashParams.get('refresh_token') ?? ''
+})
+
+### 4. Se não tiver nenhum dos dois:
+Verificar se já existe sessão ativa com 
+supabase.auth.getSession() — pode ser que o usuário 
+chegou pela segunda vez após já ter trocado o code
+
+### 5. Após qualquer um dos casos acima sem erro:
+Mostrar formulário com campo "Nova senha" e "Confirmar senha"
+Chamar supabase.auth.updateUser({ password: newPassword })
+Redirecionar para /feed após sucesso
+
+### 6. Se todos os casos falharem:
+Mostrar erro com botão "Solicitar novo link" → /auth
+
+## FLUXO COMPLETO ESPERADO
+loading → (detecta formato) → ready (formulário) → success → /feed
+                           ↘ error (nenhum token válido)
+
+## IMPORTANTE
+- supabase-js v2 — usar exchangeCodeForSession para PKCE
+- Tratar os dois formatos para garantir compatibilidade
+- TypeScript sem erros  
+- Textos em português do Brasil
+- Manter design existente da página
+- Viewport mobile 390px
