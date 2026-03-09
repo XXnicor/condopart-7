@@ -64,61 +64,67 @@ const ResolveAlertModal = ({ alertId, petName, isOpen, onClose, onSuccess }: Res
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
             className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-[480px]"
           >
-            <div className="rounded-t-3xl bg-card p-6 shadow-2xl">
-              {/* Handle bar */}
-              <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-muted" />
+            <div className="rounded-t-3xl bg-card shadow-2xl flex flex-col max-h-[85vh]">
+              {/* Scrollable content */}
+              <div className="flex-1 overflow-y-auto px-6 pt-6 pb-2">
+                {/* Handle bar */}
+                <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-muted" />
 
-              <h2 className="font-display text-lg font-bold text-foreground">
-                O {petName} foi encontrado? 🐾
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Conte como foi — sua mensagem será vista por todos do condomínio
-              </p>
+                <h2 className="font-display text-lg font-bold text-foreground">
+                  O {petName} foi encontrado? 🐾
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Conte como foi — sua mensagem será vista por todos do condomínio
+                </p>
 
-              <div className="relative mt-4">
-                <label className="mb-1.5 block text-sm font-medium text-foreground">
-                  Como o pet foi encontrado?
-                </label>
-                <Textarea
-                  placeholder="Ex: Estava no jardim do bloco B, voltou sozinho..."
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  onBlur={() => setTouched(true)}
-                  className="min-h-[100px] text-sm"
-                  maxLength={500}
-                  disabled={isResolving}
-                />
-                <span className="mt-1 block text-right text-xs text-muted-foreground">
-                  {trimmed.length}/500
-                </span>
+                <div className="relative mt-4">
+                  <label className="mb-1.5 block text-sm font-medium text-foreground">
+                    Como o pet foi encontrado?
+                  </label>
+                  <Textarea
+                    placeholder="Ex: Estava no jardim do bloco B, voltou sozinho..."
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    onBlur={() => setTouched(true)}
+                    className="min-h-[100px] text-sm"
+                    maxLength={500}
+                    disabled={isResolving}
+                  />
+                  <span className="mt-1 block text-right text-xs text-muted-foreground">
+                    {trimmed.length}/500
+                  </span>
+                </div>
+              </div>
+
+              {/* Pinned footer with action buttons */}
+              <div className="px-6 pb-6 pt-3 border-t border-border/50">
                 {showError && (
-                  <p className="text-xs text-destructive">
+                  <p className="mb-2 text-xs text-destructive">
                     Descreva com pelo menos 10 caracteres
                   </p>
                 )}
-              </div>
-
-              <div className="mt-4 flex gap-3">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={handleClose}
-                  disabled={isResolving}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
-                  onClick={handleConfirm}
-                  disabled={isResolving || (touched && trimmed.length < 10 && trimmed.length > 0)}
-                >
-                  {isResolving ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <CheckCircle2 className="mr-2 h-4 w-4" />
-                  )}
-                  {isResolving ? 'Confirmando...' : 'Confirmar encerramento'}
-                </Button>
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={handleClose}
+                    disabled={isResolving}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+                    onClick={handleConfirm}
+                    disabled={isResolving || (touched && trimmed.length < 10 && trimmed.length > 0)}
+                  >
+                    {isResolving ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="mr-2 h-4 w-4" />
+                    )}
+                    {isResolving ? 'Confirmando...' : 'Confirmar encerramento'}
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.div>
