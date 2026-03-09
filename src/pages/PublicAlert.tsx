@@ -44,13 +44,13 @@ const PublicAlert = () => {
   // OG meta tags
   useEffect(() => {
     if (!alert) return;
-    document.title = `${alert.title} está perdido — PetAlert 🐾`;
+    document.title = `${alert.title} está perdido — EncontraPet 🐾`;
     setMetaTag('og:title', `${alert.title} está perdido! 🐾`);
     setMetaTag('og:description', alert.description?.slice(0, 150) || 'Ajude a encontrar este pet');
     setMetaTag('og:image', alert.photo_url || '');
     setMetaTag('og:url', window.location.href);
     return () => {
-      document.title = 'PetAlert Condo';
+      document.title = 'EncontraPet';
       ['og:title', 'og:description', 'og:image', 'og:url'].forEach(prop => {
         document.querySelector(`meta[property="${prop}"]`)?.remove();
       });
@@ -61,7 +61,7 @@ const PublicAlert = () => {
     return (
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain">
       <header className="glass-strong px-4 py-3">
-        <span className="font-display text-xl font-extrabold text-primary">PetAlert</span>
+        <span className="font-display text-xl font-extrabold">Encontra<span className="text-primary">Pet</span></span>
       </header>
       <main className="space-y-4 px-4 py-4 overflow-y-auto overscroll-contain">
         <Skeleton className="h-[280px] w-full rounded-2xl" />
@@ -93,7 +93,7 @@ const PublicAlert = () => {
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain">
       {/* Header */}
       <header className="glass-strong px-4 py-3">
-        <span className="font-display text-xl font-extrabold text-primary tracking-tight">PetAlert</span>
+        <span className="font-display text-xl font-extrabold tracking-tight">Encontra<span className="text-primary">Pet</span></span>
       </header>
 
       <main className="space-y-4 px-4 py-4 pb-8 overflow-y-auto overscroll-contain">
@@ -166,7 +166,7 @@ const PublicAlert = () => {
 
       {/* Footer */}
       <footer className="border-t border-border py-6 text-center">
-        <p className="text-xs text-muted-foreground">PetAlert Condo — ajudando pets a voltarem para casa 🐾</p>
+        <p className="text-xs text-muted-foreground">EncontraPet — ajudando pets a voltarem para casa 🐾</p>
         <button onClick={() => navigate('/auth')} className="mt-1 text-xs text-primary hover:underline">
           Criar conta gratuita
         </button>

@@ -305,7 +305,7 @@ const Index = () => {
         <div className="flex items-center gap-2">
           <PawPrint className="h-6 w-6 text-primary" data-testid="icon-header-paw" />
           <h1 className="font-display text-lg font-bold tracking-tight" data-testid="text-header-brand" style={{ fontSize: '1.125rem' }}>
-            Pet<span className="text-primary">Alert</span>
+            Encontra<span className="text-primary">Pet</span>
           </h1>
           <Button
             variant="ghost"

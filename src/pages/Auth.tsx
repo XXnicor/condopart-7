@@ -152,7 +152,7 @@ const Auth = () => {
             <PawPrint className="h-10 w-10 text-primary-foreground animate-paw-bounce" />
           </div>
           <h1 className="font-display text-foreground tracking-tight text-center" data-testid="text-brand" style={{ fontSize: 'clamp(1.75rem, 6vw, 2.25rem)' }}>
-            Pet<span className="text-primary">Alert</span> Condo
+            Encontra<span className="text-primary">Pet</span>
           </h1>
           <p className="text-sm text-muted-foreground font-medium tracking-wide" data-testid="text-tagline">
             Encontre pets perdidos no seu condomínio

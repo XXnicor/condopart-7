@@ -128,7 +128,7 @@ const ResetPassword = () => {
             <PawPrint className="h-9 w-9 text-primary-foreground" />
           </div>
           <h1 className="font-display text-3xl font-extrabold text-foreground">
-            Pet<span className="text-primary">Alert</span> Condo
+            Encontra<span className="text-primary">Pet</span>
           </h1>
         </div>
 

@@ -1,4 +1,4 @@
-# PetAlert Condo
+# EncontraPet
 
 A React/Vite frontend application for reporting and tracking lost pets within residential condominiums in Brazil.
 

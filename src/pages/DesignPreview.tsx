@@ -290,7 +290,7 @@ const ScreenFeed = ({ onOpenDetail }: { onOpenDetail: () => void }) => {
       <header className="bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
           <PawPrint className="h-5 w-5 text-amber-500" />
-          <span className="font-bold text-gray-900 font-display">PetAlert</span>
+          <span className="font-bold text-gray-900 font-display">Encontra<span className="text-amber-500">Pet</span></span>
         </div>
         <motion.button whileTap={{ scale: 0.9 }} transition={springFast} className="relative">
           <Bell className="h-5 w-5 text-gray-600" />
@@ -771,7 +771,7 @@ const ScreenLanding = ({ onEnter }: { onEnter: () => void }) => {
           transition={{ delay: 0.2, ...spring }}
           className="text-base text-gray-500 mt-3 max-w-xs leading-relaxed"
         >
-          O PetAlert conecta moradores do Residencial Golden Park I para encontrar pets perdidos mais rapido.
+          O EncontraPet conecta moradores do Residencial Golden Park I para encontrar pets perdidos mais rapido.
         </motion.p>
 
         <motion.div
@@ -876,7 +876,7 @@ const ScreenLanding = ({ onEnter }: { onEnter: () => void }) => {
 
       {/* Footer */}
       <p className="text-xs text-gray-400 text-center pb-10">
-        PetAlert Condo © 2026 · Residencial Golden Park I
+        EncontraPet © 2026 · Residencial Golden Park I
       </p>
     </div>
   );
