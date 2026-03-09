@@ -15,6 +15,7 @@ import { ptBR } from 'date-fns/locale';
 import { toast } from 'sonner';
 import BottomNav from '@/components/BottomNav';
 import MoradorInfo from '@/components/MoradorInfo';
+import OnboardingOverlay from '@/components/OnboardingOverlay';
 import type { Tables } from '@/integrations/supabase/types';
 
 type AlertRow = Tables<'alerts'>;
@@ -301,6 +302,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
+      <OnboardingOverlay />
       <header className="sticky top-0 z-40 glass-strong px-4 py-3">
         <div className="flex items-center gap-2">
           <PawPrint className="h-6 w-6 text-primary" data-testid="icon-header-paw" />
