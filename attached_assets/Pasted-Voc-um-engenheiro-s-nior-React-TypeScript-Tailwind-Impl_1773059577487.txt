@@ -1,0 +1,136 @@
+Você é um engenheiro sênior React + TypeScript + Tailwind.
+Implemente uma seção "Como usar" na home do EncontraPet
+com 3 vídeos tutoriais em MP4, sem alterar nenhuma lógica existente.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGRA ABSOLUTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ NÃO altere nenhuma lógica, query, contexto ou rota existente
+❌ NÃO altere o feed de alertas — apenas adicione a seção abaixo dele
+❌ NÃO instale novas bibliotecas
+✅ APENAS adicione a nova seção e o componente novo
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+O QUE IMPLEMENTAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Crie o componente: src/components/TutoriaisSection.tsx
+
+E adicione-o na página / (home), abaixo do feed de alertas.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ESTRUTURA DO COMPONENTE TutoriaisSection
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HEADER DA SEÇÃO:
+  Título: "Como usar o EncontraPet"
+  Classe: text-lg font-semibold text-stone-900 mb-1
+  Subtítulo: "Aprenda em segundos"
+  Classe: text-sm text-stone-400 mb-4
+
+CARROSSEL HORIZONTAL:
+- Container: flex overflow-x-auto gap-3 pb-3
+- Scroll suave: scroll-smooth snap-x snap-mandatory
+- Esconder scrollbar: scrollbar-hide
+  (adicionar no globals.css:)
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+CADA CARD DE VÍDEO:
+- Container: flex-shrink-0 w-[200px] snap-start
+- Wrapper do vídeo: relative rounded-2xl overflow-hidden
+  bg-stone-100 aspect-[9/16]
+- Vídeo: w-full h-full object-cover rounded-2xl
+  autoPlay muted loop playsInline
+- Overlay gradiente no rodapé:
+  absolute bottom-0 left-0 right-0
+  bg-gradient-to-t from-black/60 to-transparent
+  rounded-b-2xl p-3
+- Título do vídeo no overlay:
+  text-white text-xs font-semibold leading-tight
+
+OS 3 VÍDEOS — títulos e arquivos:
+
+Card 1:
+  título: "Como criar um alerta"
+  src: "/videos/tutorial-criar-alerta.mp4"
+
+Card 2:
+  título: "Como reportar um avistamento"
+  src: "/videos/tutorial-avistamento.mp4"
+
+Card 3:
+  título: "Como compartilhar no WhatsApp"
+  src: "/videos/tutorial-compartilhar.mp4"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ESTADO DE LOADING / FALLBACK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Enquanto o vídeo não carrega, exibir placeholder:
+- bg-stone-100 animate-pulse rounded-2xl
+- Ícone de play centralizado: text-stone-300 w-10 h-10
+
+Se o vídeo falhar (onError):
+- Manter placeholder estático sem pulse
+- Ícone de play em text-stone-200
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANIMAÇÃO DE ENTRADA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Usar Framer Motion já instalado no projeto:
+
+A seção inteira:
+  initial={{ opacity: 0, y: 16 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.3, delay: 0.2, ease: "easeOut" }}
+
+Cards em stagger:
+  variants={{
+    hidden: { opacity: 0, x: 20 },
+    visible: { opacity: 1, x: 0 }
+  }}
+  staggerChildren: 0.08
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ARQUIVOS DOS VÍDEOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Crie a pasta: public/videos/
+
+Crie 3 arquivos placeholder vazios (0 bytes) para reservar os paths:
+  public/videos/tutorial-criar-alerta.mp4
+  public/videos/tutorial-avistamento.mp4
+  public/videos/tutorial-compartilhar.mp4
+
+Os arquivos reais serão substituídos manualmente pelo desenvolvedor.
+O componente já estará pronto e apontando para os paths corretos.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POSICIONAMENTO NA HOME (/)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Adicione <TutoriaisSection /> na página home:
+- ABAIXO do feed de alertas
+- ACIMA do BottomNav
+- Separado por mt-6 da seção anterior
+- Padding horizontal: px-4 (consistente com o resto da página)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHECKLIST FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ ] Componente TutoriaisSection criado em src/components/
+[ ] Carrossel horizontal com snap funcionando
+[ ] 3 cards com vídeo autoplay muted loop playsInline
+[ ] Títulos legíveis sobre overlay gradiente
+[ ] Placeholder de loading funcionando
+[ ] Fallback de erro funcionando
+[ ] Pasta public/videos/ criada com 3 placeholders
+[ ] Seção adicionada na home abaixo do feed
+[ ] Animações Framer Motion funcionando
+[ ] Zero erros TypeScript
+[ ] Nenhuma feature existente quebrada
+[ ] Scroll do carrossel não interfere com scroll da página
