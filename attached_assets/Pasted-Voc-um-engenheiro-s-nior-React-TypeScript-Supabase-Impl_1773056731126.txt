@@ -1,0 +1,119 @@
+Você é um engenheiro sênior React + TypeScript + Supabase.
+Implemente a exibição da foto e nome do morador nos alertas do EncontraPet.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTEXTO DO BANCO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tabela alerts:
+- id, user_id (→ auth.users), condo_id, pet_name, description,
+  last_seen_location, photo_url, status, created_at, updated_at
+
+Tabela profiles:
+- id (→ auth.users), full_name, phone, condo_id,
+  role, avatar_url, created_at, updated_at
+
+Relação: alerts.user_id = profiles.id
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+O QUE IMPLEMENTAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Em DOIS lugares — card do feed (/) e detalhe do alerta (/alert/:id):
+
+Exibir um bloco de identificação do morador com:
+- Avatar do morador (profiles.avatar_url)
+  → Se não tiver avatar_url: placeholder com inicial do nome
+    em bg-amber-100 text-amber-600 font-bold rounded-full
+- Nome completo (profiles.full_name)
+- Texto fixo "Morador" ou o role do perfil em texto secundário
+
+Layout do bloco (mobile-first):
+  [avatar 36px] [full_name text-sm font-medium] 
+                [role text-xs text-stone-400]
+
+Posicionamento:
+- No card do feed: rodapé do card, abaixo das infos do pet,
+  separado por um divider sutil border-t border-stone-100 pt-3
+- No detalhe /alert/:id: logo abaixo do nome do pet e badges,
+  antes das informações de localização
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ALTERAÇÕES NECESSÁRIAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### 1. Query do feed (/)
+Localize a query que busca os alertas e adicione join com profiles:
+
+  .select(`
+    *,
+    profiles (
+      full_name,
+      avatar_url,
+      role
+    )
+  `)
+
+Ajuste o tipo TypeScript do retorno para incluir:
+  profiles: {
+    full_name: string
+    avatar_url: string | null
+    role: string
+  } | null
+
+### 2. Query do detalhe (/alert/:id)
+Mesma alteração — adicione o join com profiles na query existente.
+Ajuste o tipo da mesma forma.
+
+### 3. Componente MoradorInfo (novo componente reutilizável)
+Crie em src/components/MoradorInfo.tsx:
+
+Props:
+  full_name: string
+  avatar_url: string | null
+  role?: string
+
+Comportamento:
+- Se avatar_url existir: exibe <img> com w-9 h-9 rounded-full object-cover
+- Se não existir: exibe div w-9 h-9 rounded-full bg-amber-100 
+  flex items-center justify-center
+  com a inicial maiúscula de full_name em text-sm font-bold text-amber-600
+- full_name em text-sm font-medium text-stone-800
+- role (ou "Morador" como fallback) em text-xs text-stone-400
+
+### 4. Usar MoradorInfo nos dois lugares
+- Importe e use no card do feed
+- Importe e use no detalhe do alerta
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REGRAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ NÃO altere nenhuma outra query, lógica ou componente
+❌ NÃO altere o schema do Supabase — apenas o select da query
+❌ NÃO introduza nenhum `as any` novo
+❌ NÃO altere UI de nenhuma outra parte do app
+
+✅ Se o join retornar null para profiles (edge case),
+   exiba placeholder com inicial "?" e texto "Morador"
+✅ TypeScript sem erros em todos os arquivos alterados
+✅ Textos visíveis em português do Brasil
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ORDEM DE EXECUÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Crie src/components/MoradorInfo.tsx
+2. Ajuste a query e tipos do feed (/)
+3. Ajuste a query e tipos do detalhe (/alert/:id)
+4. Integre MoradorInfo nos dois lugares
+5. Teste edge case: alerta sem avatar_url no perfil
+
+CHECKLIST FINAL:
+[ ] Avatar do morador aparece no card do feed
+[ ] Nome do morador aparece no card do feed
+[ ] Avatar do morador aparece no detalhe do alerta
+[ ] Nome do morador aparece no detalhe do alerta
+[ ] Placeholder com inicial funciona quando sem foto
+[ ] Zero erros TypeScript
+[ ] Nenhuma outra feature quebrada
