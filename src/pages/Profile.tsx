@@ -213,7 +213,10 @@ const Profile = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
+      <div
+        className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24"
+        style={{ opacity: 1 }}
+      >
         <ProfileSkeleton />
       </div>
     );
@@ -227,11 +230,8 @@ const Profile = () => {
   return (
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
       {/* Header with gradient background */}
-      <motion.div
+      <div
         className="bg-gradient-to-r from-amber-400 via-amber-500 to-orange-400 rounded-b-3xl overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
       >
         <div className="px-4 py-8 flex flex-col items-center gap-3">
           <input
@@ -241,13 +241,10 @@ const Profile = () => {
             className="hidden"
             onChange={handleAvatarChange}
           />
-          <motion.button
+          <button
             className="relative group"
             onClick={() => avatarInputRef.current?.click()}
             disabled={uploadingAvatar}
-            initial={{ scale: 0.95 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.05, duration: 0.15 }}
           >
             {profile.avatar_url ? (
               <img
@@ -267,13 +264,10 @@ const Profile = () => {
                 <Camera className="h-5 w-5 text-white" />
               )}
             </div>
-          </motion.button>
+          </button>
 
-          <motion.div
+          <div
             className="flex flex-col items-center gap-2"
-            initial={{ y: 8 }}
-            animate={{ y: 0 }}
-            transition={{ delay: 0.08, duration: 0.15 }}
           >
             <h1 className="text-2xl font-display font-bold text-white drop-shadow-md">
               {profile.full_name || 'Sem nome'}
@@ -295,23 +289,17 @@ const Profile = () => {
               <Building2 className="h-4 w-4" />
               <span className="font-medium">{condoName ?? 'Condomínio não definido'}</span>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div
+      <div
         className="px-4 space-y-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
       >
 
         {/* ── MEUS PETS ── */}
-        <motion.div
+        <div
           className="relative -mt-6 rounded-2xl bg-card p-4 shadow-lg"
-          initial={{ y: 10 }}
-          animate={{ y: 0 }}
-          transition={{ delay: 0.10, duration: 0.18 }}
         >
           <h2 className="mb-4 text-base font-semibold text-foreground">Meus pets</h2>
           {petsLoading ? (
@@ -338,12 +326,9 @@ const Profile = () => {
           ) : (
             <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide justify-center">
               {myPets.map((pet, idx) => (
-                <motion.div
+                <div
                   key={pet.id}
                   className="flex flex-col items-center gap-2 shrink-0"
-                  initial={{ scale: 0.95 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: idx * 0.04, duration: 0.15 }}
                 >
                   {pet.photo_url ? (
                     <img
@@ -359,30 +344,24 @@ const Profile = () => {
                   <span className="w-14 text-center text-xs text-foreground truncate">
                     {pet.name}
                   </span>
-                </motion.div>
+                </div>
               ))}
-              <motion.button
+              <button
                 onClick={() => toast.info('Cadastro de pets em breve!')}
                 className="flex flex-col items-center gap-1 shrink-0"
-                initial={{ scale: 0.95 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: (myPets.length) * 0.04, duration: 0.15 }}
               >
                 <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-primary/50 hover:border-primary hover:bg-primary/5 transition-colors">
                   <Plus className="h-5 w-5 text-primary" />
                 </div>
                 <span className="text-xs text-primary font-medium">Adicionar</span>
-              </motion.button>
+              </button>
             </div>
           )}
-        </motion.div>
+        </div>
 
         {/* ── MINHA ATIVIDADE ── */}
-        <motion.div
+        <div
           className="rounded-2xl bg-card p-4 shadow-md"
-          initial={{ y: 10 }}
-          animate={{ y: 0 }}
-          transition={{ delay: 0.13, duration: 0.18 }}
         >
           <h2 className="mb-3 text-base font-semibold text-foreground">Minha atividade</h2>
           {alertsLoading ? (
@@ -409,13 +388,10 @@ const Profile = () => {
               {myAlerts.slice(0, 3).map((alert, idx) => {
                 const s = statusMap[alert.status] ?? statusMap.active;
                 return (
-                  <motion.button
+                  <button
                     key={alert.id}
                     className="flex w-full items-center gap-3 rounded-xl bg-secondary/50 p-3 text-left transition-colors hover:bg-secondary"
                     onClick={() => navigate(`/alert/${alert.id}`)}
-                    initial={{ y: 6 }}
-                    animate={{ y: 0 }}
-                    transition={{ delay: 0.10 + idx * 0.03, duration: 0.15 }}
                   >
                     <PawPrint className="h-5 w-5 text-primary shrink-0" />
                     <div className="min-w-0 flex-1">
@@ -429,19 +405,16 @@ const Profile = () => {
                     <Badge variant={s.variant} className={`${s.className} text-xs`}>
                       {s.label}
                     </Badge>
-                  </motion.button>
+                  </button>
                 );
               })}
             </div>
           )}
-        </motion.div>
+        </div>
 
         {/* ── INFORMAÇÕES DA CONTA ── */}
-        <motion.div
+        <div
           className="rounded-2xl bg-card p-4 shadow-md"
-          initial={{ y: 10 }}
-          animate={{ y: 0 }}
-          transition={{ delay: 0.16, duration: 0.18 }}
         >
           <h2 className="mb-4 text-base font-semibold text-foreground">Informações da conta</h2>
           <div className="space-y-4">
@@ -490,14 +463,11 @@ const Profile = () => {
               )}
             </Button>
           </div>
-        </motion.div>
+        </div>
 
         {/* ── AÇÕES ── */}
-        <motion.div
+        <div
           className="space-y-2 pb-6"
-          initial={{ y: 10 }}
-          animate={{ y: 0 }}
-          transition={{ delay: 0.18, duration: 0.18 }}
         >
           <button
             className="flex w-full min-h-[44px] items-center gap-3 rounded-2xl bg-card px-4 py-3 text-left transition-colors hover:bg-secondary"
@@ -549,8 +519,8 @@ const Profile = () => {
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
     </div>
   );
