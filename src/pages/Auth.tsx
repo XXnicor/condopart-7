@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -42,10 +42,11 @@ const Auth = () => {
 
   const redirectTo = new URLSearchParams(window.location.search).get('redirect') || '/';
 
-  if (session) {
-    navigate(redirectTo, { replace: true });
-    return null;
-  }
+  useEffect(() => {
+    if (session) {
+      navigate(redirectTo, { replace: true });
+    }
+  }, [session, navigate, redirectTo]);
 
   const validateLogin = () => {
     const errors: typeof loginErrors = {};
