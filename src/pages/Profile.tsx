@@ -201,7 +201,7 @@ const Profile = () => {
     enabled: !!user,
   });
 
-  console.log('[Profile] render — user:', !!user, '| petsLoading:', petsLoading, '| alertsLoading:', alertsLoading);
+  console.log('[Profile] render — user:', !!user, '| profile:', !!profile, '| petsLoading:', petsLoading, '| petsCount:', myPets?.length ?? 'undefined', '| alertsLoading:', alertsLoading);
 
   /* ── handlers ── */
 
