@@ -234,7 +234,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {!profile ? (
           <motion.div
             key="skeleton"
@@ -333,7 +333,7 @@ const Profile = () => {
                 className="relative -mt-6 rounded-2xl bg-card p-4 shadow-lg"
               >
                 <motion.h2 variants={itemVariants} className="mb-4 text-base font-semibold text-foreground">Meus pets</motion.h2>
-                <AnimatePresence mode="wait">
+                <AnimatePresence>
                   {petsLoading ? (
                     <motion.div
                       key="skeleton-pets"
@@ -417,7 +417,7 @@ const Profile = () => {
                 className="rounded-2xl bg-card p-4 shadow-md"
               >
                 <motion.h2 variants={itemVariants} className="mb-3 text-base font-semibold text-foreground">Minha atividade</motion.h2>
-                <AnimatePresence mode="wait">
+                <AnimatePresence>
                   {alertsLoading ? (
                     <motion.div
                       key="skeleton-alerts"
