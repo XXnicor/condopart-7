@@ -45,7 +45,7 @@ const AnimatedRoutes = () => {
         animate="animate"
         exit="exit"
         transition={{
-          duration: shouldReduceMotion ? 0 : 0.14,
+          duration: shouldReduceMotion ? 0 : 0.8,
           ease: 'easeOut',
         }}
         style={{ width: '100%' }}
