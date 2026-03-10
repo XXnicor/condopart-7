@@ -29,7 +29,7 @@ const AnimatedRoutes = () => {
   const shouldReduceMotion = useReducedMotion();
 
   const variants = {
-    initial: { opacity: 0, y: shouldReduceMotion ? 0 : 8 },
+    initial: { opacity: 0, y: shouldReduceMotion ? 0 : 40 },
     animate: { opacity: 1, y: 0 },
     exit:    { opacity: 0, y: shouldReduceMotion ? 0 : -4 },
   };
@@ -45,7 +45,7 @@ const AnimatedRoutes = () => {
         animate="animate"
         exit="exit"
         transition={{
-          duration: shouldReduceMotion ? 0 : 0.22,
+          duration: shouldReduceMotion ? 0 : 0.6,
           ease,
         }}
         style={{ width: '100%' }}
