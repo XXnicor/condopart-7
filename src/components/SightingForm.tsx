@@ -122,7 +122,10 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
     if (!confirmedCoords) errs.location = 'Selecione o local no mapa';
 
     setErrors(errs);
-    if (Object.keys(errs).length > 0) return;
+    if (Object.keys(errs).length > 0) {
+      setTimeout(() => mapRef.current?.invalidateSize(), 50);
+      return;
+    }
 
     const location: SightingLocation = {
       lat: confirmedCoords!.lat,
