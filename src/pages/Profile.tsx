@@ -201,6 +201,8 @@ const Profile = () => {
     enabled: !!user,
   });
 
+  console.log('[Profile] render — user:', !!user, '| petsLoading:', petsLoading, '| alertsLoading:', alertsLoading);
+
   /* ── handlers ── */
 
   const handleSave = async () => {
