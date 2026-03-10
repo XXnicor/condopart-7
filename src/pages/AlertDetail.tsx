@@ -16,9 +16,9 @@ import {
   MapPin,
   PawPrint,
   Share2,
-
   XCircle,
 } from 'lucide-react';
+import { motion, useReducedMotion, Variants } from 'framer-motion';
 import { SkeletonCard } from '@/components/ui/skeleton-card';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -48,6 +48,28 @@ const AlertDetail = () => {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showShareSheet, setShowShareSheet] = useState(false);
   const [expandedDescription, setExpandedDescription] = useState(false);
+
+  // Framer Motion constraints e configs de reduzida
+  const shouldReduceMotion = useReducedMotion();
+  const dur = (base: number) => (shouldReduceMotion ? 0 : base);
+
+  const sectionVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: dur(0.07), delayChildren: dur(0.04) },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 6 },
+    visible: { opacity: 1, y: 0, transition: { duration: dur(0.22), ease: 'easeOut' } },
+  };
+
+  const heroTextVariants: Variants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 4 },
+    visible: { opacity: 1, y: 0, transition: { duration: dur(0.2), ease: 'easeOut' } },
+  };
 
   // Broadcast listener for alert-resolved events
   useEffect(() => {
@@ -141,11 +163,16 @@ const AlertDetail = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/60" />
 
         {/* Pet name overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-4">
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 p-4"
+          variants={heroTextVariants}
+          initial="hidden"
+          animate={loading ? 'hidden' : 'visible'}
+        >
           <h1 className="font-display text-3xl font-bold text-white drop-shadow-lg">
             {alert.title}
           </h1>
-        </div>
+        </motion.div>
 
         {/* Floating status badge */}
         <div className="absolute right-4 top-4 z-10">
@@ -198,100 +225,115 @@ const AlertDetail = () => {
               </div>
             )}
 
-            {/* Reporter info */}
-            <div className="rounded-xl bg-secondary/50 p-3">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-stone-400">Reportado por</p>
-              <MoradorInfo
-                full_name={alert.reporter_profile?.full_name ?? 'Morador'}
-                avatar_url={alert.reporter_profile?.avatar_url ?? null}
-                role={alert.reporter_profile?.role ?? undefined}
-              />
-            </div>
+            <motion.div
+              variants={sectionVariants}
+              initial="hidden"
+              animate={loading ? 'hidden' : 'visible'}
+              className="space-y-4"
+            >
+              {/* Reporter info */}
+              <motion.div variants={itemVariants} className="rounded-xl bg-secondary/50 p-3">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-stone-400">
+                  Reportado por
+                </p>
+                <MoradorInfo
+                  full_name={alert.reporter_profile?.full_name ?? 'Morador'}
+                  avatar_url={alert.reporter_profile?.avatar_url ?? null}
+                  role={alert.reporter_profile?.role ?? undefined}
+                />
+              </motion.div>
 
-            {/* Description (Expandable) */}
-            <div className="overflow-hidden">
-              <div className="space-y-3">
-                <div>
-                  <p
-                    className={`text-sm leading-relaxed transition-all ${
-                      expandedDescription ? 'text-foreground' : 'line-clamp-2 text-foreground'
-                    }`}
-                  >
-                    {alert.description}
-                  </p>
-                  {alert.description && alert.description.length > 100 && (
-                    <button
-                      onClick={() => setExpandedDescription(!expandedDescription)}
-                      className="mt-2 text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+              {/* Description (Expandable) */}
+              <motion.div variants={itemVariants} className="overflow-hidden">
+                <div className="space-y-3">
+                  <div>
+                    <p
+                      className={`text-sm leading-relaxed transition-all ${
+                        expandedDescription ? 'text-foreground' : 'line-clamp-2 text-foreground'
+                      }`}
                     >
-                      {expandedDescription ? 'Menos' : 'Leia mais'}
-                    </button>
-                  )}
-                </div>
-
-                {/* Location & Time */}
-                <div className="space-y-2 border-t border-border/50 pt-3">
-                  <div className="flex items-start gap-2 text-sm">
-                    <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
-                    <span className="text-foreground">{alert.location_label || 'Local não informado'}</span>
+                      {alert.description}
+                    </p>
+                    {alert.description && alert.description.length > 100 && (
+                      <button
+                        onClick={() => setExpandedDescription(!expandedDescription)}
+                        className="mt-2 text-xs font-semibold text-primary transition-colors hover:text-primary/80"
+                      >
+                        {expandedDescription ? 'Menos' : 'Leia mais'}
+                      </button>
+                    )}
                   </div>
-                  <div className="flex items-start gap-2 text-xs text-muted-foreground">
-                    <Clock className="h-4 w-4 shrink-0 mt-0.5" />
-                    <div>
-                      <p>{format(new Date(alert.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}</p>
-                      <p>{formatDistanceToNow(new Date(alert.created_at), { addSuffix: true, locale: ptBR })}</p>
+                </div>
+              </motion.div>
+
+              {/* Location & Time */}
+              <motion.div variants={itemVariants} className="space-y-2 border-t border-border/50 pt-3">
+                <div className="flex items-start gap-2 text-sm">
+                  <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
+                  <span className="text-foreground">{alert.location_label || 'Local não informado'}</span>
+                </div>
+                <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                  <Clock className="h-4 w-4 shrink-0 mt-0.5" />
+                  <div>
+                    <p>{format(new Date(alert.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}</p>
+                    <p>{formatDistanceToNow(new Date(alert.created_at), { addSuffix: true, locale: ptBR })}</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Sightings Empty State */}
+              {!loadingSightings && sightings.length === 0 && isActive && (
+                <motion.div variants={itemVariants} className="border-t border-border/50 pt-3">
+                  <div className="flex flex-col items-center gap-2 py-6 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+                      <Eye className="h-6 w-6 text-stone-300" />
                     </div>
+                    <p className="text-sm font-semibold text-foreground">Nenhum avistamento ainda</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Seja o primeiro a informar.
+                    </p>
                   </div>
-                </div>
-              </div>
-            </div>
+                </motion.div>
+              )}
 
-            {/* Sightings Empty State */}
-            {!loadingSightings && sightings.length === 0 && isActive && (
-              <div className="border-t border-border/50 pt-3">
-                <div className="flex flex-col items-center gap-2 py-6 text-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
-                    <Eye className="h-6 w-6 text-stone-300" />
+              {/* Sightings Carousel */}
+              {!loadingSightings && sightings.length > 0 && (
+                <motion.div variants={itemVariants} className="border-t border-border/50 pt-3 space-y-2">
+                  <div className="flex items-center gap-1.5 font-display text-sm font-bold text-foreground">
+                    <Eye className="h-4 w-4 text-primary" />
+                    Avistamentos ({sightings.length})
                   </div>
-                  <p className="text-sm font-semibold text-foreground">Nenhum avistamento ainda</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">Seja o primeiro a informar.</p>
-                </div>
-              </div>
-            )}
-
-            {/* Sightings Carousel */}
-            {!loadingSightings && sightings.length > 0 && (
-              <div className="border-t border-border/50 pt-3 space-y-2">
-                <div className="flex items-center gap-1.5 font-display text-sm font-bold text-foreground">
-                  <Eye className="h-4 w-4 text-primary" />
-                  Avistamentos ({sightings.length})
-                </div>
-                <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory scrollbar-hide">
-                  {sightings.map((sighting) => (
-                    <div
-                      key={sighting.id}
-                      className="flex-shrink-0 snap-start"
-                    >
-                      <div className="rounded-xl overflow-hidden border border-border/50 bg-secondary/50 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="w-32 h-24 bg-muted flex items-center justify-center text-xs text-muted-foreground">
-                          📍 {formatDistanceToNow(new Date(sighting.created_at), { locale: ptBR, addSuffix: true })}
+                  <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory scrollbar-hide">
+                    {sightings.map((sighting) => (
+                      <div key={sighting.id} className="flex-shrink-0 snap-start">
+                        <div className="rounded-xl overflow-hidden border border-border/50 bg-secondary/50 shadow-sm transition-shadow hover:shadow-md">
+                          <div className="flex h-24 w-32 items-center justify-center bg-muted text-xs text-muted-foreground">
+                            📍{' '}
+                            {formatDistanceToNow(new Date(sighting.created_at), {
+                              locale: ptBR,
+                              addSuffix: true,
+                            })}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                    ))}
+                  </div>
+                </motion.div>
+              )}
 
-            {/* Map */}
-            {!loadingSightings && sightings.length > 0 && (
-              <div className="pt-3">
-                <h3 className="mb-2 font-display text-sm font-bold text-foreground">Mapa de avistamentos</h3>
-                <div className="rounded-2xl overflow-hidden border border-border/50 shadow-sm" style={{ height: '180px' }}>
-                  <AlertMap sightings={sightings} className="h-full" />
-                </div>
-              </div>
-            )}
+              {/* Map */}
+              {!loadingSightings && sightings.length > 0 && (
+                <motion.div variants={itemVariants} className="pt-3">
+                  <h3 className="mb-2 font-display text-sm font-bold text-foreground">Mapa de avistamentos</h3>
+                  <div
+                    className="overflow-hidden rounded-2xl border border-border/50 shadow-sm"
+                    style={{ height: '180px' }}
+                  >
+                    <AlertMap sightings={sightings} className="h-full" />
+                  </div>
+                </motion.div>
+              )}
+            </motion.div>
           </div>
         </div>
 
@@ -304,7 +346,12 @@ const AlertDetail = () => {
 
         {/* Action buttons */}
         {(canResolve || canCancel) && (
-          <div className="mt-4 space-y-2">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: loading ? 0 : 1 }}
+            transition={{ duration: dur(0.2), delay: dur(0.15) }}
+            className="mt-4 space-y-2"
+          >
             {showCancelConfirm ? (
               <div className="space-y-2 rounded-xl border border-destructive/30 bg-destructive/5 p-4">
                 <p className="text-sm font-medium text-foreground">Tem certeza? Esta ação não pode ser desfeita.</p>
@@ -352,7 +399,7 @@ const AlertDetail = () => {
                 )}
               </div>
             )}
-          </div>
+          </motion.div>
         )}
 
         {/* Feed */}
