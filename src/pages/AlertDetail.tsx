@@ -18,7 +18,7 @@ import {
   Share2,
   XCircle,
 } from 'lucide-react';
-import { motion, useReducedMotion, Variants } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, Variants } from 'framer-motion';
 import { SkeletonCard } from '@/components/ui/skeleton-card';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -101,46 +101,61 @@ const AlertDetail = () => {
     return <Badge className={config.className}>{config.label}</Badge>;
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain pb-24">
-        <header className="sticky top-0 z-40 glass-strong px-4 py-3">
-          <div className="mx-auto flex max-w-[480px] items-center gap-3">
-            <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-            <div className="h-5 w-24 animate-pulse rounded bg-muted" />
-          </div>
-        </header>
-        <main className="mx-auto max-w-[480px] space-y-4 px-4 py-4">
-          <SkeletonCard variant="detail-photo" />
-          <SkeletonCard variant="detail-text" />
-          <SkeletonCard variant="detail-form" />
-          <div className="space-y-2">
-            <SkeletonCard variant="sighting" count={2} />
-          </div>
-        </main>
-      </div>
-    );
-  }
-
-  if (!alert) {
-    return (
-      <div className="flex min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden flex-col items-center justify-center bg-mesh-light dark:bg-mesh-dark gap-3">
-        <p className="text-muted-foreground">Alerta não encontrado</p>
-        <Button variant="outline" onClick={() => navigate('/')}>Voltar</Button>
-      </div>
-    );
-  }
-
-  const isOwner = user?.id === alert.reporter_id;
+  const isOwner = user?.id === alert?.reporter_id;
   const isSyndicOrAdmin = profile?.role === 'syndic' || profile?.role === 'admin';
-  const isActive = alert.status === 'active';
+  const isActive = alert?.status === 'active';
   const canResolve = (isOwner || isSyndicOrAdmin) && isActive;
   const canCancel = isOwner && isActive;
 
   return (
     <div className="min-h-screen w-full max-w-[480px] mx-auto overflow-x-hidden relative bg-mesh-light dark:bg-mesh-dark bg-grain">
+      <AnimatePresence mode="wait">
+        {loading ? (
+          <motion.div
+            key="skeleton"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="pb-24"
+          >
+            <header className="sticky top-0 z-40 glass-strong px-4 py-3">
+              <div className="mx-auto flex max-w-[480px] items-center gap-3">
+                <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground">
+                  <ArrowLeft className="h-5 w-5" />
+                </button>
+                <div className="h-5 w-24 animate-pulse rounded bg-muted" />
+              </div>
+            </header>
+            <main className="mx-auto max-w-[480px] space-y-4 px-4 py-4">
+              <SkeletonCard variant="detail-photo" />
+              <SkeletonCard variant="detail-text" />
+              <SkeletonCard variant="detail-form" />
+              <div className="space-y-2">
+                <SkeletonCard variant="sighting" count={2} />
+              </div>
+            </main>
+          </motion.div>
+        ) : !alert ? (
+          <motion.div
+            key="error"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="flex min-h-screen flex-col items-center justify-center gap-3"
+          >
+            <p className="text-muted-foreground">Alerta não encontrado</p>
+            <Button variant="outline" onClick={() => navigate('/')}>Voltar</Button>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
       {/* Hero section with overlay */}
       <div
         className="relative overflow-hidden bg-secondary"
@@ -424,7 +439,9 @@ const AlertDetail = () => {
         alertTitle={alert.title}
         alertDescription={alert.description}
       />
-
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
