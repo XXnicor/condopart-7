@@ -352,10 +352,10 @@ const Profile = () => {
                   ) : (
                     <motion.div
                       key="content-pets"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                      variants={sectionVariants}
+                      initial="hidden"
+                      animate="visible"
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
                     >
                       {!myPets?.length ? (
                         <motion.div variants={itemVariants} className="flex flex-col items-center gap-3 py-6">
@@ -436,10 +436,10 @@ const Profile = () => {
                   ) : (
                     <motion.div
                       key="content-alerts"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                      variants={sectionVariants}
+                      initial="hidden"
+                      animate="visible"
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
                     >
                       {!myAlerts?.length ? (
                         <motion.div variants={itemVariants} className="flex flex-col items-center gap-2 py-6">
