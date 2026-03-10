@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import MoradorInfo from '@/components/MoradorInfo';
 import OnboardingOverlay from '@/components/OnboardingOverlay';
 import type { Tables } from '@/integrations/supabase/types';
+import { motion, useReducedMotion, Variants } from 'framer-motion';
 
 type AlertRow = Tables<'alerts'>;
 
@@ -30,6 +31,21 @@ type AlertWithProfile = AlertRow & { reporter_profile?: ProfileData | null };
 const Index = () => {
   const { profile } = useAuth();
   const navigate = useNavigate();
+  const shouldReduceMotion = useReducedMotion();
+  const dur = (base: number) => (shouldReduceMotion ? 0 : base);
+
+  const listVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: dur(0.06), delayChildren: dur(0.04) },
+    },
+  };
+
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 6 },
+    visible: { opacity: 1, y: 0, transition: { duration: dur(0.22), ease: 'easeOut' } },
+  };
   const [alerts, setAlerts] = useState<AlertWithProfile[]>([]);
   const [foundAlerts, setFoundAlerts] = useState<AlertWithProfile[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -170,9 +186,9 @@ const Index = () => {
   };
 
   const renderAlertCard = (alert: AlertWithProfile, showResolutionNote = false) => (
-    <Card
-      key={alert.id}
-      className={`cursor-pointer overflow-hidden rounded-2xl border-glow shadow-sm card-elevated ${
+    <motion.div key={alert.id} variants={cardVariants}>
+      <Card
+        className={`cursor-pointer overflow-hidden rounded-2xl border-glow shadow-sm card-elevated ${
         alert.status === 'active' ? 'alert-card-active' : alert.status === 'found' ? 'alert-card-found' : ''
       }`}
       onClick={() => navigate(`/alert/${alert.id}`)}
@@ -222,6 +238,7 @@ const Index = () => {
         />
       </div>
     </Card>
+    </motion.div>
   );
 
   const renderEmptyState = (message: string, sub: string, icon?: React.ReactNode) => (
@@ -282,7 +299,14 @@ const Index = () => {
       ) : filtered.length === 0 ? (
         renderEmptyState('Nenhum alerta por aqui', 'Crie um alerta se seu pet estiver perdido.')
       ) : (
-        <div className="space-y-3 stagger-in">{filtered.map((a) => renderAlertCard(a))}</div>
+        <motion.div
+          className="space-y-3"
+          variants={listVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {filtered.map((a) => renderAlertCard(a))}
+        </motion.div>
       )}
     </>
   );
@@ -294,7 +318,14 @@ const Index = () => {
       ) : foundAlerts.length === 0 ? (
         renderEmptyState('Nenhum pet encontrado ainda', 'Alertas encerrados aparecerão aqui.')
       ) : (
-        <div className="space-y-3 stagger-in">{foundAlerts.map((a) => renderAlertCard(a, true))}</div>
+        <motion.div
+          className="space-y-3"
+          variants={listVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {foundAlerts.map((a) => renderAlertCard(a, true))}
+        </motion.div>
       )}
     </>
   );
