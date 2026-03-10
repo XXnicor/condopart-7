@@ -36,8 +36,11 @@ const OnboardingOverlay = () => {
 
   useEffect(() => {
     setMounted(true);
-    // [DEBUG] Force onboarding on every access for animation validation
-    setVisible(true);
+    // [DEBUG] Show onboarding when URL has ?onboarding=1
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('onboarding') === '1') {
+      setVisible(true);
+    }
   }, []);
 
   const handleDone = () => {
