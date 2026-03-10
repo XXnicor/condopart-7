@@ -10,6 +10,7 @@ import { ArrowLeft, PawPrint, Loader2, AlertCircle } from 'lucide-react';
 import LocationPicker from '@/components/LocationPicker';
 import ImageUpload from '@/components/ImageUpload';
 import { toast } from 'sonner';
+import { motion, useReducedMotion, Variants } from 'framer-motion';
 const CreateAlert = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
@@ -20,6 +21,22 @@ const CreateAlert = () => {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ petName?: string; description?: string; lastSeen?: string }>({});
+
+  const shouldReduceMotion = useReducedMotion();
+  const dur = (base: number) => (shouldReduceMotion ? 0 : base);
+
+  const formVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: dur(0.08), delayChildren: dur(0.05) },
+    },
+  };
+
+  const fieldVariants: Variants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 6 },
+    visible: { opacity: 1, y: 0, transition: { duration: dur(0.22), ease: 'easeOut' } },
+  };
 
   const validate = () => {
     const errs: typeof errors = {};
@@ -97,16 +114,24 @@ const CreateAlert = () => {
       </header>
 
       <main className="px-4 py-4 overflow-y-auto overscroll-contain">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <motion.form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+          variants={formVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {/* Photo upload */}
+          <motion.div variants={fieldVariants}>
           <ImageUpload
             userId={user?.id ?? ''}
             onUploadComplete={(url) => setPhotoUrl(url)}
             onReset={() => setPhotoUrl(null)}
             onUploadingChange={setUploading}
           />
+          </motion.div>
 
-          <div className="space-y-1.5">
+          <motion.div variants={fieldVariants} className="space-y-1.5">
             <Label htmlFor="pet-name">Nome do pet *</Label>
             <div className="relative">
               <PawPrint className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -123,9 +148,9 @@ const CreateAlert = () => {
               />
             </div>
             {errors.petName && <p className="flex items-center gap-1 text-xs text-rose-500 mt-1"><AlertCircle className="h-3 w-3 shrink-0" />{errors.petName}</p>}
-          </div>
+          </motion.div>
 
-          <div className="space-y-1.5">
+          <motion.div variants={fieldVariants} className="space-y-1.5">
             <Label htmlFor="description" className="text-sm font-medium">Descrição *</Label>
             <Textarea
               id="description"
@@ -144,18 +169,22 @@ const CreateAlert = () => {
                 {description.length}/1000
               </span>
             </div>
-          </div>
+          </motion.div>
 
-          <LocationPicker
+          <motion.div variants={fieldVariants}>
+            <LocationPicker
             value={lastSeen}
             onChange={(val) => { setLastSeen(val); setErrors(prev => ({ ...prev, lastSeen: undefined })); }}
             error={errors.lastSeen}
           />
+          </motion.div>
 
-          <Button type="submit" className="w-full font-semibold btn-tactile h-12 text-base" size="lg" disabled={isSubmitDisabled} data-testid="button-submit-alert">
-            {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : '🐾 Criar Alerta'}
-          </Button>
-        </form>
+          <motion.div variants={fieldVariants}>
+            <Button type="submit" className="w-full font-semibold btn-tactile h-12 text-base" size="lg" disabled={isSubmitDisabled} data-testid="button-submit-alert">
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</> : '🐾 Criar Alerta'}
+            </Button>
+          </motion.div>
+        </motion.form>
       </main>
 
     </div>
