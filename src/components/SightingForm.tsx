@@ -161,7 +161,7 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
           <div className="space-y-1.5">
             <Label className="text-xs">Descrição *</Label>
             <Textarea
-              placeholder="O que você viu?"
+              placeholder="Descreva o que viu para enviar o avistamento"
               value={notes}
               onChange={(e) => {
                 setNotes(e.target.value);
