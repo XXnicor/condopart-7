@@ -289,7 +289,7 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
             />
           )}
 
-          <Button type="submit" size="sm" className="w-full" disabled={isCreating}>
+          <Button type="submit" size="sm" className="w-full" disabled={isCreating || !notes.trim()}>
             {isCreating ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando…
