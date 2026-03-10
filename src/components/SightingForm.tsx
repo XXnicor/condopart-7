@@ -62,7 +62,11 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
 
 
     setMapReady(true);
-    setTimeout(() => map.invalidateSize(), 100);
+
+    const ro = new ResizeObserver(() => {
+      map.invalidateSize();
+    });
+    ro.observe(containerRef.current);
 
     map.on('dragstart', () => setDragging(true));
     map.on('dragend', () => {
@@ -76,6 +80,7 @@ const SightingForm = ({ alertId }: SightingFormProps) => {
     });
 
     return () => {
+      ro.disconnect();
       mapRef.current?.remove();
       mapRef.current = null;
     };
