@@ -16,7 +16,7 @@ import { toast } from 'sonner';
 import MoradorInfo from '@/components/MoradorInfo';
 import OnboardingOverlay from '@/components/OnboardingOverlay';
 import type { Tables } from '@/integrations/supabase/types';
-import { motion, useReducedMotion, Variants } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, Variants } from 'framer-motion';
 
 type AlertRow = Tables<'alerts'>;
 
@@ -278,55 +278,97 @@ const Index = () => {
         </div>
       )}
 
-      {loading ? (
-        <div className="space-y-3"><SkeletonCard variant="feed" count={3} /></div>
-      ) : error ? (
-        <div className="flex flex-col items-center gap-3 py-16 text-center animate-slide-up">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10">
-            <AlertTriangle className="h-7 w-7 text-destructive" />
-          </div>
-          <p className="font-display font-semibold text-foreground" data-testid="text-error">Erro ao carregar alertas</p>
-          <Button size="sm" className="bg-primary hover:bg-primary/90 btn-tactile" onClick={fetchAlerts} data-testid="button-retry">
-            Tentar novamente
-          </Button>
-        </div>
-      ) : filtered.length === 0 && debouncedSearch ? (
-        renderEmptyState(
-          'Nenhum resultado',
-          'Tente outro nome ou descrição.',
-          <Search className="h-8 w-8 text-stone-300" />
-        )
-      ) : filtered.length === 0 ? (
-        renderEmptyState('Nenhum alerta por aqui', 'Crie um alerta se seu pet estiver perdido.')
-      ) : (
-        <motion.div
-          className="space-y-3"
-          variants={listVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {filtered.map((a) => renderAlertCard(a))}
-        </motion.div>
-      )}
+      <AnimatePresence mode="wait">
+        {loading ? (
+          <motion.div
+            key="skeleton-active"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="space-y-3"
+          >
+            <SkeletonCard variant="feed" count={3} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="content-active"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            {error ? (
+              <div className="flex flex-col items-center gap-3 py-16 text-center animate-slide-up">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10">
+                  <AlertTriangle className="h-7 w-7 text-destructive" />
+                </div>
+                <p className="font-display font-semibold text-foreground" data-testid="text-error">Erro ao carregar alertas</p>
+                <Button size="sm" className="bg-primary hover:bg-primary/90 btn-tactile" onClick={fetchAlerts} data-testid="button-retry">
+                  Tentar novamente
+                </Button>
+              </div>
+            ) : filtered.length === 0 && debouncedSearch ? (
+              renderEmptyState(
+                'Nenhum resultado',
+                'Tente outro nome ou descrição.',
+                <Search className="h-8 w-8 text-stone-300" />
+              )
+            ) : filtered.length === 0 ? (
+              renderEmptyState('Nenhum alerta por aqui', 'Crie um alerta se seu pet estiver perdido.')
+            ) : (
+              <motion.div
+                className="space-y-3"
+                variants={listVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {filtered.map((a) => renderAlertCard(a))}
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 
   const renderFoundContent = () => (
     <>
-      {loadingFound ? (
-        <div className="space-y-3"><SkeletonCard variant="feed" count={3} /></div>
-      ) : foundAlerts.length === 0 ? (
-        renderEmptyState('Nenhum pet encontrado ainda', 'Alertas encerrados aparecerão aqui.')
-      ) : (
-        <motion.div
-          className="space-y-3"
-          variants={listVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {foundAlerts.map((a) => renderAlertCard(a, true))}
-        </motion.div>
-      )}
+      <AnimatePresence mode="wait">
+        {loadingFound ? (
+          <motion.div
+            key="skeleton-found"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="space-y-3"
+          >
+            <SkeletonCard variant="feed" count={3} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="content-found"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            {foundAlerts.length === 0 ? (
+              renderEmptyState('Nenhum pet encontrado ainda', 'Alertas encerrados aparecerão aqui.')
+            ) : (
+              <motion.div
+                className="space-y-3"
+                variants={listVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {foundAlerts.map((a) => renderAlertCard(a, true))}
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 
