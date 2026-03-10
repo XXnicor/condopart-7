@@ -78,7 +78,7 @@ const FeedPreview = () => {
               key={alert.id}
               {...alert}
               index={idx}
-              onClick={() => console.log(`Navegando para alerta ${alert.id}`)}
+              onClick={() => {}}
             />
           ))}
         </div>

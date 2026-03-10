@@ -51,7 +51,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     if (error && error.code !== 'PGRST116') {
-      console.error('Failed to fetch profile:', error.message);
       return;
     }
 
@@ -97,7 +96,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
-        console.log('[Auth] onAuthStateChange — event:', _event, '| user:', !!session?.user);
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
@@ -110,7 +108,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('[Auth] getSession resolved — user:', !!session?.user);
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {

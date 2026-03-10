@@ -91,7 +91,6 @@ export async function uploadAlertPhoto(
       });
 
     if (uploadError) {
-      console.error('Upload error:', uploadError);
       throw new Error('Erro ao fazer upload da foto. Tente novamente.');
     }
 
