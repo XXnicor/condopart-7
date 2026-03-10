@@ -182,7 +182,7 @@ const AlertDetail = () => {
           className="absolute bottom-0 left-0 right-0 p-4"
           variants={heroTextVariants}
           initial="hidden"
-          animate={loading ? 'hidden' : 'visible'}
+          animate="visible"
         >
           <h1 className="font-display text-3xl font-bold text-white drop-shadow-lg">
             {alert.title}
@@ -243,7 +243,7 @@ const AlertDetail = () => {
             <motion.div
               variants={sectionVariants}
               initial="hidden"
-              animate={loading ? 'hidden' : 'visible'}
+              animate="visible"
               className="space-y-4"
             >
               {/* Reporter info */}
