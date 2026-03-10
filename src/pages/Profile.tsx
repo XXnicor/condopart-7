@@ -183,7 +183,7 @@ const Profile = () => {
       if (error) throw error;
       return data;
     },
-    enabled: !!user,
+    enabled: !!user && !!profile,
   });
 
   const { data: myAlerts, isLoading: alertsLoading } = useQuery({
@@ -198,7 +198,7 @@ const Profile = () => {
       if (error) throw error;
       return data;
     },
-    enabled: !!user,
+    enabled: !!user && !!profile,
   });
 
   console.log('[Profile] render — user:', !!user, '| profile:', !!profile, '| petsLoading:', petsLoading, '| petsCount:', myPets?.length ?? 'undefined', '| alertsLoading:', alertsLoading);
