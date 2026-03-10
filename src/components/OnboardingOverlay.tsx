@@ -36,14 +36,12 @@ const OnboardingOverlay = () => {
 
   useEffect(() => {
     setMounted(true);
-    const isDone = localStorage.getItem('onboarding_done');
-    if (isDone === null) {
-      setVisible(true);
-    }
+    // [DEBUG] Force onboarding on every access for animation validation
+    setVisible(true);
   }, []);
 
   const handleDone = () => {
-    localStorage.setItem('onboarding_done', 'true');
+    // [DEBUG] localStorage.setItem('onboarding_done', 'true');
     setVisible(false);
   };
 
