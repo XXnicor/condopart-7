@@ -87,7 +87,8 @@ const AlertDetail = () => {
   }, [profile?.condominium_id, id]);
 
   const handleConfirmCancel = async () => {
-    await cancel(id!);
+    if (!id) return;
+    await cancel(id);
     setShowCancelConfirm(false);
     setTimeout(() => navigate('/'), 1500);
   };

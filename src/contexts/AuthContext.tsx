@@ -57,7 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fullName = (userMeta?.full_name as string) ?? null;
     await supabase
       .from('profiles')
-      .upsert({ id: userId, full_name: fullName }, { onConflict: 'id', ignoreDuplicates: true });
+      .upsert({ id: userId, full_name: fullName }, { onConflict: 'id' });
 
     const { data: refetched } = await supabase
       .from('profiles')
@@ -99,7 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
-          setTimeout(() => fetchProfile(session.user.id, session.user.user_metadata), 0);
+          fetchProfile(session.user.id, session.user.user_metadata);
         } else {
           setProfile(null);
         }

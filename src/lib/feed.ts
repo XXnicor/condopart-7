@@ -14,6 +14,6 @@ export function buildFeed(
     ...comments.map((c) => ({ type: 'comment' as const, data: c, timestamp: c.created_at })),
   ];
   return items.sort(
-    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
   );
 }

@@ -104,7 +104,7 @@ export async function getFoundAlerts(condoId: string) {
     .select('*')
     .eq('condominium_id', condoId)
     .eq('status', 'found')
-    .order('resolved_at' as any, { ascending: false });
+    .order('resolved_at', { ascending: false });
 
   if (error) throw new Error('Erro ao buscar alertas encontrados.');
   return data ?? [];

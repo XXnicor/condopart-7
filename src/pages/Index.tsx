@@ -101,6 +101,7 @@ const Index = () => {
   }, [profile?.condominium_id]);
 
   const fetchAlerts = async () => {
+    if (!profile?.condominium_id) return;
     setLoading(true);
     setError(false);
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
@@ -108,7 +109,7 @@ const Index = () => {
     const { data, error: fetchError } = await supabase
       .from('alerts')
       .select('*')
-      .eq('condominium_id', profile!.condominium_id!)
+      .eq('condominium_id', profile.condominium_id)
       .or(`status.eq.active,and(status.eq.found,updated_at.gt.${oneHourAgo})`)
       .order('created_at', { ascending: false });
 
