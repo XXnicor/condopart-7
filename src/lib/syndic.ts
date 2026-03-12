@@ -63,7 +63,8 @@ export async function getDashboardStats(condoId: string): Promise<DashboardStats
   if (foundAlerts.length > 0) {
     const totalHours = foundAlerts.reduce((sum, a) => {
       const created = new Date(a.created_at).getTime();
-      const resolved = new Date(a.resolved_at!).getTime();
+      const resolved = a.resolved_at ? new Date(a.resolved_at).getTime() : null;
+      if (!resolved) return sum;
       return sum + (resolved - created) / (1000 * 60 * 60);
     }, 0);
     avgResolutionHours = Math.round((totalHours / foundAlerts.length) * 10) / 10;
@@ -114,14 +115,20 @@ export async function getAllAlerts(condoId: string): Promise<AlertWithProfile[]>
 
 // ── getAlertsChartData ─────────────────────────────────
 
+interface ChartDataRow {
+  month: string;
+  total: number | string;
+  found: number | string;
+}
+
 export async function getAlertsChartData(condoId: string): Promise<ChartDataPoint[]> {
-  const { data, error } = await supabase.rpc('get_alerts_chart_data', {
+  const { data, error } = await supabase.rpc<ChartDataRow[]>('get_alerts_chart_data', {
     _condo_id: condoId,
   });
 
   if (error) throw new Error('Erro ao buscar dados do gráfico.');
 
-  return ((data as any[]) ?? []).map((row) => ({
+  return (data ?? []).map((row) => ({
     month: row.month as string,
     total: Number(row.total),
     found: Number(row.found),

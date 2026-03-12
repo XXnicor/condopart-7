@@ -162,10 +162,11 @@ const Profile = () => {
   const { data: condoName } = useQuery({
     queryKey: ['condo-name', profile?.condominium_id],
     queryFn: async () => {
+      if (!profile?.condominium_id) return null;
       const { data } = await supabase
         .from('condos')
         .select('name')
-        .eq('id', profile!.condominium_id!)
+        .eq('id', profile.condominium_id)
         .single();
       return data?.name ?? null;
     },
@@ -175,10 +176,11 @@ const Profile = () => {
   const { data: myPets, isLoading: petsLoading } = useQuery({
     queryKey: ['my-pets', user?.id],
     queryFn: async () => {
+      if (!user?.id) return [];
       const { data, error } = await supabase
         .from('pets')
         .select('id, name, species, breed, photo_url')
-        .eq('owner_id', user!.id)
+        .eq('owner_id', user.id)
         .order('name', { ascending: true });
       if (error) throw error;
       return data;
@@ -189,10 +191,11 @@ const Profile = () => {
   const { data: myAlerts, isLoading: alertsLoading } = useQuery({
     queryKey: ['my-alerts', user?.id],
     queryFn: async () => {
+      if (!user?.id) return [];
       const { data, error } = await supabase
         .from('alerts')
         .select('id, title, status, created_at')
-        .eq('reporter_id', user!.id)
+        .eq('reporter_id', user.id)
         .order('created_at', { ascending: false })
         .limit(5);
       if (error) throw error;

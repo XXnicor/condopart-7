@@ -39,6 +39,14 @@ export function tryParseLocation(raw: string | null): SightingLocation | null {
   }
 }
 
+function asStringArray(val: unknown): string[] {
+  return Array.isArray(val) ? val.filter((v): v is string => typeof v === 'string') : [];
+}
+
+function asStringOrNull(val: unknown): string | null {
+  return typeof val === 'string' ? val : null;
+}
+
 export async function getSightingsByAlert(alertId: string): Promise<Sighting[]> {
   const { data, error } = await supabase
     .from('sightings')
@@ -54,8 +62,8 @@ export async function getSightingsByAlert(alertId: string): Promise<Sighting[]> 
     user_id: row.user_id,
     notes: row.notes,
     location: tryParseLocation(row.location),
-    photo_urls: (row as Record<string, unknown>).photo_urls as string[] ?? [],
-    video_url: (row as Record<string, unknown>).video_url as string | null ?? null,
+    photo_urls: asStringArray(row.photo_urls),
+    video_url: asStringOrNull(row.video_url),
     created_at: row.created_at,
   }));
 }
@@ -122,8 +130,8 @@ export function subscribeSightings(
           user_id: row.user_id as string,
           notes: (row.notes as string) ?? null,
           location: tryParseLocation(row.location as string | null),
-          photo_urls: (row.photo_urls as string[]) ?? [],
-          video_url: (row.video_url as string | null) ?? null,
+          photo_urls: asStringArray(row.photo_urls),
+          video_url: asStringOrNull(row.video_url),
           created_at: row.created_at as string,
         });
       },

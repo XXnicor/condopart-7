@@ -64,7 +64,7 @@ const AlertMap = ({ sightings, className }: AlertMapProps) => {
       mapRef.current = null;
       groupRef.current = null;
     };
-  }, [mapped.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mapped]);
 
   // Sync markers
   useEffect(() => {

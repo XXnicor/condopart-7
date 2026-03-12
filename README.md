@@ -1,73 +1,100 @@
-# Welcome to your Lovable project
+# CondoPart
 
-## Project info
+Plataforma web para gestão colaborativa de alertas de pets em condomínios.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Visão geral
 
-## How can I edit this code?
+O **CondoPart** é uma aplicação React + TypeScript voltada para moradores e síndicos. Ela permite criar, acompanhar e resolver alertas de pets, com fluxo de autenticação, feed de atividade e funcionalidades administrativas para gestão do condomínio.
 
-There are several ways of editing your application.
+## Principais funcionalidades
 
-**Use Lovable**
+- Autenticação de usuários e gerenciamento de perfil.
+- Seleção e vínculo de condomínio.
+- Criação e acompanhamento de alertas.
+- Visualização de detalhes de alertas, comentários e avistamentos.
+- Feed consolidado de eventos (comentários e avistamentos).
+- Área do síndico com visão operacional da plataforma.
+- Página pública para compartilhamento de alerta.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Stack técnica
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend:** React 18 + TypeScript + Vite
+- **UI:** Tailwind CSS + shadcn/ui + Radix UI
+- **Estado/Dados:** TanStack Query
+- **Backend as a Service:** Supabase (Auth, Database, Realtime, Storage)
+- **Mapas e visualização:** Leaflet, Recharts
+- **Testes:** Vitest + Testing Library
 
-**Use your preferred IDE**
+## Estrutura de rotas
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+As rotas principais da aplicação incluem:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- `/auth` — autenticação
+- `/reset-password` — redefinição de senha
+- `/` — dashboard principal (protegida)
+- `/create-alert` — criação de alerta (protegida)
+- `/alert/:id` — detalhe do alerta (protegida)
+- `/feed-preview` — prévia de feed (protegida)
+- `/syndic` — área do síndico (protegida)
+- `/profile` — perfil do usuário (protegida)
+- `/p/alert/:id` — visualização pública de alerta
 
-Follow these steps:
+## Pré-requisitos
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- Node.js 18+
+- npm 9+
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Configuração de ambiente
 
-# Step 3: Install the necessary dependencies.
-npm i
+Crie um arquivo `.env` na raiz do projeto com as variáveis abaixo:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```env
+VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
+VITE_SUPABASE_ANON_KEY=SEU_ANON_KEY
 ```
 
-**Edit a file directly in GitHub**
+> A aplicação valida essas variáveis em runtime e falha na inicialização caso estejam ausentes.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Como executar localmente
 
-**Use GitHub Codespaces**
+```bash
+# 1) Instalar dependências
+npm install
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# 2) Rodar em desenvolvimento
+npm run dev
 
-## What technologies are used for this project?
+# 3) Build de produção
+npm run build
 
-This project is built with:
+# 4) Preview da build
+npm run preview
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Qualidade e validação
 
-## How can I deploy this project?
+```bash
+# Lint
+npm run lint
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+# Testes
+npm run test
 
-## Can I connect a custom domain to my Lovable project?
+# Verificação TypeScript
+npx tsc --noEmit
+```
 
-Yes, you can!
+## Convenções do projeto
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Base de código em TypeScript com aliases `@/` para imports internos.
+- Componentes e páginas em `src/components` e `src/pages`.
+- Integrações Supabase centralizadas em `src/integrations/supabase`.
+- Hooks e regras de domínio distribuídos em `src/hooks` e `src/lib`.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Deploy
+
+O projeto pode ser publicado em qualquer plataforma que suporte aplicações Vite (ex.: Vercel, Netlify), desde que as variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` estejam configuradas no ambiente de produção.
+
+## Licença
+
+Este repositório não define licença explícita no momento.
